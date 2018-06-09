@@ -451,6 +451,8 @@ more_intro = "Ver intro de nuevo";
 more_about = "Sobre Groma";
 more_community = "Comunidad";
 
+about_company_information = "Información legal";
+about_vat_id = "No. id. fiscal: %@";
 
 register_accept_terms = "Acepto los %%términos y condiciones%%";
 

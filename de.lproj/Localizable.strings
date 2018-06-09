@@ -449,6 +449,8 @@ more_intro = "Intro nochmal sehen";
 more_about = "Impressum";
 more_community = "Community";
 
+about_company_information = "Impressum";
+about_vat_id = "UST: %@";
 
 register_accept_terms = "Ich akzeptiere die %%AGB%%";
 

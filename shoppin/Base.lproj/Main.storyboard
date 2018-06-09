@@ -53,7 +53,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ijr-7n-zCH" id="9EK-bc-0K7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8d-6A-xsA" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -137,61 +137,91 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="134.5" y="258" width="106.5" height="72"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="20" y="158" width="335" height="72"/>
                                 <string key="text" base64-UTF8="YES">
-SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
+SXZhbiBTY2jDvHR64oCoQmlya2Vuc3RyYcOfZSAxNRER4oCoMTA1NTkgQmVybGluEeKAqEdlcm1hbnk
 </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="40"/>
+                                        <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
-                                <rect key="frame" x="120" y="155" width="150" height="83"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="1XQ-vd-cWg"/>
-                                    <constraint firstAttribute="height" constant="60" id="giO-xe-YTW"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="1XQ-vd-cWg"/>
-                                        <exclude reference="giO-xe-YTW"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkI-jx-bK6">
-                                <rect key="frame" x="153.5" y="350" width="68" height="30"/>
-                                <state key="normal" title="Feedback">
-                                    <color key="titleColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="onContactTap:" destination="imb-x4-nbm" eventType="touchUpInside" id="GUy-ee-9UZ"/>
-                                </connections>
-                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Legal information:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T8u-pq-ieB" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="20" y="129" width="149" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App version:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zw0-xd-kdS" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="20" y="80" width="103" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sTL-iB-l5L" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="20" y="109" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kXw-c4-GiG" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="20" y="238" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Je8-L8-ALQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" constant="7" id="9Bt-VB-Yb3"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="EDP-Dp-6AD"/>
-                            <constraint firstItem="hkI-jx-bK6" firstAttribute="top" secondItem="RDW-hy-ch1" secondAttribute="bottom" constant="20" id="Lz6-F2-vqo"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" constant="-40" id="TH0-iH-8ot"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="upF-yh-sx7"/>
-                            <constraint firstItem="hkI-jx-bK6" firstAttribute="centerX" secondItem="RDW-hy-ch1" secondAttribute="centerX" id="uqr-7x-i7q"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="T8u-pq-ieB" secondAttribute="bottom" constant="8" id="1wK-nk-lot"/>
+                            <constraint firstItem="sTL-iB-l5L" firstAttribute="top" secondItem="zw0-xd-kdS" secondAttribute="bottom" constant="8" id="3el-9a-RRU"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="9z5-GK-HTV"/>
+                            <constraint firstItem="sTL-iB-l5L" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="R2w-TV-kQE"/>
+                            <constraint firstItem="kXw-c4-GiG" firstAttribute="leading" secondItem="RDW-hy-ch1" secondAttribute="leading" id="ffV-Ep-5og"/>
+                            <constraint firstAttribute="trailing" secondItem="RDW-hy-ch1" secondAttribute="trailing" constant="20" id="hVQ-BL-sft" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                            <constraint firstItem="T8u-pq-ieB" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="iDc-GD-qfP"/>
+                            <constraint firstItem="zw0-xd-kdS" firstAttribute="leading" secondItem="nyx-EU-a0C" secondAttribute="leading" constant="20" id="lme-Sb-KU4" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                            <constraint firstItem="kXw-c4-GiG" firstAttribute="top" secondItem="RDW-hy-ch1" secondAttribute="bottom" constant="8" id="oWe-pK-hkd"/>
+                            <constraint firstItem="zw0-xd-kdS" firstAttribute="top" secondItem="vCj-Rn-aKt" secondAttribute="bottom" constant="60" id="pfK-hU-jd8"/>
+                            <constraint firstItem="T8u-pq-ieB" firstAttribute="top" secondItem="sTL-iB-l5L" secondAttribute="bottom" constant="20" id="y1H-wD-7wU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG">
                         <barButtonItem key="backBarButtonItem" title=" " id="thA-Aj-h87"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="appVersionLabel" destination="sTL-iB-l5L" id="f2O-ZM-DoC"/>
+                        <outlet property="vatinLabel" destination="kXw-c4-GiG" id="gie-sD-kH6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sxw-WL-TR0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="516" y="3132"/>
+            <point key="canvasLocation" x="516" y="3131.7841079460272"/>
         </scene>
         <!--My Tab Bar Controller-->
         <scene sceneID="iFh-OB-bje">
@@ -317,7 +347,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ANJ-05-PvP" id="pzx-ip-Qus">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dhQ-jr-KOI">
@@ -391,7 +421,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         <rect key="frame" x="0.0" y="28" width="375" height="91"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NKn-m5-Zdh" id="eIB-7N-JEC">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="gE1-hG-c7M" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -455,7 +485,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         <rect key="frame" x="0.0" y="119" width="375" height="91"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1sk-H4-Z72" id="9w2-Ot-jee">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9u4-kk-kdw" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -687,7 +717,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Okf-Mk-RuK" id="jdz-dt-wvN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iL4-5Y-aAl" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1570,7 +1600,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vlG-IH-rnp" id="HrI-DL-GBd">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Cb-Ord" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1652,7 +1682,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K72-Pl-rS1" id="g0y-il-hwG">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxv-Gd-l65" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1782,7 +1812,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L9Z-YA-iLL" id="scG-Is-T8O">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cw-8e-IWU" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1934,7 +1964,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
         </scene>
     </scenes>
     <resources>
-        <image name="about" width="150" height="83"/>
         <image name="empty_page" width="240" height="205"/>
         <image name="group" width="27" height="25"/>
         <image name="group_selected" width="25" height="25"/>

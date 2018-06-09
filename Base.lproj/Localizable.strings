@@ -451,6 +451,8 @@ more_intro = "Watch intro again";
 more_about = "About";
 more_community = "Community";
 
+about_company_information = "Legal information";
+about_vat_id = "VATIN: %@";
 
 register_accept_terms = "I accept the %%terms and conditions%%";
 

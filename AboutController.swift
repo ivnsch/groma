@@ -7,18 +7,21 @@
 //
 
 import UIKit
+import Providers
 
 class AboutController: UIViewController {
 
-    fileprivate var emailHelper: EmailHelper?
+    @IBOutlet weak var appVersionLabel: UILabel!
+    @IBOutlet weak var vatinLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Theme.mainBGColor
-    }
 
-    @IBAction func onContactTap(_ sender: UIButton) {
-        emailHelper = EmailHelper(controller: self)
-        emailHelper?.showEmail(appendSpecs: false)
+        if let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+            appVersionLabel.text = versionNumber
+        }
+
+        vatinLabel.text = trans("about_vat_id", "DE289356506")
     }
 }
