@@ -13,6 +13,7 @@ import SwiftValidator
 import RealmSwift
 import Providers
 
+// TODO why this doesn't extent ItemsController? don't remember if it's a specific reason or just lack of time
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegateNew, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
     fileprivate var inventoryItemsResult: Results<InventoryItem>? {

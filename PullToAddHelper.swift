@@ -23,6 +23,7 @@ class PullToAddHelper {
 
         let pullToRefresh = PullToRefresh()
         let height: CGFloat = 150
+        pullToRefresh.isHidden = true // hidden by default - just convenience for this app since it often interferes with animation, so we explicitly have to make it visible (usually after a delay)
         pullToRefresh.frame = CGRect(x: 0, y: -height, width: tableView.width, height: height)
         tableView.addSubview(pullToRefresh)
 
@@ -48,6 +49,10 @@ class PullToAddHelper {
         if scrollView.contentOffset.y <= 0 {
             onSnapToTop()
         }
+    }
+
+    func setHidden(_ hidden: Bool) {
+        pullToRefresh?.isHidden = hidden
     }
 
     private func onSnapToTop() {

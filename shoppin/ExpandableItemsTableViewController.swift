@@ -178,6 +178,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
         toggleButtonRotator.reset(tableView, topBar: topBar)
     }
     

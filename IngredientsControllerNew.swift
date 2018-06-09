@@ -210,6 +210,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
         toggleButtonRotator.reset(tableView, topBar: topBar)
         
         // Set inset such that newly added cells can be positioned directly below the quick add controller

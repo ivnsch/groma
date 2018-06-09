@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Providers
 
 class EmptyViewController: UITableViewController {
 
@@ -42,6 +42,10 @@ class EmptyViewController: UITableViewController {
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         view.addGestureRecognizer(tapRecognizer)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
     }
     
     func addTo(container: UIView) {

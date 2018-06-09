@@ -178,7 +178,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
+
         // Set inset such that newly added cells can be positioned directly below the quick add controller
         // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
         if !initializedTableViewBottomInset {

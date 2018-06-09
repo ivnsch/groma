@@ -842,6 +842,11 @@ class SimpleListItemsTableViewController: UITableViewController {
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listItems?.count ?? 0

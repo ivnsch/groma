@@ -96,7 +96,11 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
+    }
+
     func enablePullToAdd() {
         pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] in
             self?.listItemsTableViewDelegate?.onPullToAdd()
