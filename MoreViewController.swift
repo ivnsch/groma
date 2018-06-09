@@ -97,7 +97,7 @@ class MoreViewController: UITableViewController {
             navigationController?.pushViewController(controller, animated: true)
             
         case .share:
-            share(trans("sharing_message"), sharingImage: nil, sharingURL: URL(string: "https://itunes.apple.com/app/groma/id1121689899?&mt=8"))
+            share(trans("sharing_message"), sharingImage: nil, sharingURL: URL(string: "http://groma.co"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
 //            let controller = UIStoryboard.shareAppViewController()
 //            navigationController?.setNavigationBarHidden(true, animated: false)
