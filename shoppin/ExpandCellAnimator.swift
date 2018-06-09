@@ -30,10 +30,9 @@ class ExpandCellAnimator {
     func animateTransition(_ isExpand: Bool, topOffsetY: CGFloat, expandedViewFrame: CGRect? = nil) {
         
         guard let fromView = fromView, let toView = toView, let inView = inView else {return}
-        
-        
-        fromView.layoutIfNeeded()
-        
+
+//        fromView.layoutIfNeeded()
+
         let expandedFrame = expandedViewFrame ?? inView.bounds
         
         // Create the sliding views and add them to the scene.
@@ -71,7 +70,7 @@ class ExpandCellAnimator {
             )
             self.bottomSlidingView = view
             return view!
-            }()
+        }()
         
         //        bottomSlidingView.frame = bottomSlidingViewFrame
         bottomSlidingView.frame = CGRect(x: bottomSlidingViewFrame.origin.x, y: bottomSlidingViewFrame.origin.y, width: bottomSlidingViewFrame.width, height: bottomSlidingViewFrame.height)
