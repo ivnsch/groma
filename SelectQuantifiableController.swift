@@ -23,8 +23,8 @@ class SelectQuantifiableController: UIViewController {
         super.viewDidLoad()
         
         onViewDidLoad?()
-        
 
+        titleLabel.text = trans("popup_select_quantifiable_title")
     }
     
     var quantifiableProducts: [QuantifiableProduct] = [] {

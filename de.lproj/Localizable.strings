@@ -304,6 +304,7 @@ popup_button_restore_bundled_product = "Wiederherstellen";
 popup_button_remove_list = "Liste entfernen";
 
 popup_note_title = "Notiz";
+popup_select_quantifiable_title = "Wähle aus";
 
 button_close_help = "Hilfe schließen";
 

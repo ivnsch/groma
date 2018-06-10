@@ -303,6 +303,7 @@ popup_button_restore_bundled_product = "Restore";
 popup_button_remove_list = "Remove list";
 
 popup_note_title = "Note";
+popup_select_quantifiable_title = "Select";
 
 button_close_help = "Close help";
 
