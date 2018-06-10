@@ -290,8 +290,9 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
 
         if itemMarkedToDelete() == selectedItem.uniqueName && allowRemoveItem(item: selectedItem, controller: controller) {
 
-            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: confirmRemoveItemPopupMessage(item: selectedItem), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_cancel"), controller: controller, onOk: { [weak self] in
+            controller.view.endEditing(true)
 
+            MyPopupHelper.showPopup(parent: controller, type: .warning, message: confirmRemoveItemPopupMessage(item: selectedItem), onOk: { [weak self] in
                 self?.willDeleteItem?(selectedItem)
                 self?.delete(item: selectedItem, controller: controller, onFinish: { [weak self] in
                     self?.myCollectionView.deleteItems(at: [indexPath])
