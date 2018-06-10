@@ -296,7 +296,7 @@ public class ListItem: DBSyncable, Identifiable, WithUuid {
     }
 
     static func createFilterWithSection(_ sectionUnique: SectionUnique) -> String {
-        return "sectionOpt.name == '\(sectionUnique.name)' && sectionOpt.statusVal == '\(sectionUnique.status.rawValue)' && sectionOpt.list.uuid == '\(sectionUnique.listUuid)'"
+        return "sectionOpt.name == '\(sectionUnique.name)' && sectionOpt.statusVal == \(sectionUnique.status.rawValue) && sectionOpt.list.uuid == '\(sectionUnique.listUuid)'"
     }
 
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
