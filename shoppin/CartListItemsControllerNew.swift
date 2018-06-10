@@ -37,8 +37,8 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     weak var delegate: CartListItemsControllerDelegate?
     
-    fileprivate var currentNotePopup: MyAlertWrapper?
-    
+    fileprivate var currentNotePopup: MyPopup?
+
     override var status: ListItemStatus {
         return .done
     }
@@ -88,18 +88,9 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         return delegate?.cartParentForAddButton ?? view
     }
     
-    
     override func showPopup(text: String, cell: UITableViewCell, button: UIView) {
-        guard let delegate = delegate else {logger.e("No delegate - can't retrive prices view height to show popup"); return}
-        
-        let topOffset: CGFloat = -delegate.priceViewHeight
-        let frame = view.bounds.copy(y: topOffset, height: view.bounds.height - topOffset)
-        
-        let noteButtonPointParentController = view.convert(CGPoint(x: button.center.x, y: button.center.y), from: cell)
-        // adjust the anchor point also for topOffset
-        let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
-        
-        currentNotePopup = AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+        guard let parent = parent else { logger.e("No superview"); return }
+        currentNotePopup = NoteViewController.show(parent: parent, text: text, from: button)
     }
     
     fileprivate func addAllItemsToInventory() {
@@ -167,7 +158,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     override func clearPossibleNotePopup() {
         super.clearPossibleNotePopup()
         
-        currentNotePopup?.dismiss()
+        currentNotePopup?.hide()
         currentNotePopup = nil
     }
     

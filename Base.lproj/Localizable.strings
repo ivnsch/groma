@@ -302,6 +302,8 @@ popup_button_rate_dont_ask_again = "Don't ask again";
 popup_button_restore_bundled_product = "Restore";
 popup_button_remove_list = "Remove list";
 
+popup_note_title = "Note";
+
 button_close_help = "Close help";
 
 popup_you_cant_delete_default_unit = "You can't remove the default unit!";
