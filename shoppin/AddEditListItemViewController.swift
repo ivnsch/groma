@@ -718,7 +718,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             let price: Float = 0 // TODO not used as an independent value anymore - only derived!
 
             let refPrice: Float? = priceInputs.price
-            let refQuantity: Float? = priceInputs.quantity
+            let refQuantity: Float? = {
+                if priceInputs.quantity > 0 {
+                    return priceInputs.quantity
+                } else {
+                    return 1 // replace 0 with 1 - a reference quantity of 0 doesn't make sense (if 0 costs x then y costs ? -> division by 0)
+                }
+            }()
 
             if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 

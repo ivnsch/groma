@@ -289,6 +289,17 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func submit() {
+
+        func toValidBaseQuantity(_ baseQuantityInput: Float?) -> Float? {
+            return baseQuantityInput.flatMap { inputBaseQuantity in
+                if inputBaseQuantity < 1 {
+                    return nil // map 0 to null - 0 base quantity doesn't make sense
+                } else {
+                    return inputBaseQuantity
+                }
+            }
+        }
+
         // TODO ensure that there's always a unit and a base selected!
         guard let unitId = inputs.unitId else { logger.e("Can't submit without a unit"); return }
         guard let unitName = inputs.unitName else { logger.e("Can't submit without unit name"); return } // TODO remove name?
@@ -297,8 +308,9 @@ class SelectUnitAndBaseController: UIViewController {
         // Text input overrides collection view selection
         let finalUnitId = inputs.textInputUnitId ?? unitId
         let finalUnitName = inputs.textInputUnitName ?? unitName
-        let finalBaseQuantity = inputs.textInputBaseQuantity ?? baseQuantity
-        let finalSecondBaseQuantity = inputs.textInputSecondBaseQuantity ?? inputs.secondBaseQuantity // optional
+
+        let finalBaseQuantity = toValidBaseQuantity(inputs.textInputBaseQuantity) ?? baseQuantity
+        let finalSecondBaseQuantity = toValidBaseQuantity(inputs.textInputSecondBaseQuantity) ?? inputs.secondBaseQuantity // optional
 
         // TODO why are we handling errors here with logger instead of the default handler (alert)?
         

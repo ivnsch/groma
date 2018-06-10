@@ -120,10 +120,12 @@ extension ManageItemsBaseQuantitiesController: EditSingleInputControllerDelegate
     
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
-        guard let base = name.floatValue else {logger.e("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return}
-        guard let editingBase = editingObj as? Float else {logger.e("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
-        
-        Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: base, successHandler{[weak self] in
+        guard let base = name.floatValue else { logger.e("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return }
+        guard let editingBase = editingObj as? Float else { logger.e("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return }
+
+        let finalBase = base > 0 ? base : 1 // 0 base doesn't make sense - convert to 1
+
+        Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: finalBase, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)
             
             //self?.tableView.reloadData()
