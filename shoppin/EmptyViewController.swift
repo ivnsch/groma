@@ -45,6 +45,9 @@ class EmptyViewController: UITableViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
+
         delay(0.5) { [weak self] in self?.pullToAdd?.setHidden(false) }
     }
     
