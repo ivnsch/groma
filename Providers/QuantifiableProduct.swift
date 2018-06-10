@@ -204,6 +204,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     static var baseQuantityNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
         return formatter
     }()
     
@@ -220,35 +221,57 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     
     
     public var baseText: String {
-        return QuantifiableProduct.baseText(baseQuantity: baseQuantity, unitName: unit.name)
+        return QuantifiableProduct.baseText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value, unitName: unit.name)
     }
     
     public var baseAndUnitText: String {
-        return QuantifiableProduct.baseAndUnitText(baseQuantity: baseQuantity, unitName: unit.name, pluralUnit: true)
+        return QuantifiableProduct.baseAndUnitText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value, unitName: unit.name, pluralUnit: true)
     }
     
     // Shows base and unit. The content of any of these doesn't affect the other.
-    public static func baseAndUnitText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        return baseAndUnitTextInternal(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
+    public static func baseAndUnitText(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        return baseAndUnitTextInternal(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
     // Shows base text and unit, only if base is a non no-op value. Used for labels that show specifically base - we show something if there's a base, otherwise nothing
-    public static func baseText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        guard baseQuantity > 1 else {return ""} // for base quantity 1 or 0 there's no text
+    public static func baseText(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        guard baseQuantity > 1 || (secondBaseQuantity.map { $0 > 1 } ?? false) else { return "" }
         
-        return baseAndUnitTextInternal(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
+        return baseAndUnitTextInternal(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
     // NOTE: plural unit only affects .none / empty unit ("unit" / "units").
-    fileprivate static func baseAndUnitTextInternal(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+    fileprivate static func baseAndUnitTextInternal(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
 
-        let baseQuantityText = baseQuantity > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))! : ""
-        
+        let baseQuantityText: String = {
+            if baseQuantity > 1 {
+                return QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
+            } else if baseQuantity == 1 {
+                if secondBaseQuantity == nil {
+                    return ""
+                } else {
+                    return QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
+                }
+            } else {
+                logger.e("Invalid base quantity value: \(baseQuantity)", .db)
+                return ""
+            }
+        }()
+
+        let secondBaseQuantityText: String = {
+            if let secondBaseQuantity = secondBaseQuantity {
+                let formattedSecondBaseQuantity = QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: secondBaseQuantity))!
+                return "\(formattedSecondBaseQuantity)x" // NOTE on "x": we assume there's always a base quantity string - if the base is one but there's a second base we show it
+            } else {
+                return ""
+            }
+        }()
+
         let unitText = QuantifiableProduct.unitText(unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
         
 //        let unitSeparator = unitName.isEmpty || baseQuantityText.isEmpty ? " " : ""
         let unitSeparator = ""
-        return "\(baseQuantityText)\(unitSeparator)\(unitText)"
+        return "\(secondBaseQuantityText)\(baseQuantityText)\(unitSeparator)\(unitText)"
     }
     
     public static func unitText(unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {

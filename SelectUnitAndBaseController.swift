@@ -100,8 +100,11 @@ class SelectUnitAndBaseController: UIViewController {
         // TODO redundancy - only one identifier for unit and base respectively
         inputs.unitId = selectedUnitId
         inputs.unitName = selectedUnitName
+        
         inputs.baseQuantity = selectedBaseQuantity
         inputs.baseQuantityName = selectedBaseQuantity.quantityString
+
+        inputs.secondBaseQuantity = secondSelectedBaseQuantity
         inputs.secondBaseQuantityName = secondSelectedBaseQuantity?.quantityString
 
         unitsManager.reload()

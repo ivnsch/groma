@@ -1357,7 +1357,7 @@ class RealmProductProvider: RealmProvider {
                 } else {
                     if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit, realmData: realmData, doTransaction: false) {
                         
-                        let product = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product)
+                        let product = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, secondBaseQuantity: prototype.secondBaseQuantity, unit: unit.unit, product: product)
                         if save {
                             realm.add(product, update: true)
                         }

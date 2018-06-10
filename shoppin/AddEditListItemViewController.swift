@@ -620,6 +620,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         currentUnit = item.product?.unit.name ?? trans("unit_unit")
         currentQuantity = item.quantity
         currentBase = item.product?.baseQuantity ?? 1
+        currentSecondBase = item.product?.secondBaseQuantity.value ?? 1
 
         updateProductQuantityController()
 
