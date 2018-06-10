@@ -22,19 +22,19 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JU5-FZ-Ny8" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="35" y="97" width="306" height="60"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JU5-FZ-Ny8" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="20" y="100" width="335" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                            <integer key="value" value="40"/>
+                            <integer key="value" value="50"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Note" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zwr-H9-vW5" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="1" y="0.0" width="375" height="70"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zwr-H9-vW5" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                     <color key="backgroundColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="70" id="a0K-yi-QAG"/>
@@ -48,7 +48,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="INI-pU-E33">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="INI-pU-E33">
                     <rect key="frame" x="337" y="26" width="18" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="9Vo-co-0YO"/>
@@ -63,14 +63,14 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="JU5-FZ-Ny8" firstAttribute="top" secondItem="Zwr-H9-vW5" secondAttribute="bottom" constant="20" id="3Kh-Jy-ifc"/>
-                <constraint firstItem="JU5-FZ-Ny8" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="CZb-Ut-kGR" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="JU5-FZ-Ny8" firstAttribute="top" secondItem="Zwr-H9-vW5" secondAttribute="bottom" constant="30" id="3Kh-Jy-ifc"/>
+                <constraint firstItem="JU5-FZ-Ny8" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="CZb-Ut-kGR" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                 <constraint firstItem="INI-pU-E33" firstAttribute="centerY" secondItem="Zwr-H9-vW5" secondAttribute="centerY" id="Ge6-Tg-d8c"/>
                 <constraint firstAttribute="trailing" secondItem="Zwr-H9-vW5" secondAttribute="trailing" id="Mym-Ba-dMw"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="INI-pU-E33" secondAttribute="trailing" constant="20" id="Tfu-Mh-6O0"/>
                 <constraint firstItem="Zwr-H9-vW5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="YJt-Hc-1pi"/>
                 <constraint firstItem="Zwr-H9-vW5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="dAy-48-Fun"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="JU5-FZ-Ny8" secondAttribute="trailing" constant="20" id="vq6-jS-Nsw" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="JU5-FZ-Ny8" secondAttribute="trailing" constant="20" id="vq6-jS-Nsw" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="33.5" y="53.5"/>
