@@ -451,11 +451,16 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             
             pricesViewBottomConstraint.constant = (pricesViewBottomConstraintConstantInExpandedState ?? 0) - view.frame.height + (expand ? bottomConstraintHeightDelta : 0)
             pricesView.heightConstraint.constant = expand ? pricesViewMinimizedHeight : pricesView.originalHeight
+
+            pricesView.cartImgCenterConstraint.constant = 0
+
             self.view.layoutIfNeeded()
             
         } else {
             tableViewTopConstraint?.constant = view.frame.height < 0.1 ? 0 : view.frame.height
             reorderSectionsTableViewTopConstraint?.constant = view.frame.height < 0.1 ? 0 : view.frame.height
+
+            pricesView.cartImgCenterConstraint.constant = 5 // NOTE has to match initial offset in storyboard (ListItemsControllers.storyboard)
         }
     }
     

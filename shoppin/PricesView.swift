@@ -19,7 +19,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     @IBOutlet weak var cartImgLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var cartImg: UIImageView!
 
-    @IBOutlet weak var quantityCenterConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var quantityCenterConstraint: NSLayoutConstraint!
+    @IBOutlet weak var cartImgCenterConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
@@ -107,7 +108,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     fileprivate func updateQuantityCenterConstraint() {
-        quantityCenterConstraint.constant = stashQuantity == 0 ? 5 : 0
+        // TODO - no stash for now so disabled this
+//        quantityCenterConstraint.constant = stashQuantity == 0 ? 5 : 0
     }
     
     override func awakeFromNib() {
