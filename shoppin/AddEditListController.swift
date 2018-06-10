@@ -361,19 +361,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     @IBAction func onColorTap() {
         guard let parent = parent else { logger.e("Parent is not set"); return }
 
-        let popup = MyPopup(parent: parent.view)
+        let topBarHeight: CGFloat = Theme.navBarHeight
+
+        let popup = MyPopup(parent: parent.view, frame: CGRect(x: 0, y: topBarHeight, width: parent.view.bounds.width, height: parent.view.bounds.height - topBarHeight))
         let controller = UIStoryboard.listColorPicker()
         controller.delegate = self
         parent.addChildViewController(controller)
 
-        let topBarHeight: CGFloat = Theme.navBarHeight
-
-        controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.width, height: parent.view.height - topBarHeight)
+        controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
         popup.contentView = controller.view
-        popup.contentCenter = CGPoint(x: parent.view.center.x, y: parent.view.center.y + topBarHeight / 2)
         self.colorPopup = popup
 
-        popup.show(from: colorButton)
+        popup.show(from: colorButton, offsetY: -topBarHeight)
 
         view.endEditing(true)
     }
