@@ -475,11 +475,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         )
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-    }
-
     func onTapUnitBaseView() {
         // Parent is expected to be list items controller
         guard let parent = self.parent?.parent?.parent else { logger.e("No parent! Can't show popup"); return }
@@ -517,6 +512,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     self?.delegate?.focusSearchBar()
                 }
             })
+
+            self?.addButtonHelper?.addObserverSafe() // Restore save keyboard button
         }
 
         parent.addChildViewController(controller)
@@ -532,6 +529,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         popup.show(from: unitBaseView, offsetY: -Theme.navBarHeight)
 
         controller.loadItems()
+
+        // Don't show the keyboard save button from this controller while in select unit and base controller
+        addButtonHelper?.removeObserver()
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -1283,6 +1283,7 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
             showingAnyChild = true
             unitBasePopup?.hide(onFinish: { [weak self] in
                 self?.unitBasePopup = nil
+                self?.addButtonHelper?.addObserverSafe() // Restore save keyboard button
             })
         }
 

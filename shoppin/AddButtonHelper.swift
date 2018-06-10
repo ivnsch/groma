@@ -23,7 +23,9 @@ class AddButtonHelper: NSObject {
     fileprivate var tapHandler: VoidFunction?
     
     fileprivate var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error. EDIT: better explanation: this is the reference view frame used to calculate the center!
-    
+
+    fileprivate var isObserving: Bool = false
+
     init(parentView: UIView, overrideCenterY: CGFloat? = nil, tapHandler: VoidFunction?) {
         
         self.parentView = parentView
@@ -34,14 +36,22 @@ class AddButtonHelper: NSObject {
     }
     
     func addObserver() {
+        isObserving = true
         NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func removeObserver() {
         NotificationCenter.default.removeObserver(self)
+        isObserving = false
     }
-    
+
+    func addObserverSafe() {
+        if !isObserving {
+            addObserver()
+        }
+    }
+
     @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
