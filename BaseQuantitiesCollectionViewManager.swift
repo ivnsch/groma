@@ -60,8 +60,9 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
     }
 
     override func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<BaseQuantity>) -> Void) {
-        Prov.unitProvider.baseQuantities(controller.successHandler{ bases in
+        Prov.unitProvider.baseQuantities(controller.successHandler{ [weak self] bases in
             onSucces(AnyRealmCollection(bases))
+            self?.observeList(bases)
         })
     }
 

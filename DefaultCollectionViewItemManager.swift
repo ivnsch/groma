@@ -149,6 +149,45 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    // TODO refactor these - code is the same but one has Results as parameter the other RealmSwift.List
+
+    func observeResults(_ items: Results<T>) {
+        notificationToken = items.observe({ [weak self] changes in
+            switch changes {
+            case .initial: break
+            case .update(_, let deletions, let insertions, let modifications):
+                logger.d("Bases notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+
+                self?.update(insertions: insertions, deletions: deletions, modifications: modifications)
+
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError(String(describing: error))
+            }
+        })
+    }
+
+    func observeList(_ items: RealmSwift.List<T>) {
+        notificationToken = items.observe({ [weak self] changes in
+            switch changes {
+            case .initial: break
+            case .update(_, let deletions, let insertions, let modifications):
+                logger.d("Bases notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+
+                self?.update(insertions: insertions, deletions: deletions, modifications: modifications)
+
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError(String(describing: error))
+            }
+        })
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+
     // Realm notifications entry point
     func update(insertions: [Int], deletions: [Int], modifications: [Int]) {
         myCollectionView.performBatchUpdates({
