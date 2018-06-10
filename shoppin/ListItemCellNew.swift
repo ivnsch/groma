@@ -110,7 +110,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 if tableViewListItem.swiped {
                     backgroundColor = UIColor.clear
                 } else {
-                    backgroundColor = status.map{$0 == .todo ? UIColor.white : Theme.lightBlue} ?? UIColor.white
+                    backgroundColor = UIColor.white
                 }
 
                 updateStrikeLine()
