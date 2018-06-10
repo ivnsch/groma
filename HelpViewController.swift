@@ -87,7 +87,6 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.sectionIndex = section
         // height now calculated yet so we pass the position of border
         view.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
-        view.backgroundColor = Theme.mainBGColor
         return view
     }
     
