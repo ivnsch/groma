@@ -326,10 +326,10 @@ class SelectUnitAndBaseController: UIViewController {
 
                 func doSubmit(secondBaseQuantity: Float?) {
                     let result = SelectUnitAndBaseControllerResult(
-                        unitId: unitId,
-                        unitName: unitName,
-                        baseQuantity: baseQuantity,
-                        secondBaseQuantity: secondBaseQuantity
+                        unitId: finalUnitId,
+                        unitName: finalUnitName,
+                        baseQuantity: finalBaseQuantity,
+                        secondBaseQuantity: finalSecondBaseQuantity
                     )
                     self?.onSubmit?(result)
                 }
