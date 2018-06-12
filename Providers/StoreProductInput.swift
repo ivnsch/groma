@@ -14,10 +14,10 @@ public class StoreProductInput {
     public let refPrice: Float?
     public let refQuantity: Float?
     public let baseQuantity: Float
-    public let secondBaseQuantity: Float?
+    public let secondBaseQuantity: Float
     public let unit: String
     
-    public init(price: Float, refPrice: Float?, refQuantity: Float?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String) {
+    public init(price: Float, refPrice: Float?, refQuantity: Float?, baseQuantity: Float, secondBaseQuantity: Float, unit: String) {
         self.price = price
         self.refPrice = refPrice
         self.refQuantity = refQuantity

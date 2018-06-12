@@ -57,7 +57,7 @@ class UnitWithBaseView: HandlingView {
         }
     }
 
-    func show(base: Float, secondBase: Float?, unitId: UnitId, unitName: String) {
+    func show(base: Float, secondBase: Float, unitId: UnitId, unitName: String) {
 
         // Unit image
         unitImageView.image = Theme.unitImage(unitId: unitId)
@@ -76,8 +76,8 @@ class UnitWithBaseView: HandlingView {
                 return unitName
             }
         } ()
-        let baseString = base.quantityStringHideZero
-        let secondBaseString = secondBase.map { $0.quantityStringHideZero } ?? ""
+        let baseString = base.quantityStringHideLessOrEqualThan1
+        let secondBaseString = secondBase.quantityStringHideLessOrEqualThan1
         let basesSeparator = !baseString.isEmpty && !secondBaseString.isEmpty ? "x" : ""
         label.text = "\(secondBaseString)\(basesSeparator)\(baseString) \(unitName)"
         label.sizeToFit()

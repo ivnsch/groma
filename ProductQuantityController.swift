@@ -80,7 +80,7 @@ class ProductQuantityController: UIViewController {
         quantityView.delegate = self
     }
 
-    func show(base: Float, secondBase: Float?, unitId: UnitId, unitName: String, quantity: Float) {
+    func show(base: Float, secondBase: Float, unitId: UnitId, unitName: String, quantity: Float) {
         quantityView.quantity = quantity
         unitWithBaseView.show(base: base, secondBase: secondBase, unitId: unitId, unitName: unitName)
     }
@@ -103,7 +103,7 @@ class ProductQuantityController: UIViewController {
     }
 
 
-    func showBaseUnit(base: Float, secondBase: Float?, unitId: UnitId, unitName: String) {
+    func showBaseUnit(base: Float, secondBase: Float, unitId: UnitId, unitName: String) {
         unitWithBaseView.show(base: base, secondBase: secondBase, unitId: unitId, unitName: unitName)
     }
 //    func selectBaseWithValue(_ val: Float) {

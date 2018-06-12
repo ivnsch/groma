@@ -122,7 +122,7 @@ class AddRecipeController: UIViewController {
                         categoryColor: ingredient.item.category.color,
                         brand: cellState?.brandName ?? "",
                         baseQuantity: cellState?.baseQuantity ?? 1,
-                        secondBaseQuantity: cellState?.secondBaseQuantity,
+                        secondBaseQuantity: cellState?.secondBaseQuantity ?? 1,
                         unit: cellState?.unitData.unitName ?? ingredient.unit.name,
                         edible: true),
                     quantity: cellState?.quantity ?? ingredient.quantity,
@@ -334,7 +334,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
                 unitName: unitName
             ),
             baseQuantity: ingredient.pBase,
-            secondBaseQuantity: ingredient.pSecondBase.value,
+            secondBaseQuantity: ingredient.pSecondBase,
             quantity: ingredient.pQuantity == 0 ? 1 : ingredient.pQuantity, // Default is 1
             isHighlighted: false,
             alreadyHaveText: nil

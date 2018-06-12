@@ -25,7 +25,7 @@ public final class Ingredient: Object, WithUuid {
     @objc public dynamic var pName: String = ""
     @objc public dynamic var pBrand: String = ""
     @objc public dynamic var pBase: Float = 1
-    public let pSecondBase = RealmOptional<Float>()
+    @objc public dynamic var pSecondBase: Float = 1
     @objc public dynamic var pQuantity: Float = 0
     @objc public dynamic var pUnit: String = ""
 
@@ -175,7 +175,7 @@ public final class Ingredient: Object, WithUuid {
         pBrand = prototype.brand
         pUnit = prototype.unit
         pBase = prototype.baseQuantity
-        pSecondBase.value = prototype.secondBaseQuantity
+        pSecondBase = prototype.secondBaseQuantity
         pQuantity = quantity
     }
     
@@ -188,11 +188,11 @@ public final class Ingredient: Object, WithUuid {
         return uuid == rhs.uuid
     }
     
-    public static func quantityFullText(quantity: Float, baseQuantity: Float, unit: Providers.Unit?) -> String {
-        return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, secondBaseQuantity: nil,  unitId: unit?.id, unitName: unit?.name ?? "")
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, secondBaseQuantity: Float, unit: Providers.Unit?) -> String {
+        return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity,  unitId: unit?.id, unitName: unit?.name ?? "")
     }
 
-    public static func quantityFullText(quantity: Float, baseQuantity: Float, secondBaseQuantity: Float?, unitId: UnitId?, unitName: String, showNoneUnitName: Bool = false) -> String {
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, secondBaseQuantity: Float, unitId: UnitId?, unitName: String, showNoneUnitName: Bool = false) -> String {
 
         let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
 
@@ -201,7 +201,7 @@ public final class Ingredient: Object, WithUuid {
             true
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
-        let secondBaseText = showBaseQuantity ? (secondBaseQuantity.map { "\($0.quantityString)"} ?? "") : ""
+        let secondBaseText = showBaseQuantity ? secondBaseQuantity.quantityString : ""
         let secondBaseSuffix = secondBaseText.isEmpty ? "" : " x "
         let baseText = showBaseQuantity ? " x \(secondBaseText)\(secondBaseSuffix)\(baseQuantity.quantityString)" : ""
         var unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
@@ -229,7 +229,7 @@ public final class Ingredient: Object, WithUuid {
         dict["pName"] = pName as AnyObject?
         dict["pBrand"] = pBrand as AnyObject?
         dict["pBase"] = pBase as AnyObject?
-        dict["pSecondBase"] = pSecondBase.value as AnyObject?
+        dict["pSecondBase"] = pSecondBase as AnyObject?
         dict["pQuantity"] = pQuantity as AnyObject?
         dict["pUnit"] = pUnit as AnyObject?
 

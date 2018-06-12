@@ -38,7 +38,7 @@ struct SelectUnitAndBaseControllerResult {
     var unitId: UnitId // TODO remove unitName?
     var unitName: String // assumed to be unique
     var baseQuantity: Float // assumed to be unique
-    var secondBaseQuantity: Float? // assumed to be unique
+    var secondBaseQuantity: Float // assumed to be unique
 }
 
 class SelectUnitAndBaseController: UIViewController {
@@ -313,7 +313,7 @@ class SelectUnitAndBaseController: UIViewController {
         let finalUnitName = inputs.textInputUnitName ?? unitName
 
         let finalBaseQuantity = toValidBaseQuantity(inputs.textInputBaseQuantity) ?? baseQuantity
-        let finalSecondBaseQuantity = toValidBaseQuantity(inputs.textInputSecondBaseQuantity) ?? inputs.secondBaseQuantity // optional
+        let finalSecondBaseQuantity = toValidBaseQuantity(inputs.textInputSecondBaseQuantity) ?? inputs.secondBaseQuantity ?? 1 // optional
 
         // TODO why are we handling errors here with logger instead of the default handler (alert)?
         
@@ -327,7 +327,7 @@ class SelectUnitAndBaseController: UIViewController {
                     logger.e("Couldn't get/create base quantity: \(finalBaseQuantity)", .db)
                 }
 
-                func doSubmit(secondBaseQuantity: Float?) {
+                func doSubmit(secondBaseQuantity: Float) {
                     let result = SelectUnitAndBaseControllerResult(
                         unitId: finalUnitId,
                         unitName: finalUnitName,
@@ -337,15 +337,11 @@ class SelectUnitAndBaseController: UIViewController {
                     self?.onSubmit?(result)
                 }
 
-                if let secondBaseQuantity = finalSecondBaseQuantity {
-                    Prov.unitProvider.getOrCreate(baseQuantity: secondBaseQuantity) { result in
-                        if !result.success {
-                            logger.e("Couldn't get/create second base quantity: \(secondBaseQuantity)", .db)
-                        }
-                        doSubmit(secondBaseQuantity: secondBaseQuantity)
+                Prov.unitProvider.getOrCreate(baseQuantity: finalSecondBaseQuantity) { result in
+                    if !result.success {
+                        logger.e("Couldn't get/create second base quantity: \(finalSecondBaseQuantity)", .db)
                     }
-                } else {
-                    doSubmit(secondBaseQuantity: nil)
+                    doSubmit(secondBaseQuantity: finalSecondBaseQuantity)
                 }
             }
         }

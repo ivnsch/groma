@@ -22,7 +22,7 @@ public struct ProductUnique {
     }
 }
 
-public typealias QuantifiableProductUnique = (name: String, brand: String, unit: String, baseQuantity: Float, secondBaseQuantity: Float?)
+public typealias QuantifiableProductUnique = (name: String, brand: String, unit: String, baseQuantity: Float, secondBaseQuantity: Float)
 //public struct QuantifiableProductUnique {
 //    let name: String
 //    let brand: String
@@ -41,7 +41,7 @@ public struct ProductPrototype {
     public var brand: String
     
     public var baseQuantity: Float
-    public var secondBaseQuantity: Float?
+    public var secondBaseQuantity: Float
     public var unit: String
     
     public var edible: Bool
@@ -54,7 +54,7 @@ public struct ProductPrototype {
         return QuantifiableProductUnique(name: name, brand: brand, unit: unit, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity)
     }
     
-    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, edible: Bool) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float, secondBaseQuantity: Float, unit: String, edible: Bool) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor

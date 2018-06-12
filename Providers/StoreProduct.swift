@@ -44,7 +44,7 @@ public class StoreProduct: DBSyncable, Identifiable, WithUuid {
     // Multiply this with quantity = totalPrice
     public var basePrice: Float {
         let refQuantity = self.refQuantity.value ?? 0
-        return StoreProduct.calculateBasePrice(refQuantity: refQuantity, refPrice: refPrice.value ?? 0, baseQuantity: product.baseQuantity, secondBaseQuantity: product.secondBaseQuantity.value)
+        return StoreProduct.calculateBasePrice(refQuantity: refQuantity, refPrice: refPrice.value ?? 0, baseQuantity: product.baseQuantity, secondBaseQuantity: product.secondBaseQuantity)
     }
 
     public static func calculateBasePrice(refQuantity: Float, refPrice: Float, baseQuantity: Float, secondBaseQuantity: Float?) -> Float {

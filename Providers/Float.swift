@@ -43,7 +43,11 @@ public extension Float {
     public var quantityStringHideZero: String {
         return self == 0 ? "" : Float.quantityFormatter.string(from: NSNumber(value: self))!
     }
-    
+
+    public var quantityStringHideLessOrEqualThan1: String {
+        return self <= 1 ? "" : Float.quantityFormatter.string(from: NSNumber(value: self))!
+    }
+
     public var quantityString: String {
         return Float.quantityFormatter.string(from: NSNumber(value: self))!
     }

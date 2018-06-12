@@ -455,7 +455,7 @@ class RealmGlobalProvider: RealmProvider {
                     continue
                 }
                 let quantifiableProduct = targetRealm.create(QuantifiableProduct.self, value: srcQuantifiableProduct.toRealmMigrationDict(product: product, unit: unit), update: true)
-                quantifiableProduct.secondBaseQuantity.value = srcQuantifiableProduct.secondBaseQuantity.value
+                quantifiableProduct.secondBaseQuantity = srcQuantifiableProduct.secondBaseQuantity
                 addedQuantifiableProducts[quantifiableProduct.uuid] = quantifiableProduct
             }
 

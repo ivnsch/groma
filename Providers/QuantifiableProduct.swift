@@ -38,7 +38,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     @objc public dynamic var uuid: String = ""
     @objc dynamic var productOpt: Product? = Product()
     @objc public dynamic var baseQuantity: Float = 1
-    public let secondBaseQuantity = RealmOptional<Float>()
+    @objc public dynamic var secondBaseQuantity: Float = 1
     @objc dynamic var unitOpt: Unit? = Unit()
     @objc public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
@@ -64,13 +64,13 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
         return "uuid"
     }
     
-    public convenience init(uuid: String, baseQuantity: Float, secondBaseQuantity: Float? = nil, unit: Unit, product: Product, fav: Int = 1) {
+    public convenience init(uuid: String, baseQuantity: Float, secondBaseQuantity: Float = 1, unit: Unit, product: Product, fav: Int = 1) {
         
         self.init()
         
         self.uuid = uuid
         self.baseQuantity = baseQuantity
-        self.secondBaseQuantity.value = secondBaseQuantity
+        self.secondBaseQuantity = secondBaseQuantity
         self.unit = unit
         self.product = product
         self.fav = fav
@@ -80,7 +80,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
         return QuantifiableProduct(
             uuid: uuid ?? self.uuid,
             baseQuantity: baseQuantity ?? self.baseQuantity,
-            secondBaseQuantity: secondBaseQuantity ?? self.secondBaseQuantity.value,
+            secondBaseQuantity: secondBaseQuantity ?? self.secondBaseQuantity,
             unit: unit ?? self.unit.copy(),
             product: product ?? self.product.copy(),
             fav: fav ?? self.fav
@@ -94,8 +94,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        let secondBaseQuantityString: Any = unique.secondBaseQuantity.map { $0 } ?? "nil" // apparently nil is correct for look after not set, see https://github.com/realm/realm-cocoa/issues/3300
-        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)' AND secondBaseQuantity == \(secondBaseQuantityString)"
+        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)' AND secondBaseQuantity == \(unique.secondBaseQuantity)"
     }
     
     static func createFilterBrand(_ brand: String) -> String {
@@ -194,11 +193,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     }
 
     public var unique: QuantifiableProductUnique {
-        return (name: product.item.name, brand: product.brand, unit: unit.name, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value)
+        return (name: product.item.name, brand: product.brand, unit: unit.name, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity)
     }
     
     public func matches(unique: QuantifiableProductUnique) -> Bool {
-        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit && secondBaseQuantity.value == unique.secondBaseQuantity
+        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit && secondBaseQuantity == unique.secondBaseQuantity
     }
     
     static var baseQuantityNumberFormatter: NumberFormatter = {
@@ -221,33 +220,33 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     
     
     public var baseText: String {
-        return QuantifiableProduct.baseText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value, unitName: unit.name)
+        return QuantifiableProduct.baseText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unit.name)
     }
     
     public var baseAndUnitText: String {
-        return QuantifiableProduct.baseAndUnitText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value, unitName: unit.name, pluralUnit: true)
+        return QuantifiableProduct.baseAndUnitText(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unit.name, pluralUnit: true)
     }
     
     // Shows base and unit. The content of any of these doesn't affect the other.
-    public static func baseAndUnitText(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+    public static func baseAndUnitText(baseQuantity: Float, secondBaseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
         return baseAndUnitTextInternal(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
     // Shows base text and unit, only if base is a non no-op value. Used for labels that show specifically base - we show something if there's a base, otherwise nothing
-    public static func baseText(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        guard baseQuantity > 1 || (secondBaseQuantity.map { $0 > 1 } ?? false) else { return "" }
+    public static func baseText(baseQuantity: Float, secondBaseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        guard baseQuantity > 1 || secondBaseQuantity > 1 else { return "" }
         
         return baseAndUnitTextInternal(baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
     // NOTE: plural unit only affects .none / empty unit ("unit" / "units").
-    fileprivate static func baseAndUnitTextInternal(baseQuantity: Float, secondBaseQuantity: Float?, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+    fileprivate static func baseAndUnitTextInternal(baseQuantity: Float, secondBaseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
 
         let baseQuantityText: String = {
             if baseQuantity > 1 {
                 return QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
             } else if baseQuantity == 1 {
-                if secondBaseQuantity == nil {
+                if secondBaseQuantity == 1 {
                     return ""
                 } else {
                     return QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
@@ -259,10 +258,13 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
         }()
 
         let secondBaseQuantityText: String = {
-            if let secondBaseQuantity = secondBaseQuantity {
+            if secondBaseQuantity > 1 {
                 let formattedSecondBaseQuantity = QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: secondBaseQuantity))!
                 return "\(formattedSecondBaseQuantity)x" // NOTE on "x": we assume there's always a base quantity string - if the base is one but there's a second base we show it
+            } else if secondBaseQuantity == 1 {
+                return ""
             } else {
+                logger.e("Invalid second base quantity value: \(baseQuantity)", .db)
                 return ""
             }
         }()

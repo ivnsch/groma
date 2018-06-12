@@ -19,7 +19,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, brand: String, edible: Bool, editingItem: Any?)
+    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -201,7 +201,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         }
     }
-    fileprivate var currentSecondBase: Float? {
+    fileprivate var currentSecondBase: Float = 1 {
         didSet {
             updateTotalPrice()
             // See comments in currentBase didSet - apply here as well
@@ -620,7 +620,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         currentUnit = item.product?.unit.name ?? trans("unit_unit")
         currentQuantity = item.quantity
         currentBase = item.product?.baseQuantity ?? 1
-        currentSecondBase = item.product?.secondBaseQuantity.value ?? 1
+        currentSecondBase = item.product?.secondBaseQuantity ?? 1
 
         updateProductQuantityController()
 
