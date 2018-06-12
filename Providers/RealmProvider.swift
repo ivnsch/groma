@@ -135,12 +135,12 @@ class RealmProvider {
 
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
     func load<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+//        DispatchQueue.global(qos: .background).async {
             let result: Results<T>? = self.loadSync(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
-            DispatchQueue.main.async(execute: {
+//            DispatchQueue.main.async(execute: {
                 handler(result)
-            })
-        }
+//            })
+//        }
     }
     
     func load<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
