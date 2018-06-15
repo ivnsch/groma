@@ -530,7 +530,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         }
     }
 
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickAddController: QuickAddViewController) {
         guard let list = currentList else {logger.e("No list"); return}
         guard let realmData = realmData else {logger.e("No realm data"); return}
         
@@ -552,10 +552,17 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 edible: model.productPrototype.edible
             )
         }
-        
-        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler {_ in
+
+
+        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler { [weak self] _ in guard let weakSelf = self else { return }
             // The list will update automatically with realm notification
             quickAddController.closeRecipeController()
+
+            if let tabBarHeight = weakSelf.tabBarController?.tabBar.bounds.size.height {
+                AddRecipeToListNotificationHelper.show(tabBarHeight: tabBarHeight, parent: weakSelf.view, recipeData: recipeData)
+            } else {
+                logger.e("No tabBarController")
+            }
         })
     }
     

@@ -381,7 +381,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         })
     }
     
-    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickAddController: QuickAddViewController) {
         fatalError("TODO!!!!!!!!!!!!!!!!!!!!")
     }
     

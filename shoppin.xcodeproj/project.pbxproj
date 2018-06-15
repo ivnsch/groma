@@ -115,6 +115,7 @@
 		6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7C54B81E439B2800300F8D /* ItemsController.xib */; };
 		6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */; };
 		6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */; };
+		6A7C8C6020D376D700F420F0 /* AddRecipeToListNotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C8C5F20D376D700F420F0 /* AddRecipeToListNotificationHelper.swift */; };
 		6A7E64861FEAAD1E00F75DFD /* AddNewItemInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7E64841FEAAD1E00F75DFD /* AddNewItemInputCell.swift */; };
 		6A7E64871FEAAD1E00F75DFD /* AddNewItemInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7E64851FEAAD1E00F75DFD /* AddNewItemInputCell.xib */; };
 		6A7E64891FEABE7B00F75DFD /* UnitWithBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7E64881FEABE7B00F75DFD /* UnitWithBaseView.swift */; };
@@ -665,6 +666,7 @@
 		6A7C54B81E439B2800300F8D /* ItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemsController.xib; sourceTree = "<group>"; };
 		6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6A7C8C5F20D376D700F420F0 /* AddRecipeToListNotificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeToListNotificationHelper.swift; sourceTree = "<group>"; };
 		6A7E64841FEAAD1E00F75DFD /* AddNewItemInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewItemInputCell.swift; sourceTree = "<group>"; };
 		6A7E64851FEAAD1E00F75DFD /* AddNewItemInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddNewItemInputCell.xib; sourceTree = "<group>"; };
 		6A7E64881FEABE7B00F75DFD /* UnitWithBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitWithBaseView.swift; sourceTree = "<group>"; };
@@ -1292,6 +1294,7 @@
 				6AD23FFD1FED922C0080161E /* AddRecipeController.xib */,
 				6AD240021FEDD22B0080161E /* AddRecipeTableViewHeader.swift */,
 				6AD240041FEDD2370080161E /* AddRecipeTableViewHeader.xib */,
+				6A7C8C5F20D376D700F420F0 /* AddRecipeToListNotificationHelper.swift */,
 			);
 			name = addRecipe;
 			sourceTree = "<group>";
@@ -3389,6 +3392,7 @@
 				6A287E991E54794600868244 /* ManageItemsSectionView.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
+				6A7C8C6020D376D700F420F0 /* AddRecipeToListNotificationHelper.swift in Sources */,
 				6AF46EAE1E5A3A4900BBFF4C /* UnitEditableView.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
 				EB37ABB71CA099BB00FE9D7A /* ToggleButtonRotator.swift in Sources */,

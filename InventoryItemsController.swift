@@ -319,7 +319,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 //        }
     }
     
-    internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+    internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickAddController: QuickAddViewController) {
         // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
          fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
     }

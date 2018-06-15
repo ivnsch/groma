@@ -19,7 +19,7 @@ protocol QuickAddDelegate: class {
     var ingredientCellAnimationNameLabelTargetX: CGFloat { get }
 
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickAddController: QuickAddViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
@@ -342,8 +342,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onAddGroup(group, onFinish: nil)
     }
     
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController) {
-        delegate?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: self)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickListController: QuickAddListItemViewController) {
+        delegate?.onAddRecipe(ingredientModels: ingredientModels, recipeData: recipeData, quickAddController: self)
     }
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {

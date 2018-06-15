@@ -70,6 +70,14 @@ public extension String {
         return attributedString
     }
 
+    public func applyBold(substring: String, font: UIFont, color: UIColor) -> NSAttributedString {
+        if let range = range(substring, caseInsensitive: false) {
+            return applyBoldColor(ranges: [range], font: font, color: color)
+        } else {
+            return NSAttributedString(string: self)
+        }
+    }
+
     public func applyBold(ranges: [NSRange] = [], font: UIFont) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
         for range in ranges {

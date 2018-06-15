@@ -24,7 +24,7 @@ protocol QuickAddListItemDelegate: class {
 
 
     func onAddGroup(_ group: ProductGroup)
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickListController: QuickAddListItemViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
     
     func onCloseQuickAddTap()
@@ -904,8 +904,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
 extension QuickAddListItemViewController: AddRecipeControllerDelegate {
     
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) {
-        delegate?.onAddRecipe(ingredientModels: ingredientModels, quickListController: self)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, addRecipeController: AddRecipeController) {
+        delegate?.onAddRecipe(ingredientModels: ingredientModels, recipeData: recipeData, quickListController: self)
     }
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {

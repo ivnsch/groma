@@ -492,6 +492,8 @@ recipe_unit_plural = "Artículos";
 recipe_edit_to_enter_text = "Agrega texto";
 recipe_enter_text = "Ingresa texto";
 
+recipe_added_to_list = "%@ se agregó a la lista";
+
 unit_unit = "unidad";
 unit_unit_pl = "unidades";
 unit_g = "g";

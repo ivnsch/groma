@@ -11,8 +11,13 @@ import Providers
 import RealmSwift
 
 protocol AddRecipeControllerDelegate: class {
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) // Delegate can decide when/if to close the recipe controller
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, addRecipeController: AddRecipeController) // Delegate can decide when/if to close the recipe controller
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
+}
+
+struct RecipeData {
+    let name: String
+    let color: UIColor
 }
 
 class AddRecipeController: UIViewController {
@@ -22,8 +27,7 @@ class AddRecipeController: UIViewController {
     // Initial state
     fileprivate var modelData: AddableIngredients?
 
-    fileprivate var recipeName: String = ""
-    fileprivate var recipeColor: UIColor = Theme.lightGreyBackground
+    fileprivate var recipeData = RecipeData(name: "", color: Theme.lightGreyBackground)
 
     // Of cells presented so far
     fileprivate var cellStates: Dictionary<Int, AddRecipeIngredientCell.CellState> = [:]
@@ -45,8 +49,7 @@ class AddRecipeController: UIViewController {
     func config(recipe: Recipe, delegate: AddRecipeControllerDelegate) {
         self.delegate = delegate
 
-        recipeName = recipe.name
-        recipeColor = recipe.color
+        recipeData = RecipeData(name: recipe.name, color: recipe.color)
 
         retrieveData(recipe: recipe)
     }
@@ -136,13 +139,14 @@ class AddRecipeController: UIViewController {
         // We update last inputs and submit paralelly - last inputs isn't critical.
         Prov.ingredientProvider.updateLastProductInputs(ingredientModels: ingredientModels, successHandler {})
 
-        delegate?.onAddRecipe(ingredientModels: ingredientModels, addRecipeController: self)
+        delegate?.onAddRecipe(ingredientModels: ingredientModels, recipeData: recipeData, addRecipeController: self)
     }
 
     fileprivate func initTableView() {
         tableView.register(UINib(nibName: "AddRecipeIngredientCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.bottomInset = Theme.submitViewHeight
         tableView.keyboardDismissMode = .onDrag
+        tableView.backgroundColor = Theme.lightGreyBackground
     }
 
     fileprivate func initSubmitView() {
@@ -287,7 +291,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = AddRecipeTableViewHeader.createView()
-        header.config(title: recipeName, recipeColor: recipeColor)
+        header.config(title: recipeData.name, recipeColor: recipeData.color)
         return header
     }
 

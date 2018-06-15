@@ -493,6 +493,8 @@ recipe_unit_plural = "units";
 recipe_edit_to_enter_text = "Add recipe text";
 recipe_enter_text = "Enter recipe text";
 
+recipe_added_to_list = "%@ was added to list";
+
 unit_unit = "unit";
 unit_unit_pl = "units";
 unit_g = "g";

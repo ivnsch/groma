@@ -492,11 +492,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         }
     }
     
-    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], recipeData: RecipeData, quickAddController: QuickAddViewController) {
         if isCartOpen {
-            cartController?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
+            cartController?.onAddRecipe(ingredientModels: ingredientModels, recipeData: recipeData, quickAddController: quickAddController)
         } else {
-            super.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
+            super.onAddRecipe(ingredientModels: ingredientModels, recipeData: recipeData, quickAddController: quickAddController)
         }
     }
     

@@ -490,6 +490,8 @@ recipe_unit_plural = "Einheiten";
 recipe_edit_to_enter_text = "Füge Text hinzu";
 recipe_enter_text = "Trage den Text deines Rezeptes ein";
 
+recipe_added_to_list = "%@ wurde hinzugefügt";
+
 unit_unit = "Einheit";
 unit_unit_pl = "Einheiten";
 unit_g = "g";
