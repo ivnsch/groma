@@ -36,7 +36,7 @@ class HelpProviderImpl: HelpProvider {
         //        // #new
         //        HelpItem(title: "How are the Lists, Cart, Inventory and History related?", text: "Shopping Lists are where you keep Lists of items you want to buy, when you marked them as bought in the Cart they go to the Inventory. The Inventory defaults to ‘Home’, but you can add other locations if you need. The best way to use Lists is to name each for the store where you will use it (this means that when you add prices it will be the right price for that store). When you mark an item as purchased the app also automatically adds it to your History.
 
-        HelpItem(title: "How do I reorder sections?", text: "You can do a zoom out gesture (put 2 fingers on the screen and move them towards each other) over the list items to switch to section-only mode, where you can reorder sections. You leave with the opposite gesture."),
+//        HelpItem(title: "How do I reorder sections?", text: "You can do a zoom out gesture (put 2 fingers on the screen and move them towards each other) over the list items to switch to section-only mode, where you can reorder sections. You leave with the opposite gesture."),
 
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruit'. A Section is the area of the store where you find the product. The section can be different than the category! For example tuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in Shopping Lists."),
 
@@ -70,7 +70,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "How do I make sense of the report?", text: "The bar chart shows your monthly spend for the last year. 'Monthly average' is the average of what you have spent in the last year, 'Daily average in this month' is the average of what you have spent so far in the current month, 'Projected total this month' is an estimation of what you will spend in total in the current month based on what you have spent so far in this month. Tapping on a bar shows you a detailed view of its month. The pie chart shows the top categories and below you see an aggregate of all the purchased products."),
         
-        HelpItem(title: "Can I share with other users in real time?", text: "You can share with other users in real time, by using the same login! If your current login is private (e.g. Facebook account) you have to create a new account which can be shared."),
+//        HelpItem(title: "Can I share with other users in real time?", text: "You can share with other users in real time, by using the same login! If your current login is private (e.g. Facebook account) you have to create a new account which can be shared."),
 
         HelpItem(title: "What is the list store? How do prices work?", text: "Each shopping list can be associated with a store. The prices you assign to products are specific for each store. This means, for example, that if you have a list associated with a certain store \"My super grocery market\" every price you assign in this list will be remembered only in lists that have \"My super grocery market\" as a store. All lists have a store: When there's no name, it means that you are using the anonymous store."),
 
@@ -112,7 +112,7 @@ class HelpProviderImpl: HelpProvider {
     
     fileprivate static var helpItemsDE = [
 
-        HelpItem(title: "Kann ich die Abteilungen einer Shopping-Liste umsortieren?", text: "Ja, du kannst eine zoom-out Geste machen über die Listeneinträge um in Abteilungen-Modus zu wechseln, wo du umsortieren kannst."),
+//        HelpItem(title: "Kann ich die Abteilungen einer Shopping-Liste umsortieren?", text: "Ja, du kannst eine zoom-out Geste machen über die Listeneinträge um in Abteilungen-Modus zu wechseln, wo du umsortieren kannst."),
 
         HelpItem(title: "Was ist der Unterschied zwischen Abteilungen und Kategorien?", text: "Kategorien ist wie du generell etwas einordnen willst. Die Abteilung ist der Ort im Laden, wo sich das Produkt befindet. Z.B. für Thunfisch könnte die Kategorie 'Fisch' lauten, und die Abteilung 'Dosenprodukte'."),
 
@@ -140,7 +140,7 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Wie ist der Bericht zu verstehen?", text: "Das Säulendiagramm zeigt dir deine monatlichen Ausgaben seitdem du angefangen hast, die App zu benutzen. 'Monatlicher Durchschnitt' ist der Durchschnitt von deinen Ausgaben in den Monaten wo du die App benutzt hast. 'Monatstagesdurchschnitt' ist der täglicher Durchschnitt von dem was du in diesem Monat ausgegeben hast. 'Gesch. Gesamtausgaben akt. Monat' ist die Schätzung von dem, was du in diesem Monat ausgeben wirst, anhand dessen was du bislang in diesem Monat ausgegeben hast. Wenn du eine Säule antippst kommst du zur Detail-Ansicht für den jeweiligen Monat. Da findest du ein Tortendiagramm mit den Kategorien wofür du am meisten ausgegeben hast und darunter ein Aggregat von den gekauften Produkten."),
         
         
-        HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
+//        HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
 
         HelpItem(title: "Was ist der Laden einer Liste? Wie funktionieren Preise?", text: "Jede Einkaufsliste hat kann mit einem Laden verknüpft werden. Die Preise, die du Waren in einer Liste zuweist, beziehen sich nur auf diesen Laden. Dies bedeutet, dass, wenn du z.B. eine Liste mit \"Tolles Kaufhaus\" als Laden hast, alle Listen die \"Tolles Kaufhaus\" als Laden haben die Preise Teilen werden. Listen mit einem anderen Laden bekommen von diesen Preisen nichts mit. Alle Listen haben einen Laden: Wenn er keinen Namen hat, benutzt du den anonymen Laden."),
 
@@ -183,7 +183,7 @@ class HelpProviderImpl: HelpProvider {
     
     fileprivate static var helpItemsES = [
 
-        HelpItem(title: "Puedo cambiar el orden de las secciones en una lista?", text: "Sí, para esto tienes que hacer un gesto de \"zoom out\" (ponder los dedos separados en la pantalla y unirlos), con lo que cambias al modo de secciones en donde puedes reordenarlas. Para volver al modo normal haz el gesto opuesto."),
+//        HelpItem(title: "Puedo cambiar el orden de las secciones en una lista?", text: "Sí, para esto tienes que hacer un gesto de \"zoom out\" (ponder los dedos separados en la pantalla y unirlos), con lo que cambias al modo de secciones en donde puedes reordenarlas. Para volver al modo normal haz el gesto opuesto."),
 
         HelpItem(title: "Cuál es la diferencia entre categorías y secciones?", text: "Categoría es como clasificas un producto. Por ejemplo para manzanas probablemente usarías 'frutas'. Una sección es la parte del almacén donde encuentras el producto. La sección no siempre es lo mismo que la categoría! Por ejemplo atún, podría tener 'pez' como categoría pero estar en la sección 'enlatados'.\nProductos siempre tienen una categoría (en listas, grupos, inventarios, etc.) mientras que la sección sólo es utilizada en las listas."),
 
@@ -209,7 +209,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Cómo interpreto el reporte?", text: "La estadística de barras the muestra los gastos mensuales desde que empezaste a utilizar la app, hasta 1 año en el pasado. 'Promedio mensual' es el promedio de los gastos durante los meses que has usado la app. 'Promedio diario en este mes' es el promedio diario de lo que has gastado durante el mes actual. 'Gastos estimados para este mes'  es una estimación de lo que habrás gastado al final del mes actual (sólo para este mes). Pulsar en las barras te lleva a la vista de gastos para el mes correspondiente. El gráfico de torta muestra las categorías por las que más has gastado y abajo hay una lista de agregados de los productos que compraste durante el mes."),
         
-        HelpItem(title: "Puedo sincronizar con otros usuarios en tiempo real?", text: "Sí, para esto tienen todos que conectarse con el mismo usuario. Si esto no es posible (por ejemplo por que usas tu cuenta personal de Facebook) tienen que crear una nueva cuenta que se puede compartir."),
+//        HelpItem(title: "Puedo sincronizar con otros usuarios en tiempo real?", text: "Sí, para esto tienen todos que conectarse con el mismo usuario. Si esto no es posible (por ejemplo por que usas tu cuenta personal de Facebook) tienen que crear una nueva cuenta que se puede compartir."),
 
         HelpItem(title: "Qué es el almacén de una lista? Cómo funcionan los precios?", text: "Cada lista de compras se puede asociar con un almacén. Los precios que asignas a los productos en esta lista sólo son aplicados a este almacén. Esto significa que si, por ejemplo, tienes una lista con \"Super Almacenes Mundo\" como almacén, todas las listas con el almacén \"Super Almacenes Mundo\" compartirán los precios. Todas las listas tienen un almacén: Si el nombre está vacío, significa que es el almacén anónimo."),
 
