@@ -19,7 +19,7 @@ class SelectQuantifiableCell: UITableViewCell, QuantityViewDelegate, SwipeToIncr
         didSet {
             if let quantifiableProduct = quantifiableProduct {
                 baseLabel.text = quantifiableProduct.baseQuantity.quantityString
-                unitLabel.text = quantifiableProduct.unit.name
+                unitLabel.text = quantifiableProduct.unit.id == .none ? "" : quantifiableProduct.unit.name
                 quantityView.quantity = 1
                 
             } else {
