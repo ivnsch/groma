@@ -456,6 +456,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     // MARK: - Touch
     
     @objc func longPress(_ sender: UILongPressGestureRecognizer) {
+        guard !isEditing else { return }
+        
         switch sender.state {
         case .began: mode = mode == .increment ? .note : .increment
         default: break
