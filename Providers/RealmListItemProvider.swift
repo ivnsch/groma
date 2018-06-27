@@ -1365,25 +1365,19 @@ class RealmListItemProvider: RealmProvider {
 
             // delete from src section
             srcSection.listItems.remove(at: from.row)
-            
+
             dstSection.listItems.insert(listItem, at: to.row)
-            
+
             if srcSection != dstSection {
                 listItem.section = dstSection
             }
 
             // If src section is empty, delete it
             if srcSection.listItems.isEmpty {
-                if let _ = list.sections(status: status).index(of: srcSection) {
-                    let section = list.sections(status: status)
-                    realm.delete(section)
-                    return MoveListItemResult(deletedSrcSection: true)
-                } else {
-                    logger.e("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
-                    return nil
-                }
+                realm.delete(srcSection)
+                return MoveListItemResult(deletedSrcSection: true)
             }
-            
+
             return MoveListItemResult(deletedSrcSection: false)
         }
     }
