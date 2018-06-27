@@ -375,7 +375,7 @@ empty_inventory_line1 = "Oops, there are no items yet";
 empty_inventory_line2 = "You can add items directly or using 'buy' in the cart.";
 empty_group_line1 = "Oops, there are no items yet";
 empty_group_line2 = "Just add some, will ya?";
-empty_recipe_line1 = "Opps, there are no ingredients";
+empty_recipe_line1 = "Oops, there are no ingredients";
 empty_recipe_line2 = "Tap to add some";
 
 
