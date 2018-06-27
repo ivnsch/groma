@@ -406,7 +406,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate func createPriceInputsControler() -> PriceInputsController {
         let controller = PriceInputsController()
-        let tooltipWidth = priceInputs.secondQuantity == nil ? view.width - 120 : view.width - 60
+
+        let secondQuantity: Float? = {
+            if currentSecondBase > 1 { // if we have a second base, show always the input to enter a second reference quantity
+                return priceInputs.secondQuantity
+            } else {
+                // if there's no second base show the input only if there's a value greater than 1
+                // not sure when this is the case, since at the moment we don't persist reference quantity inputs, so this always is derived from the base
+                // but seems better to use this logic anyway
+                return priceInputs.secondQuantity.flatMap { $0 <= 1 ? nil : $0 }
+            }
+        }()
+
+        let tooltipWidth = secondQuantity == nil ? view.width - 150 : view.width - 80
         controller.view.frame = CGRect(x: 0, y: 0, width: tooltipWidth, height: 50)
         controller.onPriceChange = { [weak self] price in
             self?.refQuantityWasEnteredByUser = true // interpret price input as also "ack-ing" the current quantity input. This causes the ref quantity to not be affected anymore by changing the base quantity.
@@ -423,7 +435,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             self?.priceInputs.secondQuantity = quantity
         }
 
-        controller.prefill(quantity: priceInputs.quantity, secondQuantity: priceInputs.secondQuantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
+        controller.prefill(quantity: priceInputs.quantity, secondQuantity: secondQuantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
         return controller
     }
 
@@ -628,14 +640,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
         let price = item.storeProduct?.totalPrice(quantity: currentQuantity) ?? 0
 
-        if let refQuantity = item.storeProduct?.refQuantity.value {
+        if let refQuantity = item.storeProduct?.refQuantity.value, refQuantity != 1 {
+            // refQuantity == 1 -> since we now always force a ref quantity of 1 when storing the item (TODO probably we just should init the value with 1...)
+            // we can't use "empty" to figure if it wasn't entered by the user yet. So the new logic is to overwrite with base always when the refQuantity is 1 (or empty)
+            // not completely sure this makes sense in all cases, too lazy now to think this through (TODO)
             refQuantityWasEnteredByUser = true
             priceInputs.quantity = refQuantity
         } else {
             refQuantityWasEnteredByUser = false
             priceInputs.quantity = currentBase // use base as default reference quantity
-
         }
+
         priceView.show(price: price)
 
         // TODO remove?
