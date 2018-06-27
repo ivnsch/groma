@@ -12,11 +12,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="IntroPageView" customModule="groma" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="196"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="252"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gA-1a-5TJ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="40" y="174.5" width="295" height="21.5"/>
+                    <rect key="frame" x="40" y="10.5" width="295" height="21.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <color key="textColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -28,7 +28,23 @@
                 </label>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="9gA-1a-5TJ" secondAttribute="bottom" id="85R-Tc-y5G"/>
+                <constraint firstAttribute="bottom" secondItem="9gA-1a-5TJ" secondAttribute="bottom" constant="220" id="85R-Tc-y5G" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                            <real key="value" value="160"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                            <real key="value" value="180"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                            <real key="value" value="220"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                            <real key="value" value="265"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
                 <constraint firstAttribute="trailing" secondItem="9gA-1a-5TJ" secondAttribute="trailing" constant="40" id="m0e-gd-QRs" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
@@ -62,7 +78,7 @@
             <connections>
                 <outlet property="label" destination="9gA-1a-5TJ" id="i55-fr-sfi"/>
             </connections>
-            <point key="canvasLocation" x="33.5" y="289"/>
+            <point key="canvasLocation" x="33.5" y="261"/>
         </view>
     </objects>
 </document>

@@ -30,12 +30,19 @@
                                 </constraints>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="168" y="423.5" width="39" height="37"/>
+                                <rect key="frame" x="168" y="403.5" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="currentPageIndicatorTintColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </pageControl>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ynb-xz-qyx" customClass="SwipeView">
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="k9Y-sO-uBl" id="jlh-MV-n5y"/>
+                                    <outlet property="delegate" destination="k9Y-sO-uBl" id="8TY-LL-IM3"/>
+                                </connections>
+                            </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="170" y="490.5" width="35" height="34"/>
+                                <rect key="frame" x="170" y="470.5" width="35" height="34"/>
                                 <accessibility key="accessibilityConfiguration" identifier="skip"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
@@ -52,15 +59,8 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
-                                <rect key="frame" x="177" y="497.5" width="20" height="20"/>
+                                <rect key="frame" x="177" y="477.5" width="20" height="20"/>
                             </activityIndicatorView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ynb-xz-qyx" customClass="SwipeView">
-                                <rect key="frame" x="16" y="20" width="343" height="393.5"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="k9Y-sO-uBl" id="jlh-MV-n5y"/>
-                                    <outlet property="delegate" destination="k9Y-sO-uBl" id="8TY-LL-IM3"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -78,7 +78,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
-                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="20" id="2Je-Xu-p9d"/>
+                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" id="2Je-Xu-p9d"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" constant="-80" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
@@ -104,7 +104,7 @@
                             <constraint firstItem="Ynb-xz-qyx" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leadingMargin" id="W7p-ZN-NCh"/>
                             <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="kq0-sL-AYj"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
-                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="Ynb-xz-qyx" secondAttribute="bottom" constant="10" id="p4M-ut-kH7"/>
+                            <constraint firstItem="OHf-Rk-Mbe" firstAttribute="top" secondItem="Ynb-xz-qyx" secondAttribute="bottom" id="sIt-gg-HuD"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" id="xZ6-gy-O9O" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
@@ -133,7 +133,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sav-df-KtR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1632" y="502"/>
+            <point key="canvasLocation" x="1631.2" y="501.49925037481262"/>
         </scene>
     </scenes>
 </document>
