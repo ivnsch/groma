@@ -118,7 +118,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onExpand(_ expanding: Bool) {
         if !expanding {
-            productsWithQuantityController?.setEmptyUI(true, animated: false)
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()            
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])

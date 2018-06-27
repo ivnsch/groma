@@ -80,6 +80,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             _ = self?.toggleTopAddController()
         }
         self.emptyViewController = emptyViewController
+        emptyViewController.view.isHidden = true
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -122,7 +123,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         if !expanding {
             clearPossibleNotePopup()
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
-            setEmptyUI(false, animated: false)
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels(rightButtonsClosing())
             // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
@@ -140,6 +140,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     func setEmptyUI(_ empty: Bool, animated: Bool) {
         let hidden = !empty
         if animated {
+            emptyViewController.view.isHidden = false
             emptyViewControllerContainer.setHiddenAnimated(hidden)
         } else {
             emptyViewControllerContainer.isHidden = hidden

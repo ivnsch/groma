@@ -133,6 +133,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
             logger.v("Initialized sections: \(String(describing: self.listItemsTableViewController.sections?.count))")
 
+            self.updateEmptyUI()
+
             self.onTableViewChangedQuantifiables()
 
             self.initNotifications()

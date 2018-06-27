@@ -132,7 +132,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             self?.delegate?.onEmptyViewTap()
         }
         self.emptyViewController = emptyViewController
-        
+        emptyViewController.view.isHidden = true
+
         initEmptyViewLabelsIfConditions()
     }
 
@@ -154,6 +155,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     func setEmptyUI(_ empty: Bool, animated: Bool) {
         let hidden = !empty
         if animated {
+            emptyViewController.view.isHidden = false
             emptyViewControllerContainer.setHiddenAnimated(hidden)
         } else {
             emptyViewControllerContainer.isHidden = hidden
@@ -457,9 +459,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     func load() {
         guard let sortBy = sortBy else {logger.e("Can't load models, sortBy not set"); return}
-        
-        tableView.reloadData()
-        updateEmptyUI()
 
         delay(0.2) { // smoother animation when showing controller
             self.delegate?.loadModels(sortBy: sortBy.value) { [weak self] in
