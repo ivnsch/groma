@@ -78,7 +78,7 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "What are purchasable units?", text: "Units that can be purchased! Examples: A liter or a pack are purchasable, as you find things in stores measured directly in liters (e.g. a 2L beverage) or packs (e.g. a pack of sweets). A tablespoon or a shot are not purchasable, as normally stores do not sell products measured in these units. You can edit this property."),
 
-        HelpItem(title: "What are edible products?", text: "Products that you can eat! This is to filter out non-edible products from the recipe section (you will not be able to add e.g. cleaning agent to a recipe). You can edit this property."),
+//        HelpItem(title: "What are edible products?", text: "Products that you can eat! This is to filter out non-edible products from the recipe section (you will not be able to add e.g. cleaning agent to a recipe). You can edit this property."),
 
         HelpItem(title: "The app is not working!", text: "You can contact the support via \"feedback\" in the \"More\" screen. There's also always the nuclear (and quick) option - in case your data became corrupted and the app isn't usable at all (which of course shouldn't-happen™️) - you can use the \"clear all data\" option in the settings and restore the bundled products after it (also in the settings), such that you get the same state of a new install. Needless to say, this will erase permanently your lists, history, etc. You will have to add them again."),
 
@@ -146,9 +146,9 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
 
-        HelpItem(title: "Was sind kaufbare Messeinheiten?", text: "Einheiten, die gekauft werden können! Zum Beispiel: Ein Liter oder eine Packung sind kaufbar, da Produkte in diesen Einheiten verkauft werden. Ein Teelöffel oder ein Schuss sind nicht (direktkaufbar. Diese Eigenschaft kann editiert werden."),
-
-        HelpItem(title: "Was sind verzehbare Produkte?", text: "Wie die Bezeichnung sagt, Produkte die verzehrt werden können! Dies hat den Zweck nicht verzehrbare Produkte von der Zutaten-Auswahl in den Rezepten rauszufiltern (es ist z.B. nicht möglich Putzmittel in ein Rezept einzufügen). Diese Eingenschaft kann editiert werden."),
+        HelpItem(title: "Was sind kaufbare Messeinheiten?", text: "Einheiten, die gekauft werden können! Zum Beispiel: Ein Liter oder eine Packung sind kaufbar, da Produkte in diesen Einheiten verkauft werden. Ein Teelöffel oder ein Schuss sind nicht direkt kaufbar. Diese Eigenschaft kann editiert werden."),
+//
+//        HelpItem(title: "Was sind verzehbare Produkte?", text: "Wie die Bezeichnung sagt, Produkte die verzehrt werden können! Dies hat den Zweck nicht verzehrbare Produkte von der Zutaten-Auswahl in den Rezepten rauszufiltern (es ist z.B. nicht möglich Putzmittel in ein Rezept einzufügen). Diese Eingenschaft kann editiert werden."),
 
         HelpItem(title: "Ich kann nicht die Information finden, die ich suche", text: "Sende uns eine Feedback Email! Wir beantworten gerne deine Fragen."),
 
@@ -217,7 +217,7 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "Qué son unidades comprables?", text: "Unidades de medida que puedes comprar directamente! Por ejemplo, un litro o un paquete son comprables, ja que encuetras productos en estas unidades en los almacenes. Por otro lado, por una cucharada o un trago no se compran directamente. Esta propiedad es editable."),
 
-        HelpItem(title: "Qué son productos comestibles?", text: "Como el adjetivo lo indica, productos que se pueden comer! Esto es para remover productos que no se pueden comer del menú en las recetas - por ejemplo, no puedes agregar detergente a una receta. Esta propiedad es editable."),
+//        HelpItem(title: "Qué son productos comestibles?", text: "Como el adjetivo lo indica, productos que se pueden comer! Esto es para remover productos que no se pueden comer del menú en las recetas - por ejemplo, no puedes agregar detergente a una receta. Esta propiedad es editable."),
 
         HelpItem(title: "No encuentro la información que estoy buscando", text: "Envíanos un feedback email! Nos alegra mucho responder todas tus preguntas!"),
 
