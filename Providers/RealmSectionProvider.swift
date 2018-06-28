@@ -133,10 +133,10 @@ class RealmSectionProvider: RealmProvider {
         
         // delete section
         if let dbSection = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first {
-            if markForSync {
-                let toRemove = SectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
-                realm.add(toRemove, update: true)
-            }
+//            if markForSync {
+//                let toRemove = SectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
+//                realm.add(toRemove, update: true)
+//            }
             realm.delete(dbSection)
             return true
         } else {
