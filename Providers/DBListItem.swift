@@ -300,7 +300,7 @@ public class ListItem: DBSyncable, Identifiable, WithUuid {
     }
 
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
-        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == \(quantifiableProductUnique.baseQuantity)"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == \(quantifiableProductUnique.baseQuantity) AND productOpt.productOpt.secondBaseQuantity == \(quantifiableProductUnique.secondBaseQuantity)"
     }
    
     
