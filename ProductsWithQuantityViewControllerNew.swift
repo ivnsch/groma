@@ -127,12 +127,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
 
     fileprivate func initEmptyView() {
         let emptyViewController = UIStoryboard.emptyViewStoryboard()
+        emptyViewController.view.isHidden = true
         emptyViewController.addTo(container: emptyViewControllerContainer)
         emptyViewController.onTapOrPull = {[weak self] in
             self?.delegate?.onEmptyViewTap()
         }
         self.emptyViewController = emptyViewController
-        emptyViewController.view.isHidden = true
 
         initEmptyViewLabelsIfConditions()
     }
@@ -155,7 +155,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     func setEmptyUI(_ empty: Bool, animated: Bool) {
         let hidden = !empty
         if animated {
-            emptyViewController.view.isHidden = false
+            emptyViewController.view.isHidden = hidden
             emptyViewControllerContainer.setHiddenAnimated(hidden)
         } else {
             emptyViewControllerContainer.isHidden = hidden

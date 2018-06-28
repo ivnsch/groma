@@ -19,13 +19,17 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         didSet {
             if let recipe = recipe {
                 topBar.title = recipe.name
-                recipeText = NSAttributedString(string: recipe.text)
-                spans = recipe.textAttributeSpans.map {
-                    TextSpan(start: $0.start, length: $0.length, attribute: TextAttribute(rawValue: $0.attribute)!)
-                }
                 updateTextView()
                 delay(0.2) { // smoother animation when showing controller
                     self.load()
+
+                    // TODO spans and recipeText are coupled - if we set e.g. a recipe text different to recipe.text here,
+                    // the app will crash with out of bounds when trying to apply the range of the spans to this text
+                    // so either ensure they are manager as a unit such that these inconsistencies can't happen or decouple in some way
+                    self.recipeText = NSAttributedString(string: recipe.text)
+                    self.spans = recipe.textAttributeSpans.map {
+                        TextSpan(start: $0.start, length: $0.length, attribute: TextAttribute(rawValue: $0.attribute)!)
+                    }
                 }
             }
         }

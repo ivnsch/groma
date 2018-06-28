@@ -140,7 +140,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     func setEmptyUI(_ empty: Bool, animated: Bool) {
         let hidden = !empty
         if animated {
-            emptyViewController.view.isHidden = false
+            emptyViewController.view.isHidden = hidden
             emptyViewControllerContainer.setHiddenAnimated(hidden)
         } else {
             emptyViewControllerContainer.isHidden = hidden
