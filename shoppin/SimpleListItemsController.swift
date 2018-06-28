@@ -569,11 +569,13 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         guard let list = currentList else {logger.e("No list"); return}
         
-        Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
+        Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: { listItems -> String in
             if listItems.isEmpty {
                 return ""
             } else {
-                return trans("recipe_already_has", listItems.map{$0.quantityTextWithoutName()}.joined(separator: ", "))
+                return trans("recipe_already_has", listItems.map {
+                    Ingredient.quantityFullText(quantity: $0.quantity, baseQuantity: $0.product.product.baseQuantity, secondBaseQuantity: $0.product.product.secondBaseQuantity, unitId: $0.product.product.unit.id, unitName: $0.product.product.unit.name, showNoneUnitName: true)
+                }.joined(separator: ", "))
             }
         }, successHandler {text in
             handler(text)
