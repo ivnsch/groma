@@ -201,7 +201,7 @@ public final class Ingredient: Object, WithUuid {
             true
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
-        let secondBaseText = showBaseQuantity ? secondBaseQuantity.quantityString : ""
+        let secondBaseText = showBaseQuantity && secondBaseQuantity > 1 ? secondBaseQuantity.quantityString : ""
         let secondBaseSuffix = secondBaseText.isEmpty ? "" : " x "
         let baseText = showBaseQuantity ? " x \(secondBaseText)\(secondBaseSuffix)\(baseQuantity.quantityString)" : ""
         var unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
