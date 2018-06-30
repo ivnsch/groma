@@ -386,7 +386,7 @@ placeholder_user_name = "E-mail";
 placeholder_password = "Kennwort";
 
 placeholder_section_name = "Abteilungsname";
-placeholder_section = "Abteilung";
+placeholder_section = "Abteilung (freiwillig)";
 placeholder_category = "Kategorie";
 placeholder_list_name = "Name";
 placeholder_store = "Laden (freiwillig)";
@@ -396,6 +396,7 @@ placeholder_recipe_name = "Rezeptname";
 placeholder_price_inputs_price = "Preis";
 placeholder_price_inputs_quantity = "Menge";
 
+default_section_name = "Verschiedenes";
 
 validation_missing_password = "Bitte gib dein Passwort ein";
 validation_email_format = "Inkorrektes e-Mail Format";

@@ -227,3 +227,14 @@ public extension String {
         }
     }
 }
+
+public extension Optional where Wrapped == String {
+
+    public func toNilIfEmpty() -> String? {
+        if let str = self, !str.trim().isEmpty {
+            return str
+        } else {
+            return nil
+        }
+    }
+}

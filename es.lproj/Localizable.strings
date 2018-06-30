@@ -388,7 +388,7 @@ placeholder_user_name = "E-mail";
 placeholder_password = "Clave";
 
 placeholder_section_name = "Nombre de sección";
-placeholder_section = "Sección";
+placeholder_section = "Sección (opcional)";
 placeholder_category = "Categoría";
 placeholder_list_name = "Nombre de la lista";
 placeholder_store = "Tienda (opcional)";
@@ -398,6 +398,7 @@ placeholder_recipe_name = "Nombre de la receta";
 placeholder_price_inputs_price = "Precio";
 placeholder_price_inputs_quantity = "Cantidad";
 
+default_section_name = "Misceláneo";
 
 validation_email_format = "Formato incorrecto de e-mail";
 validation_missing_password = "Por favor ingresa tu clave";

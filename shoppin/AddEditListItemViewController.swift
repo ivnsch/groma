@@ -691,7 +691,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate func initValidator() {
         let validator = Validator()
-        validator.registerField(sectionInput, rules: [NotEmptyTrimmedRule(message: trans("validation_section_name_not_empty"))])
 //        validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
 
 //        if modus == .listItem {
@@ -742,7 +741,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }()
 
-            if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+            let section: String = sectionInput.text.toNilIfEmpty() ?? trans("default_section_name")
+
+            if let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 

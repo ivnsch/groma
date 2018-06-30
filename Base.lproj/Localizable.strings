@@ -388,7 +388,7 @@ placeholder_user_name = "Email";
 placeholder_password = "Password";
 
 placeholder_section_name = "Section name";
-placeholder_section = "Section";
+placeholder_section = "Section (optional)";
 placeholder_category = "Category";
 placeholder_list_name = "List name";
 placeholder_store = "Store (optional)";
@@ -398,6 +398,7 @@ placeholder_recipe_name = "Recipe name";
 placeholder_price_inputs_price = "Price";
 placeholder_price_inputs_quantity = "Quantity";
 
+default_section_name = "Misc";
 
 validation_email_format = "Wrong email format";
 validation_missing_password = "Please enter your password";
