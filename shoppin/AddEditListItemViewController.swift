@@ -318,7 +318,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     categoryOrSectionTextFieldTopToBrandEdibleRowConstraint.isActive = false
                     categoryOrSectionTextFieldTopToSuperviewConstraint.constant = 10
                 }
-                
+
+                // Apply placeholder colors to new strings
+                initTextFieldPlaceholders()
+
             } else {
                 print("Error: Trying to set modus before outlet is initialised")
             }
