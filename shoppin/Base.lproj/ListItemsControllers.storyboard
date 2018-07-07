@@ -295,8 +295,8 @@
                                         <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" ambiguous="YES" text="Items" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="71" y="19.5" width="262" height="21.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Items" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="71" y="29.5" width="262" height="21.5"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" red="0.72156862745098038" green="0.72156862745098038" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -306,8 +306,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" ambiguous="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="FMk-6f-dB8" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="55" y="19.5" width="12" height="21.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="FMk-6f-dB8" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="55" y="29.5" width="12" height="21.5"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -471,7 +471,7 @@
                                                         <constraint firstAttribute="width" constant="4" id="4a4-fc-VIG"/>
                                                     </constraints>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="npq-ts-NkO" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="npq-ts-NkO" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                                     <rect key="frame" x="29" y="25" width="44" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -494,7 +494,7 @@
                                                         <action selector="onNoteTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="ERg-HN-Obn"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="9Rc-cx-ee2" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Rc-cx-ee2" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                                     <rect key="frame" x="29" y="47" width="161" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -516,6 +516,7 @@
                                                 <constraint firstItem="259-87-721" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" id="FB9-89-d3h"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" constant="4" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>
+                                                <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="trailing" id="Irf-tR-DDK"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="W7z-OP-2eO" secondAttribute="trailing" constant="25" id="LUU-o0-wMf" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" constant="4" id="OJx-bm-tMl"/>
                                                 <constraint firstAttribute="trailing" secondItem="259-87-721" secondAttribute="trailing" id="P0w-Kx-G4d" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
@@ -525,7 +526,7 @@
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="leading" id="avc-VW-rvi"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="cTT-nZ-E4n"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" constant="10" id="den-ag-xFz"/>
-                                                <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="9Rc-cx-ee2" secondAttribute="trailing" constant="10" id="pp4-NJ-EeN"/>
+                                                <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="9Rc-cx-ee2" secondAttribute="trailing" id="pp4-NJ-EeN"/>
                                                 <constraint firstItem="259-87-721" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="xZU-R0-J9P"/>
                                             </constraints>
                                             <variation key="default">
