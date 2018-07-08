@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                realTimeConnectionSetting,
 //                overwriteDataSetting,
 //                removeAccountSetting, // TODO!!!!!!!!!!!!!!!!!!!!!!! how to do this with Realm?
-//                addDummyHistoryItemsSetting,
+                addDummyHistoryItemsSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting,
                 restoreUnitsSetting,
@@ -101,7 +101,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             settings = [
 //                clearHistorySetting,
-//                addDummyHistoryItemsSetting,
+                addDummyHistoryItemsSetting,
 //                clearAllDataSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting,
