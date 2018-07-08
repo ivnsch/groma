@@ -104,9 +104,9 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         initValidator()
         
         groupNameInputField.setPlaceholderWithColor(trans("placeholder_recipe_name"), color: UIColor.white)
-        
-        setBackgroundColor(UIColor.randomColor())
-        
+
+        setBackgroundColor(UIColor(hexString: "2E9E3F"))
+
         groupNameInputField.becomeFirstResponder()
     }
     
