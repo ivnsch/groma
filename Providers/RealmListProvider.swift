@@ -76,22 +76,7 @@ class RealmListProvider: RealmProvider {
         func onNotExists() {
             let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: list.realm) {realm -> Bool in
                 realm.add(list, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
-
-                let list1 = List(uuid: UUID().uuidString, name: "My supermarket", color: UIColor(hexString: "d35b9d"), order: 0, inventory: list.inventory, store: nil)
-                let list2 = List(uuid: UUID().uuidString, name: "Weekend supplies", color: UIColor(hexString: "d6c295"), order: 0, inventory: list.inventory, store: nil)
-                let list3 = List(uuid: UUID().uuidString, name: "Mom", color: UIColor(hexString: "26ad5e"), order: 0, inventory: list.inventory, store: nil)
-                let list4 = List(uuid: UUID().uuidString, name: "DIY stuff", color: UIColor(hexString: "346272"), order: 0, inventory: list.inventory, store: nil)
-                let list5 = List(uuid: UUID().uuidString, name: "Personal", color: UIColor(hexString: "3498db"), order: 0, inventory: list.inventory, store: nil)
-
-                lists.append(list1)
-                lists.append(list2)
-                lists.append(list3)
-                lists.append(list4)
-                lists.append(list5)
-
-
-
-//                lists.append(list)
+                lists.append(list)
                 return true
             }
 

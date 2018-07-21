@@ -154,7 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             listController?.allowedToLoadModelsOnWillAppear = false
 
             // On first launch make lists view controller update immediately after create example list, such that when user exits intro there's not a little delay where they see empty image while the example list is loaded. The reason the empty image shows is that the first view controller is loaded immediately - not after intro controller, and it fetches lists which are empty at this point.
-            introController.onCreateExampleList = {[weak listController] in
+            introController.onCreateExampleList = {[weak listController] success in
                 listController?.initModels()
                 listController?.allowedToLoadModelsOnWillAppear = true
             }

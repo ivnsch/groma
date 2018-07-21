@@ -37,7 +37,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
 
     fileprivate var databaseFinishedLoading = false
 
-    var onCreateExampleList: VoidFunction?
+    var onCreateExampleList: ((Bool) -> Void)? // bool: success creating example list
     
     fileprivate let suggestionsPrefiller = SuggestionsPrefiller()
     
@@ -349,12 +349,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                     
                     let productsWithBrands: [(name: String, brand: String)] = productsWithQuantity.map{(name: $0.name, brand: "")}
                     
-                    Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
+                    Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: { [weak self] products in
                         
                         if products.count != productsWithBrands.count {
                             logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
                             onFinish?()
-                            
+                            self?.onCreateExampleList?(false)
+
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
@@ -384,7 +385,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                                 Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
                                     logger.d("Finish adding example list")
                                     
-                                    self?.onCreateExampleList?()
+                                    self?.onCreateExampleList?(true)
                                     
                                     onFinish?()
                                     
