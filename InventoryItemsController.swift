@@ -554,6 +554,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func itemForRow(row: Int) -> ProductWithQuantity2? {
+        let count: Int? = inventoryItemsResult?.count
+        guard (count.map { row < $0 } ?? false) else { return nil } // quick fix for out of bounds access here TODO better fix? crash report: https://rink.hockeyapp.net/manage/apps/279062/app_versions/33/crash_reasons/227783389?order=asc&sort_by=date&type=crashes#crash_data
         return inventoryItemsResult?[row]
     }
     
