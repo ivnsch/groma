@@ -351,7 +351,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                     
                     Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: { [weak self] products in
                         
-                        if products.count != productsWithBrands.count {
+                        if products.count < productsWithBrands.count {
                             logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
                             onFinish?()
                             self?.onCreateExampleList?(false)
