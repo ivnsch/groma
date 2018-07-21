@@ -66,6 +66,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
+
+                if tableViewListItem.isInvalidated { return } // quick fix for crash accessing invalid object TODO!!!! try to not store the list item as a variable so we never have invalid object
+
                 quantityView.quantity = shownQuantity
                 quantityView.quantityText = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
                 quantityView.invalidateIntrinsicContentSize()
@@ -159,6 +162,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     func update() {
         let tableViewListItem = self.tableViewListItem
+
+        if tableViewListItem?.isInvalidated ?? false { return } // quick fix for crash accessing invalid object TODO!!!! try to not store the list item as a variable so we never have invalid object
+
         self.tableViewListItem = tableViewListItem
     }
     
@@ -178,7 +184,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     }
     
     fileprivate func updateModeItemsVisibility(_ mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: ListItem, animated: Bool) {
-        
+
+        if tableViewListItem.isInvalidated { return } // quick fix for crash accessing invalid object TODO!!!! try to not store the list item as a variable so we never have invalid object
+
         let hasNote = !tableViewListItem.note.isEmpty
         let showNote = hasNote && mode == .note
         
