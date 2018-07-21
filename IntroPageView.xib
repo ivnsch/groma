@@ -76,6 +76,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomConstraint" destination="85R-Tc-y5G" id="KGV-Nx-JTx"/>
                 <outlet property="label" destination="9gA-1a-5TJ" id="i55-fr-sfi"/>
             </connections>
             <point key="canvasLocation" x="33.5" y="261"/>

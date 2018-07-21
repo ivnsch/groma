@@ -509,6 +509,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
         let v = (view ?? Bundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
         let pageModel = pageModels[index]
         v.label.text = pageModel.key
+        v.setup(source: mode, controller: self)
         return v
     }
 
