@@ -145,9 +145,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let controller = UIStoryboard.mainTabController()
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = controller
-        self.window?.makeKeyAndVisible()
-        
+        window?.makeKeyAndVisible()
+
         if (isDebug() && debugForceShowIntro) || PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
+
+            let launchMaybe = Bundle.main.loadNibNamed("LaunchScreen", owner: nil, options: nil)?.first as? UIView
+            if let launch = launchMaybe {
+                launch.frame = controller.view.bounds
+                launch.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+                window?.addSubview(launch)
+            }
+
             let introController = UIStoryboard.introViewController()
 
             let listController = (controller.viewControllers?.first as? UINavigationController)?.viewControllers.first as? ListsTableViewController
@@ -163,8 +171,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             
             let navController = UINavigationController()
             navController.viewControllers = [introController]
-            
-            self.window?.rootViewController?.present(navController, animated: false, completion: nil)
+
+            //Using DispatchQueue to prevent "Unbalanced calls to begin/end appearance transitions"
+            DispatchQueue.global().async {
+                // Bounce back to the main thread to update the UI
+                DispatchQueue.main.async {
+                    self.window?.rootViewController?.present(navController, animated: false, completion: {
+
+                        UIView.animate(withDuration: 0.5, animations: {
+                            launchMaybe?.alpha = 0
+                        }, completion: { (_) in
+                            launchMaybe?.removeFromSuperview()
+                        })
+                    })
+                }
+            }
         }
     }
     
