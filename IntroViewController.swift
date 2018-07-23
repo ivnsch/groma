@@ -107,7 +107,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
 
     fileprivate func initIntroAnimation() {
         initAnimationIntervals()
-        animationView.setAnimation(named: "groma-intro-02")
+
+        background({ () -> LOTComposition? in
+            return LOTComposition(name: "groma-intro-02")
+        }) { [weak self] composition in
+            self?.animationView.sceneModel = composition
+        }
+
         if let firstSceneStart = animationIntervals[safe: 1] {
             animationView.play(toProgress: CGFloat(firstSceneStart.0 / 100), withCompletion: nil)
         } else {
