@@ -557,3 +557,11 @@ base_unit_help_reference_quantity_price = "La %%4cantidad de referencia%%4 y el 
 base_unit_help_reference_quantity_price_2 = "Este tooltip aparece cuando seleccionas el precio en la vista para agregar (o editar) items.";
 base_unit_help_unit_bases = "La %%1unidad%%1, la %%2cantidad básica%%2 y la %%3segunda candidad básica%%3 van en la vista donde abriste este popup";
 
+accessibility_general_button_edit = "Editar";
+accessibility_general_button_add = "Agregar";
+accessibility_general_button_submit = "Enviar";
+accessibility_general_button_toggle_menu = "Abrir o cerrar menú";
+accessibility_general_button_toggle_sections = "Expandir o contraher secciones";
+accessibility_general_button_navigation_bar_title = "Título";
+accessibility_settings_button_help = "Ayuda %@";
+accessibility_general_search_input = "Buscar";

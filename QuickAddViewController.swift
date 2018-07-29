@@ -137,6 +137,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
         searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
 
+        searchBar.accessibilityLabel = trans("accessibility_general_search_input")
+        searchBar.accessibilityTraits = UIAccessibilityTraitSearchField
+
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
     

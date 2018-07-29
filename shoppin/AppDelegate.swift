@@ -139,13 +139,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         BITHockeyManager.shared().start()
         BITHockeyManager.shared().authenticator.authenticateInstallation()
     }
-    
+
+    fileprivate func initTabItemsAccessibility(controller: UITabBarController) {
+        let tabbar = controller.tabBar.items
+        let listsTabItem = tabbar?[0]
+        let recipesTabItem = tabbar?[1]
+        let inventoriesTabItem = tabbar?[2]
+        let statsTabItem = tabbar?[3]
+        let moreTabItem = tabbar?[4]
+
+        listsTabItem?.accessibilityLabel = trans("tab_lists")
+        recipesTabItem?.accessibilityLabel = trans("tab_recipes")
+        inventoriesTabItem?.accessibilityLabel = trans("tab_inventories")
+        statsTabItem?.accessibilityLabel = trans("tab_stats")
+        moreTabItem?.accessibilityLabel = trans("tab_more")
+
+        if let tabBarItems = controller.tabBar.items {
+            for item in tabBarItems {
+                item.accessibilityTraits = UIAccessibilityTraitButton
+                item.isAccessibilityElement = true
+            }
+        }
+    }
+
     fileprivate func showController() {
-        
         let controller = UIStoryboard.mainTabController()
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = controller
         window?.makeKeyAndVisible()
+
+        initTabItemsAccessibility(controller: controller)
 
         if (isDebug() && debugForceShowIntro) || PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
 
@@ -165,6 +188,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             introController.onCreateExampleList = {[weak listController] success in
                 listController?.initModels()
                 listController?.allowedToLoadModelsOnWillAppear = true
+
+                // Intro isn't needed for blind people, so exit as soon as db finishes initializing
+                if UIAccessibilityIsVoiceOverRunning() {
+                    introController.exit()
+                }
             }
             
             introController.mode = .launch

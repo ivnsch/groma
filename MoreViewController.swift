@@ -40,8 +40,8 @@ class MoreViewController: UITableViewController {
             MoreItem(type: .help, text: trans("more_help"), image: #imageLiteral(resourceName: "more_help")),
             MoreItem(type: .share, text: trans("more_share"), image: #imageLiteral(resourceName: "more_share")),
 //            MoreItem(type: .community, text: trans("more_community"), image: #imageLiteral(resourceName: "more_community")),
-            MoreItem(type: .feedback, text: trans("more_feedback"), image: #imageLiteral(resourceName: "more_feedback")),
-            MoreItem(type: .watchIntro, text: trans("more_intro"), image: #imageLiteral(resourceName: "more_intro")),
+            MoreItem(type: .feedback, text: trans("more_feedback"), image: #imageLiteral(resourceName: "more_feedback"))
+        ] + (introItemOrNone().map { [$0] } ?? []) + [
             MoreItem(type: .about, text: trans("more_about"), image: #imageLiteral(resourceName: "more_info")),
 //            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.modelCode), \(UIScreen.main.nativeBounds.height)")
         ]
@@ -52,6 +52,14 @@ class MoreViewController: UITableViewController {
         
         tableView.reloadData()
 
+    }
+
+    fileprivate func introItemOrNone() -> MoreItem? {
+        if !UIAccessibilityIsVoiceOverRunning() {
+            return MoreItem(type: .watchIntro, text: trans("more_intro"), image: #imageLiteral(resourceName: "more_intro"))
+        } else {
+            return nil
+        }
     }
     
     fileprivate func styleBackButton() {

@@ -36,6 +36,24 @@ enum ListTopBarViewButtonId: Int {
             return "expandSections"
         }
     }
+
+    var accessibilityLabel: String {
+        let key: String = {
+            switch self {
+                case .add:
+                    return "accessibility_general_button_add"
+                case .submit:
+                    return "accessibility_general_button_submit"
+                case .toggleOpen: // TODO different labels for open and close
+                    return "accessibility_general_button_toggle_menu"
+                case .edit:
+                    return "accessibility_general_button_edit"
+                case .expandSections: // TODO different labels for expanded and contracted
+                    return "accessibility_general_button_toggle_sections"
+                }
+        }()
+        return trans(key)
+    }
 }
 
 struct TopBarButtonModel {
@@ -123,6 +141,7 @@ class ListTopBarView: UIView {
         titleLabelCenterYContraintOffset = hasNotch ? 21.5 : 10
         centerYOffsetInExpandedState = Float(titleLabelCenterYContraintOffset)
         titleLabel.font = titleLabelFont
+
 //        titleLabel.adjustsFontSizeToFitWidth = true
         addSubview(titleLabel)
         titleLabelLeftConstraint = titleLabel.alignLeft(self, constant: titleLabelLeftConstant)
@@ -159,6 +178,9 @@ class ListTopBarView: UIView {
     var title: String = "" {
         didSet {
             titleLabel.text = title
+            titleLabel.accessibilityLabel = title
+            titleLabel.accessibilityTraits = UIAccessibilityTraitHeader
+
             titleLabel.sizeToFit()
         }
     }
@@ -251,6 +273,9 @@ class ListTopBarView: UIView {
         button.fillSuperviewHeight()
         button.fillSuperviewWidth(70, rightConstant: -70)
         button.addTarget(self, action: #selector(ListTopBarView.onTitleTap(_:)), for: .touchUpInside)
+
+        button.accessibilityLabel = trans("accessibility_general_button_navigation_bar_title") // TODO label "back" when it's possible to go bar (items screens) - and otherwise nothing (title already on the label).
+        button.accessibilityTraits = UIAccessibilityTraitButton
     }
     
     /**
@@ -342,6 +367,9 @@ class ListTopBarView: UIView {
 //                logger.v("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
                 tapView.accessibilityIdentifier = model.buttonId.name
+                tapView.accessibilityTraits = UIAccessibilityTraitButton
+                tapView.accessibilityLabel = model.buttonId.accessibilityLabel
+
                 if left {
                     leftButtons.append(tapView)
                 } else {

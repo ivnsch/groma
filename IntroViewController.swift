@@ -468,11 +468,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
     
     @IBAction func skipTapped(_ sender: UIButton) {
         if mode == .launch {
-            PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
             exit()
         }
     }
-    
+
     // MARK: - RegisterDelegate
     
     func onRegisterSuccess(_ email: String) {
@@ -492,13 +491,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
     
     // MARK: -
     
-    fileprivate func exit() {
+    func exit() {
+        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         self.modalTransitionStyle = .crossDissolve
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
     func onLoginSuccess() {
-        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         exit()
     }
     

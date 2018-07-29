@@ -205,6 +205,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     fileprivate func initExplanationManager() {
+        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+
         let contents = ExplanationContents(title: "Did you know?", text: "You can press and hold\nto set individual items in edit mode", imageName: "longpressedit", buttonTitle: "Got it!", frameCount: 210)
         let checker = SwipeToIncrementAlertHelperNew()
         checker.preference = .showedLongTapToEditCounter

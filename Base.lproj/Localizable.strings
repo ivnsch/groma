@@ -557,3 +557,12 @@ base_unit_help_reference_quantity_price = "The %%4reference quantity%%4 and %%5p
 base_unit_help_reference_quantity_price_2 = "This tooltip appears when you tap on the price view in the add (or edit) item view.";
 base_unit_help_unit_bases = "You enter %%1unit%%1, %%2base quantity%%2 and %%3second base quantity%%3 in the view where you opened this popup";
 
+accessibility_general_button_edit = "Edit";
+accessibility_general_button_add = "Add";
+accessibility_general_button_submit = "Submit";
+accessibility_general_button_toggle_menu = "Toggle menu";
+accessibility_general_button_toggle_sections = "Toggle sections";
+accessibility_general_button_navigation_bar_title = "Title";
+accessibility_settings_button_help = "%@ help";
+accessibility_general_search_input = "Search input";
+

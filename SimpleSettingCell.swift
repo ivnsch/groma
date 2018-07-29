@@ -27,6 +27,10 @@ class SimpleSettingCell: UITableViewCell {
                 label.text = setting.label
                 label.textColor = setting.labelColor
                 [helpButton, helpImage].forEach { $0.isHidden = !setting.hasHelp }
+
+                helpButton.accessibilityTraits = UIAccessibilityTraitButton
+                helpButton.accessibilityLabel = trans("accessibility_settings_button_help", setting.label)
+
             }
         }
     }
