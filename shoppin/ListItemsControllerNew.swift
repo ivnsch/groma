@@ -710,7 +710,6 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             ListItemInput(
                 name: model.productPrototype.name,
                 quantity: model.quantity,
-                price: 0,
                 refPrice: nil,
                 refQuantity: nil,
                 section: model.ingredient.item.category.name,
@@ -724,7 +723,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             )
         }
         
-        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler {[weak self] _ in guard let weakSelf = self else { return }
+        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, overwriteColorIfAlreadyExists: true, realmData: realmData, successHandler {[weak self] _ in guard let weakSelf = self else { return }
             quickAddController.closeRecipeController()
             self?.tableView.reloadData()
             self?.onTableViewChangedQuantifiables()

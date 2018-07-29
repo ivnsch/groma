@@ -137,7 +137,7 @@ public protocol ListItemProvider {
 
     func addNewStoreProduct(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<(StoreProduct, Bool)>) -> Void)
     
-    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
 
     /// Quick add
     func addToCart(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ProviderResult<AddCartListItemResult>) -> Void)

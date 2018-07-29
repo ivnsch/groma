@@ -239,10 +239,10 @@ class RealmSectionProvider: RealmProvider {
     }
     
     // add/update and save (TODO better method name)
-    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionResult, DatabaseError> {
+    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, overwriteColorIfAlreadyExists: Bool = true, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionResult, DatabaseError> {
         
         guard let sections = sectionsSync(list: list, status: status) else {
-            logger.e("Couldn't retrieve the sections for list: \(list.uuid):\(list.name)")
+            logger.e("Couldn't retrieve the sections for list: \(list.uuid): \(list.name)")
             return .err(.unknown)
         }
 
@@ -251,10 +251,12 @@ class RealmSectionProvider: RealmProvider {
             let addResult: AddSectionResult = {
                 let sectionUnique = SectionUnique(name: sectionName, listUuid: list.uuid, status: status)
                 if let section = sections.filter(Section.createFilter(unique: sectionUnique)).first, let index = sections.index(of: section) {
-                    section.color = sectionColor
+                    if overwriteColorIfAlreadyExists {
+                        section.color = sectionColor
+                    }
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionResult(section: section, isNew: false, index: index)
-                } else {
+                } else { // New section
                     let section = Section(name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
                     sections.append(section)
                     return AddSectionResult(section: section, isNew: true, index: sections.count - 1)

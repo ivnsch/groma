@@ -623,7 +623,7 @@ class RealmGlobalProvider: RealmProvider {
                 logger.e("Invalid state: no container")
                 return
             }
-            let inventory = DBInventory(uuid: UUID().uuidString, name: "Test inventory", bgColor: UIColor.flatRed, order: 0)
+            let inventory = DBInventory(uuid: UUID().uuidString, name: "Test inventory", bgColor: UIColor.red, order: 0)
             realm.add(inventory)
             logger.d("Added test inventory!", .db)
             inventoriesContainer.inventories.append(inventory)
@@ -633,7 +633,7 @@ class RealmGlobalProvider: RealmProvider {
                 return
             }
 
-            let list = List(uuid: UUID().uuidString, name: "Test list", color: UIColor.flatRed, order: 0, inventory: inventory, store: nil)
+            let list = List(uuid: UUID().uuidString, name: "Test list", color: UIColor.red, order: 0, inventory: inventory, store: nil)
             realm.add(list)
             logger.d("Added test list!", .db)
             listsContainer.lists.append(list)

@@ -20,7 +20,7 @@ public struct ListItemInput {
     public let edible: Bool
     public let storeProductInput: StoreProductInput
     
-    public init(name: String, quantity: Float, price: Float, refPrice: Float?, refQuantity: Float?, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float, unit: String, brand: String, edible: Bool) {
+    public init(name: String, quantity: Float, refPrice: Float?, refQuantity: Float?, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float, unit: String, brand: String, edible: Bool) {
         self.name = name
         self.quantity = quantity
         self.section = section
@@ -28,7 +28,7 @@ public struct ListItemInput {
         self.note = note
         self.brand = brand
         self.edible = edible
-        self.storeProductInput = StoreProductInput(price: price, refPrice: refPrice, refQuantity: refQuantity, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unit: unit)
+        self.storeProductInput = StoreProductInput(refPrice: refPrice, refQuantity: refQuantity, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity, unit: unit)
     }
 }
 

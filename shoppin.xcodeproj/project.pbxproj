@@ -89,6 +89,8 @@
 		6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */; };
 		6A4DBFDF1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */; };
 		6A4DBFE21FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */; };
+		6A4F45E32115BF67000548AD /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */; };
+		6A4F45E52115CD1A000548AD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		6A501D69202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */; };
 		6A633751201DFBCC001E4969 /* LoginOrRegister.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */; };
 		6A633753201E0120001E4969 /* LoginOrRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633752201E0120001E4969 /* LoginOrRegisterController.swift */; };
@@ -155,6 +157,14 @@
 		6AD51AE31E5134D00053934E /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */; };
 		6AD51AE91E51360C0053934E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE81E51360C0053934E /* UIView.swift */; };
 		6AD51AEB1E5136880053934E /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AEA1E5136880053934E /* ViewTags.swift */; };
+		6AD9122B210E1AA500E177EB /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD9122A210E1AA500E177EB /* IntentHandler.swift */; };
+		6AD91233210E1AA500E177EB /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AD91232210E1AA500E177EB /* IntentsUI.framework */; };
+		6AD91236210E1AA500E177EB /* IntentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD91235210E1AA500E177EB /* IntentViewController.swift */; };
+		6AD91239210E1AA500E177EB /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AD91237210E1AA500E177EB /* MainInterface.storyboard */; };
+		6AD9123D210E1AA500E177EB /* SiriUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6AD91231210E1AA500E177EB /* SiriUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6AD91240210E1AA500E177EB /* Siri.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6AD91228210E1AA500E177EB /* Siri.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6AD9124A210E224D00E177EB /* AddTaskRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD91249210E224D00E177EB /* AddTaskRequestHandler.swift */; };
+		6AD91254210E3A7300E177EB /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AD91253210E3A7300E177EB /* Providers.framework */; };
 		6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F391E4D2C88005BE5EB /* FractionView.swift */; };
 		6ADC6F3E1E4D2EB1005BE5EB /* FractionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */; };
 		6ADC6F401E4D32CD005BE5EB /* FractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */; };
@@ -209,6 +219,7 @@
 		6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */; };
 		ABCC0C60A2DB87DCAF62D76A /* Pods_shoppinUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
+		CD03F4926820FD40F2BA710C /* Pods_Siri.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F9087E6BD50DBA6662C495 /* Pods_Siri.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };
@@ -518,6 +529,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6AD9123B210E1AA500E177EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB1DDE9D1A3334EC00D778DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6AD91230210E1AA500E177EB;
+			remoteInfo = SiriUI;
+		};
+		6AD9123E210E1AA500E177EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB1DDE9D1A3334EC00D778DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6AD91227210E1AA500E177EB;
+			remoteInfo = Siri;
+		};
 		EB33D56F1CE010410097AD58 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EB1DDE9D1A3334EC00D778DE /* Project object */;
@@ -535,6 +560,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		6AD91247210E1AA500E177EB /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6AD9123D210E1AA500E177EB /* SiriUI.appex in Embed App Extensions */,
+				6AD91240210E1AA500E177EB /* Siri.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6AEA4EA21E045EC40040557D /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -549,6 +586,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		12F9087E6BD50DBA6662C495 /* Pods_Siri.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Siri.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		350AE7940462A672F24DC919 /* Pods-shoppinUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppinUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validatable.swift; sourceTree = "<group>"; };
 		58FA07151DE1F2550059F2D0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
@@ -639,6 +677,8 @@
 		6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveItemsToCartTest.swift; sourceTree = "<group>"; };
 		6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchItemsBetweenTodoCartTests.swift; sourceTree = "<group>"; };
 		6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartTodoItemsTestUtils.swift; sourceTree = "<group>"; };
+		6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppIntentVocabulary.plist; sourceTree = "<group>"; };
+		6A4F45E42115C846000548AD /* Siri.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Siri.entitlements; sourceTree = "<group>"; };
 		6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitBaseHelpCellExplanationHighlighter.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginOrRegister.storyboard; sourceTree = "<group>"; };
@@ -706,6 +746,17 @@
 		6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		6AD51AE81E51360C0053934E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		6AD51AEA1E5136880053934E /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
+		6AD91228210E1AA500E177EB /* Siri.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Siri.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AD9122A210E1AA500E177EB /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		6AD9122C210E1AA500E177EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AD91231210E1AA500E177EB /* SiriUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SiriUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AD91232210E1AA500E177EB /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		6AD91235210E1AA500E177EB /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
+		6AD91238210E1AA500E177EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		6AD9123A210E1AA500E177EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AD91248210E1C7C00E177EB /* shoppin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-Bridging-Header.h"; sourceTree = "<group>"; };
+		6AD91249210E224D00E177EB /* AddTaskRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskRequestHandler.swift; sourceTree = "<group>"; };
+		6AD91253210E3A7300E177EB /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ADC6F391E4D2C88005BE5EB /* FractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionView.swift; sourceTree = "<group>"; };
 		6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FractionView.xib; sourceTree = "<group>"; };
 		6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionCell.swift; sourceTree = "<group>"; };
@@ -769,6 +820,7 @@
 		B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppinUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE92BCDD9D065E2AC1384DF9 /* Pods-groma.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-groma.release.xcconfig"; path = "Pods/Target Support Files/Pods-groma/Pods-groma.release.xcconfig"; sourceTree = "<group>"; };
+		D4EC8A7E0DF93E1574592CF4 /* Pods-Siri.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Siri.release.xcconfig"; path = "Pods/Target Support Files/Pods-Siri/Pods-Siri.release.xcconfig"; sourceTree = "<group>"; };
 		EB0587DB1BBED86B00080626 /* IntroPageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPageView.xib; sourceTree = "<group>"; };
 		EB0587DD1BBED9C800080626 /* IntroPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		EB0587DF1BBEDAA600080626 /* NSBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSBundle.swift; sourceTree = "<group>"; };
@@ -1122,10 +1174,28 @@
 		EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserChecker.swift; sourceTree = "<group>"; };
 		EBFD15C01BA7F59600E37342 /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		F33952157C2F91ED420F7F6D /* Pods-Siri.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Siri.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Siri/Pods-Siri.debug.xcconfig"; sourceTree = "<group>"; };
 		F98BBCCA2791B575B10BE207 /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6AD91225210E1AA500E177EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD91254210E3A7300E177EB /* Providers.framework in Frameworks */,
+				CD03F4926820FD40F2BA710C /* Pods_Siri.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD9122E210E1AA500E177EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD91233210E1AA500E177EB /* IntentsUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB1DDEA21A3334EC00D778DE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1421,6 +1491,27 @@
 			name = ingredient;
 			sourceTree = "<group>";
 		};
+		6AD91229210E1AA500E177EB /* Siri */ = {
+			isa = PBXGroup;
+			children = (
+				6A4F45E42115C846000548AD /* Siri.entitlements */,
+				6AD9122A210E1AA500E177EB /* IntentHandler.swift */,
+				6AD9122C210E1AA500E177EB /* Info.plist */,
+				6AD91249210E224D00E177EB /* AddTaskRequestHandler.swift */,
+			);
+			path = Siri;
+			sourceTree = "<group>";
+		};
+		6AD91234210E1AA500E177EB /* SiriUI */ = {
+			isa = PBXGroup;
+			children = (
+				6AD91235210E1AA500E177EB /* IntentViewController.swift */,
+				6AD91237210E1AA500E177EB /* MainInterface.storyboard */,
+				6AD9123A210E1AA500E177EB /* Info.plist */,
+			);
+			path = SiriUI;
+			sourceTree = "<group>";
+		};
 		6AE34BE21E2E255C0039A2A8 /* recipes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1527,6 +1618,8 @@
 				CE92BCDD9D065E2AC1384DF9 /* Pods-groma.release.xcconfig */,
 				350AE7940462A672F24DC919 /* Pods-shoppinUITests.debug.xcconfig */,
 				9205D4FFE19B37AD4CFEE52E /* Pods-shoppinUITests.release.xcconfig */,
+				F33952157C2F91ED420F7F6D /* Pods-Siri.debug.xcconfig */,
+				D4EC8A7E0DF93E1574592CF4 /* Pods-Siri.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1534,6 +1627,7 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6AD91253210E3A7300E177EB /* Providers.framework */,
 				6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */,
 				6A4DBFD91FF9B10D00B2AB15 /* Realm.framework */,
 				6A4DBFD71FF9B0C000B2AB15 /* RealmSwift.framework */,
@@ -1549,6 +1643,8 @@
 				98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */,
 				8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */,
 				B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */,
+				6AD91232210E1AA500E177EB /* IntentsUI.framework */,
+				12F9087E6BD50DBA6662C495 /* Pods_Siri.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1702,6 +1798,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
+				6AD91248210E1C7C00E177EB /* shoppin-Bridging-Header.h */,
 				6A58B0D21E48D5D50012F4C9 /* groma.entitlements */,
 				6AEA4EA31E0461660040557D /* Providers.framework */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
@@ -1711,6 +1808,8 @@
 				EB1DDEC01A3334EC00D778DE /* shoppinTests */,
 				EB9F6CF61A8610550038355B /* shoppin_osxTests */,
 				EB33D56B1CE010400097AD58 /* shoppinUITests */,
+				6AD91229210E1AA500E177EB /* Siri */,
+				6AD91234210E1AA500E177EB /* SiriUI */,
 				EB1DDEA61A3334EC00D778DE /* Products */,
 				E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */,
 				B27D810CB73D3BD1DB8296A9 /* Pods */,
@@ -1724,6 +1823,8 @@
 				EB9F6CE21A8610550038355B /* shoppin_osx.app */,
 				EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */,
 				EB33D56A1CE010400097AD58 /* shoppinUITests.xctest */,
+				6AD91228210E1AA500E177EB /* Siri.appex */,
+				6AD91231210E1AA500E177EB /* SiriUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1747,6 +1848,7 @@
 			isa = PBXGroup;
 			children = (
 				EB1DDEA91A3334EC00D778DE /* Info.plist */,
+				6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */,
 				EB0F5F851B962D2100035175 /* GoogleService-Info.plist */,
 			);
 			name = "Supporting Files";
@@ -2692,6 +2794,42 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6AD91227210E1AA500E177EB /* Siri */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6AD91244210E1AA500E177EB /* Build configuration list for PBXNativeTarget "Siri" */;
+			buildPhases = (
+				7732A759D366E6F6E476EF9C /* [CP] Check Pods Manifest.lock */,
+				6AD91224210E1AA500E177EB /* Sources */,
+				6AD91225210E1AA500E177EB /* Frameworks */,
+				6AD91226210E1AA500E177EB /* Resources */,
+				031C34DC8587E5BB8262AC83 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Siri;
+			productName = Siri;
+			productReference = 6AD91228210E1AA500E177EB /* Siri.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6AD91230210E1AA500E177EB /* SiriUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6AD91241210E1AA500E177EB /* Build configuration list for PBXNativeTarget "SiriUI" */;
+			buildPhases = (
+				6AD9122D210E1AA500E177EB /* Sources */,
+				6AD9122E210E1AA500E177EB /* Frameworks */,
+				6AD9122F210E1AA500E177EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SiriUI;
+			productName = SiriUI;
+			productReference = 6AD91231210E1AA500E177EB /* SiriUI.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		EB1DDEA41A3334EC00D778DE /* groma */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "groma" */;
@@ -2704,10 +2842,13 @@
 				6AEA4EA21E045EC40040557D /* Embed Frameworks */,
 				002CB37F85917CB0CA426C8A /* [CP] Embed Pods Frameworks */,
 				D7A0B09196426BECD3C0C00D /* [CP] Copy Pods Resources */,
+				6AD91247210E1AA500E177EB /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6AD9123C210E1AA500E177EB /* PBXTargetDependency */,
+				6AD9123F210E1AA500E177EB /* PBXTargetDependency */,
 			);
 			name = groma;
 			productName = shoppin;
@@ -2777,21 +2918,42 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = ivanschuetz;
 				TargetAttributes = {
+					6AD91227210E1AA500E177EB = {
+						CreatedOnToolsVersion = 9.4.1;
+						DevelopmentTeam = 37QAPDY2PR;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					6AD91230210E1AA500E177EB = {
+						CreatedOnToolsVersion = 9.4.1;
+						DevelopmentTeam = 37QAPDY2PR;
+						ProvisioningStyle = Automatic;
+					};
 					EB1DDEA41A3334EC00D778DE = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
 								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 0;
+							};
+							com.apple.Siri = {
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 0;
@@ -2842,11 +3004,29 @@
 				EB9F6CE11A8610550038355B /* shoppin_osx */,
 				EB9F6CF21A8610550038355B /* shoppin_osxTests */,
 				EB33D5691CE010400097AD58 /* shoppinUITests */,
+				6AD91227210E1AA500E177EB /* Siri */,
+				6AD91230210E1AA500E177EB /* SiriUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6AD91226210E1AA500E177EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A4F45E52115CD1A000548AD /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD9122F210E1AA500E177EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD91239210E1AA500E177EB /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB1DDEA31A3334EC00D778DE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2865,6 +3045,7 @@
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
 				6A3A67DE1E59D50C00B5354F /* UnitEditableCell.xib in Resources */,
 				6A287E971E54792F00868244 /* ManageItemsSectionView.xib in Resources */,
+				6A4F45E32115BF67000548AD /* AppIntentVocabulary.plist in Resources */,
 				6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */,
@@ -3013,16 +3194,16 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift-iOS9.0/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 				"${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/ChartLegends/ChartLegends.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
@@ -3035,11 +3216,12 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
 				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm-iOS10.0/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift-iOS10.0/RealmSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -3049,6 +3231,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASValueTrackingSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CMPopTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChartLegends.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
@@ -3061,10 +3244,27 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		031C34DC8587E5BB8262AC83 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Siri/Pods-Siri-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2914BDFAD188B5991A65938A /* [CP] Check Pods Manifest.lock */ = {
@@ -3079,6 +3279,24 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-shoppinUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7732A759D366E6F6E476EF9C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Siri-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3112,16 +3330,16 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift-iOS9.0/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 				"${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/ChartLegends/ChartLegends.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
@@ -3138,7 +3356,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -3148,6 +3365,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASValueTrackingSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CMPopTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChartLegends.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
@@ -3219,6 +3437,23 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6AD91224210E1AA500E177EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD9122B210E1AA500E177EB /* IntentHandler.swift in Sources */,
+				6AD9124A210E224D00E177EB /* AddTaskRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AD9122D210E1AA500E177EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AD91236210E1AA500E177EB /* IntentViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB1DDEA11A3334EC00D778DE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3624,6 +3859,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6AD9123C210E1AA500E177EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6AD91230210E1AA500E177EB /* SiriUI */;
+			targetProxy = 6AD9123B210E1AA500E177EB /* PBXContainerItemProxy */;
+		};
+		6AD9123F210E1AA500E177EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6AD91227210E1AA500E177EB /* Siri */;
+			targetProxy = 6AD9123E210E1AA500E177EB /* PBXContainerItemProxy */;
+		};
 		EB33D5701CE010410097AD58 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EB1DDEA41A3334EC00D778DE /* groma */;
@@ -3637,6 +3882,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6AD91237210E1AA500E177EB /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6AD91238210E1AA500E177EB /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3864,6 +4117,118 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		6AD91242210E1AA500E177EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SiriUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.SiriUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6AD91243210E1AA500E177EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SiriUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.SiriUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6AD91245210E1AA500E177EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F33952157C2F91ED420F7F6D /* Pods-Siri.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Siri/Siri.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Siri/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.Siri;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6AD91246210E1AA500E177EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4EC8A7E0DF93E1574592CF4 /* Pods-Siri.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Siri/Siri.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Siri/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.Siri;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EB1DDEC51A3334EC00D778DE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3987,6 +4352,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 90786A7A2BEDAE7F0308001C /* Pods-groma.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
@@ -4004,7 +4370,7 @@
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9b82531b-949d-4a96-ae81-6625eacec6c8";
+				PROVISIONING_PROFILE = "bc57b82e-1694-416a-94b2-b5a4fc1a7bbb";
 				PROVISIONING_PROFILE_SPECIFIER = "Groma development created 2018_07_29";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -4019,6 +4385,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CE92BCDD9D065E2AC1384DF9 /* Pods-groma.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
@@ -4036,7 +4403,7 @@
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3be46302-4dd3-48c6-8f7c-544ff779bb00";
+				PROVISIONING_PROFILE = "dd038fa3-1284-48ca-b72f-4c01118858e2";
 				PROVISIONING_PROFILE_SPECIFIER = "Groma AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -4201,6 +4568,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6AD91241210E1AA500E177EB /* Build configuration list for PBXNativeTarget "SiriUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6AD91242210E1AA500E177EB /* Debug */,
+				6AD91243210E1AA500E177EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6AD91244210E1AA500E177EB /* Build configuration list for PBXNativeTarget "Siri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6AD91245210E1AA500E177EB /* Debug */,
+				6AD91246210E1AA500E177EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EB1DDEA01A3334EC00D778DE /* Build configuration list for PBXProject "shoppin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

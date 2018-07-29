@@ -15,8 +15,6 @@ def providersdeps
     pod 'Alamofire', '~> 4.5'
     pod 'Valet', '~> 2.4.2'
     pod 'Starscream', '3.0.2'
-    pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
-
 end
 
 # Shared by app and ui tests
@@ -65,6 +63,14 @@ target 'ProvidersTests' do
     platform :ios, '9.0'
     providersdeps
 end
+
+
+target 'Siri' do
+    project 'shoppin.xcodeproj'
+    platform :ios, '10.0'
+    pod 'RealmSwift', '~> 3.3.0'
+end
+
 
 #target 'shoppin_osxTests' do
 #    platform :osx, '10.10'

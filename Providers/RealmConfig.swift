@@ -25,7 +25,8 @@ public struct RealmConfig {
     static let syncUserUrl = URL(string: "https://\(syncHost)/user/")!
 
     fileprivate static var documentsDirectoryUrl: URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.co.groma")!
+        //return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
     }
 
     fileprivate static var localRealmUrl: URL? {
@@ -103,8 +104,8 @@ public struct RealmConfig {
     }
 
     public static func realm() throws -> Realm {
-//        return try Realm(configuration: localRealmConfig)
-        return try Realm()
+        return try Realm(configuration: localRealmConfig)
+//        return try Realm()
     }
 
 }

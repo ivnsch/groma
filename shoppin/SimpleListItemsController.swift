@@ -539,7 +539,6 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             ListItemInput(
                 name: model.productPrototype.name,
                 quantity: model.quantity,
-                price: 0,
                 refPrice: nil,
                 refQuantity: nil,
                 section: model.ingredient.item.category.name,
@@ -554,7 +553,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         }
 
 
-        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler { [weak self] _ in guard let weakSelf = self else { return }
+        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, overwriteColorIfAlreadyExists: true, realmData: realmData, successHandler { [weak self] _ in guard let weakSelf = self else { return }
             // The list will update automatically with realm notification
             quickAddController.closeRecipeController()
 

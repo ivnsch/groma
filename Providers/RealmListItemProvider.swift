@@ -943,7 +943,7 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add / form
     /// price set when used in form
     // TODO!!!!!!!!!!!!!!!!!! remove RealmData and "doTransaction" everywhere -- to indicate that a transaction already exists, pass a Realm. Notification token separately where needed.
-    func addSync(quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool = true, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
 
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
@@ -958,7 +958,7 @@ class RealmListItemProvider: RealmProvider {
         // NOTE executing everything in the same transaction otherwise it ignores the notification token (i.e. it sends the notification) in some places, e.g. incrementSync!
         func transactionContent(realmData: RealmData?) -> AddListItemResult? {
 
-            switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false) {
+            switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false) {
 
             case .ok(let sectionResult):
 
@@ -1010,12 +1010,12 @@ class RealmListItemProvider: RealmProvider {
     
     
     /// Input form
-    func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> AddListItemResult? {
+    func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool = true, realmData: RealmData?, doTransaction: Bool = true) -> AddListItemResult? {
 
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: doTransaction) {
             
         case .ok(let quantifiableProduct):
-            return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", refPrice: listItemInput.storeProductInput.refPrice, refQuantity: listItemInput.storeProductInput.refQuantity, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
+            return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", refPrice: listItemInput.storeProductInput.refPrice, refQuantity: listItemInput.storeProductInput.refQuantity, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, realmData: realmData, doTransaction: doTransaction)
 
         case .err(let error):
             logger.e("Couldn't add/update quantifiable product: \(error)")
@@ -1028,7 +1028,6 @@ class RealmListItemProvider: RealmProvider {
         
         switch DBProv.productProvider.mergeOrCreateStoreProductSync(
             prototype: listItemInput.toProductPrototype(),
-            price: listItemInput.storeProductInput.price,
             refPrice: listItemInput.storeProductInput.refPrice,
             refQuantity: listItemInput.storeProductInput.refQuantity,
             updateCategory: true,
@@ -1047,7 +1046,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     /// Input form / recipes
-    func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
+    func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool = true, realmData: RealmData?, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
         
         //guard let listItemsRealm = listItems.realm else {logger.e("List items have no realm"); return nil}
         
@@ -1058,7 +1057,7 @@ class RealmListItemProvider: RealmProvider {
             let realmData = realmData ?? RealmData(realm: realm, tokens: [])
 
             for listItemInput in listItemInputs {
-                if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: false) {
+                if let result = addSync(listItemInput: listItemInput, list: list, status: status, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, realmData: realmData, doTransaction: false) {
                     addedListItems.append((result.listItem, result.isNewItem))
                 } else {
                     logger.e("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip

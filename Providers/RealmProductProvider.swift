@@ -1398,7 +1398,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     
-    func mergeOrCreateStoreProductSync(prototype: ProductPrototype, price: Float, refPrice: Float?, refQuantity: Float?, updateCategory: Bool, save: Bool, realmData: RealmData? = nil, doTransaction: Bool = true) -> ProvResult<(StoreProduct, Bool), DatabaseError> {
+    func mergeOrCreateStoreProductSync(prototype: ProductPrototype, refPrice: Float?, refQuantity: Float?, updateCategory: Bool, save: Bool, realmData: RealmData? = nil, doTransaction: Bool = true) -> ProvResult<(StoreProduct, Bool), DatabaseError> {
         
         // Always fetch/create product (whether store product already exists or not), since we need to ensure we have the product identified by unique from prototype, which is not necessarily the same as the one referenced by existing store product (we want to update only non-unique properties).
         let quantifiableProductResult = mergeOrCreateQuantifiableProductSync(prototype: prototype, updateCategory: updateCategory, save: false, realmData: realmData, doTransaction: doTransaction)

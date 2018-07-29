@@ -174,7 +174,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{
-            let storeProductInput = StoreProductInput(price: 0, refPrice: nil, refQuantity: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity, unit: $0.product.unit.name)
+            let storeProductInput = StoreProductInput(refPrice: nil, refQuantity: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity, unit: $0.product.unit.name)
             return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
         }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
@@ -1288,8 +1288,8 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void) {
-        if let tuples = DBProv.listItemProvider.addSync(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData) {
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void) {
+        if let tuples = DBProv.listItemProvider.addSync(listItemInputs: listItemInputs, list: list, status: status, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuples))
         } else {
             handler(ProviderResult(status: .databaseUnknown))

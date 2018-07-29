@@ -452,14 +452,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
     }
     
-    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?) {
+    func onOkTap(_ refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             
             let listItemInput = ListItemInput(
                 name: name,
                 quantity: quantity,
-                price: price,
                 refPrice: refPrice,
                 refQuantity: refQuantity,
                 section: section,

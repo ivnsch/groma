@@ -260,77 +260,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
             }))
         }
 
-        
-        func initExampleGroup(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
-            Prov.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
-
-                if groups.isEmpty {
-
-                    let exampleGroup = ProductGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), color: UIColor.flatYellow, order: 0)
-
-                    let ingredients: [(name: String, quantity: Float)] = [
-                        (trans("pr_pineapple"), 1),
-                        (trans("pr_plums"), 3),
-                        (trans("pr_bananas"), 2),
-                        (trans("pr_strawberries"), 1),
-                        (trans("pr_water"), 3)
-                    ]
-
-                    let ingredientsNameBrands: [(name: String, brand: String)] = ingredients.map{(name: $0.name, brand: "")}
-
-                    Prov.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
-
-                        if products.count != ingredientsNameBrands.count {
-                            logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): (\(products.map{$0.item.name})), searched(\(ingredients.count)): \(ingredients.map{$0.name})")
-                            onFinish?()
-
-                        } else {
-                            Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
-
-                                guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add group items."); onFinish?(); return}
-
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.compactMap {ingredient in
-                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
-                                        // for now use products without unit to prefill group
-                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
-                                        return (quanatifiableProduct, ingredient.quantity)
-                                    } else {
-                                        return nil
-                                    }
-                                }
-
-                                let groupItems = productsIngredients.map {productIngredient in
-                                    GroupItem(uuid: NSUUID().uuidString, quantity: productIngredient.quantity, product: productIngredient.product, group: exampleGroup)
-                                }
-
-                                Prov.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
-                                    logger.d("Finish adding example group")
-                                    onFinish?()
-
-                                    }, onError: {result in
-                                        logger.e("Error adding example group items, result: \(result), items: \(groupItems)")
-                                        onFinish?()
-                                }))
-
-                                }, onError: {result in
-                                    logger.e("Error adding example group, result: \(result), group: \(exampleGroup)")
-                                    onFinish?()
-                            }))
-                        }
-                        }, onError: {result in
-                            logger.e("Error querying products, result: \(result)")
-                            onFinish?()
-                    }))
-                } else {
-                    logger.d("User already has groups, skipping")
-                    onFinish?()
-                }
-                }, onError: {result in
-                    logger.e("Error fetching groups, result: \(result)")
-                    onFinish?()
-            }))
-        }
-
         func initExampleList(_ inventory: DBInventory, unitDict: [UnitId: Providers.Unit], onFinish: VoidFunction? = nil) {
             Prov.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
                 
@@ -358,13 +287,16 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                     Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: { [weak self] products in
                         
                         if products.count < productsWithBrands.count {
-                            logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
+                            logger.e("Unexpected: Some of the products for the example list are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
                             onFinish?()
                             self?.onCreateExampleList?(false)
 
                         } else {
-                            Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
-                        
+                            Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: { addedList in
+                                self?.onCreateExampleList?(true)
+                                onFinish?()
+
+
                                 guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add list items."); onFinish?(); return}
 
                                 let productsInputs: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.compactMap {ingredient in
@@ -385,24 +317,25 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
 
                                 let inputs = productsInputs.map {
                                     // NOTE: Assumes all example list items are edible (edible: true). To change this set this flag in the productsWithQuantity tuples.
-                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, refPrice: nil, refQuantity: 1, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
+                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, refPrice: nil, refQuantity: 1, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
                                 }
-                                
-                                Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
+
+                                Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, overwriteColorIfAlreadyExists: true, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
                                     logger.d("Finish adding example list")
-                                    
+
                                     self?.onCreateExampleList?(true)
-                                    
+
                                     onFinish?()
-                                    
-                                    }, onError: {result in
+
+                                    }, onError: { result in
                                         logger.e("Error adding example list items, result: \(result), inputs: \(inputs)")
                                         onFinish?()
-                                }))
-                                                                
-                                }, onError: {result in
-                                    logger.e("Error adding example list, result: \(result), group: \(exampleList)")
-                                    onFinish?()
+                                    }
+                                ))
+
+                            }, onError: { result in
+                                logger.e("Error adding example list, result: \(result), group: \(exampleList)")
+                                onFinish?()
                             }))
                         }
                         }, onError: {result in
@@ -439,9 +372,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                     logger.d("Finished adding default inventory")
                     
                     initExampleRecipe(unitDict: unitDict) {
-
-//                    initExampleGroup(unitDict: unitDict) { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
-//                        logger.d("Finished adding example group")
                         if let inventory = inventoryMaybe {
                             initExampleList(inventory, unitDict: unitDict) {
                                 logger.d("Finished adding example list")
@@ -451,7 +381,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                             logger.d("Didn't add default inventory so can't add example list")
                             onComplete()
                         }
-//                    }
                     }
                 }
             }
