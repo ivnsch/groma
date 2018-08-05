@@ -19,7 +19,7 @@ class CountryHelper {
     }
     
     static func isInServerSupportedCountry() -> Bool {
-        return false // server not working yet
+        return true // Activate everywhere...
 
         // we will release only to countries where the server is also supported
 
