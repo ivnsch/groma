@@ -108,7 +108,7 @@ public struct RealmConfig {
             #if DEBUG
                 logger.v("It was not needed to move Realm." +
                         "Source Realm exists: \(sourceRealmExists()), " +
-                        "destination Realm exists: \(destinationRealmExists()).", db)
+                        "destination Realm exists: \(destinationRealmExists()).", .db)
             #endif
         }
     }
