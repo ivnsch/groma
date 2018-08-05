@@ -63,6 +63,17 @@ public struct RealmConfig {
             }
     })
 
+    public static func setDefaultConfiguration() {
+        if let user = SyncUser.current {
+            logger.i("Realm user exists: \(String(describing: user.identity)), initializing synced realm.", .db)
+            Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)
+        } else {
+            Realm.Configuration.defaultConfiguration = RealmConfig.localRealmConfig
+        }
+
+        logger.i("Realm path: \(String(describing: Realm.Configuration.defaultConfiguration.fileURL))", .db)
+    }
+    
     /**
      * For app versions pre-2.1 Realm has to be moved to share folder.
      * Shared folder is necessary to share Realm with SiriKit extension.

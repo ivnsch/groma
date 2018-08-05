@@ -1315,6 +1315,14 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
+    func addNewSync(itemName: String, list: List) -> ProviderResult<AddListItemResult> {
+        if let result = DBProv.listItemProvider.addSync(name: itemName, list: list) {
+            return ProviderResult(status: .success, sucessResult: result)
+        } else {
+            return ProviderResult(status: .databaseUnknown)
+        }
+    }
+
     func updateNew(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<(UpdateListItemResult)>) -> Void) {
         
         switch DBProv.listItemProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: list, realmData: realmData) {

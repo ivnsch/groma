@@ -302,10 +302,11 @@ public class ListItem: DBSyncable, Identifiable, WithUuid {
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
         return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == \(quantifiableProductUnique.baseQuantity) AND productOpt.productOpt.secondBaseQuantity == \(quantifiableProductUnique.secondBaseQuantity)"
     }
-   
-    
-    
-    
+
+    static func createFilter(quantifiableProductUnique: QuantifiableProductUnique, listUuid: String) -> String {
+        return "\(createFilter(quantifiableProductUnique: quantifiableProductUnique)) AND \(createFilterList(listUuid))"
+    }
+
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
 //    // TODO? in case we have to enable this again, check if we need product unit, store etc. here

@@ -20,6 +20,11 @@ class RealmStoreProductProvider: RealmProvider {
         return loadFirstSync(filter: StoreProduct.createFilter(uuid))
     }
 
+
+    func storeProductSync(quantifiableProductUnique: QuantifiableProductUnique, list: List) -> StoreProduct? {
+        return loadFirstSync(filter: StoreProduct.createFilter(unique: quantifiableProductUnique, store: list.store ?? ""))
+    }
+
     func storeProduct(_ product: QuantifiableProduct, store: String, handler: @escaping (StoreProduct?) -> Void) {
         handler(storeProductSync(product, store: store))
     }
@@ -68,6 +73,51 @@ class RealmStoreProductProvider: RealmProvider {
         realm.delete(storeProducts)
         
         return true
+    }
+
+    func mostCompleteProductMatchSync(itemName: String, list: List) -> MostCompleteItemMatch {
+
+        // TODO finer logic - at least for siri usage - if we find 1 product (or store product etc) with a different unique - we use this
+        // if we find more than 1, or none - we use the default unique (like above with base quantity 1 etc)
+        // currently if user has, say, grapes 500g in list we will add a new list item grapes 1 unit.
+        let quantifiableProductUnique = QuantifiableProductUnique(
+            name: itemName,
+            brand: "",
+            unit: noneUnitName,
+            baseQuantity: 1,
+            secondBaseQuantity: 1)
+
+        if let listItem = DBProv.listItemProvider.findListItemWithUniqueSync(quantifiableProductUnique, list: list) {
+            return .listItem(listItem: listItem)
+
+        } else if let storeProduct = storeProductSync(quantifiableProductUnique: quantifiableProductUnique, list: list) {
+            return .storeProduct(storeProduct: storeProduct)
+
+        } else if let quantifiableProduct = DBProv.productProvider.loadQuantifiableProductWithUniqueSync(
+            quantifiableProductUnique
+        ) {
+            return .quantifiableProduct(quantifiablProduct: quantifiableProduct)
+
+        } else if let product = DBProv.productProvider.loadProductWithUniqueSync(
+            ProductUnique(
+                name: itemName,
+                brand: quantifiableProductUnique.brand
+            )) {
+            return .product(product: product)
+
+        } else {
+            switch DBProv.itemProvider.findSync(name: quantifiableProductUnique.name) {
+            case .ok(let item):
+                if let item = item {
+                    return .item(item: item)
+                } else {
+                    return .none
+                }
+            case .err(let error):
+                logger.e("Error fetching item: \(error)", .db)
+                return .none
+            }
+        }
     }
     
     // MARK: - Sync

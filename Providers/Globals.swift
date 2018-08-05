@@ -18,3 +18,6 @@ public typealias Insets = (left: CGFloat, top: CGFloat, right: CGFloat, bottom: 
 public enum Orientation { case vertical, horizontal }
 public enum DirectionUpDown { case up, down }
 
+public let noneUnitName = trans("unit_unit")
+public let defaultSectionName = trans("default_section_name")
+public let defaultSectionColor = "666666"

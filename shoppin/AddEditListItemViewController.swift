@@ -360,7 +360,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //        priceInput.delegate = self
 //        priceInput.addTarget(self, action: #selector(priceInputDidChange(_:)), for: .editingChanged)
 
-        sectionColorButton.textColor = UIColor.gray
+        sectionColorButton.textColor = UIColor(hexString: defaultSectionColor)
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
         
         configQuantifiablesView()

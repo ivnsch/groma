@@ -25,10 +25,6 @@ class AddTaskRequestHandler: NSObject, INAddTasksIntentHandling {
     }
 
     func handle(intent: INAddTasksIntent, completion: @escaping (INAddTasksIntentResponse) -> Void) {
-
-        logger.i("intent: \(intent)", .db)
-        print("????")
-
         Prov.listProvider.lists(false) { [weak self] result in
             if let lists = result.sucessResult {
                 self?.handle(lists: lists, intent: intent, completion: completion)
@@ -56,38 +52,30 @@ class AddTaskRequestHandler: NSObject, INAddTasksIntentHandling {
         // Get the list
         let list = lists[listIndex]
 
-        print(">>>> \(trans("unit_unit"))")
+        completion(addListItems(itemNames: itemNames, list: list))
+    }
 
-
-        // Add the items
+    private func addListItems(itemNames: [INSpeakableString], list: Providers.List) -> INAddTasksIntentResponse {
         var addedTasks = [INTask]()
-        let inputs = itemNames.map { itemName in
-            ListItemInput(name: itemName.spokenPhrase,
-                          quantity: 1,
-                          refPrice: 0,
-                          refQuantity: 1,
-                          section: trans("default_section_name"),
-                          sectionColor: UIColor.red,
-                          note: nil,
-                          baseQuantity: 1,
-                          secondBaseQuantity: 1,
-                          unit: trans("unit_unit"),
-                          brand: "",
-                          edible: true)
-        }
-
         let itemNamesDictionary: [String : INSpeakableString] = itemNames.toDictionary { ($0.spokenPhrase, $0) }
-        Prov.listItemsProvider.addNew(listItemInputs: inputs, list: list, status: .todo, overwriteColorIfAlreadyExists: false, realmData: nil) { result in
-
+        for itemName in itemNames {
+            let result = Prov.listItemsProvider.addNewSync(itemName: itemName.spokenPhrase, list: list)
             if let successResult = result.sucessResult {
-                for addListItemResult in successResult {
-                    let listItemName = addListItemResult.listItem.product.product.product.item.name
-                    if let speakableString = itemNamesDictionary[listItemName] {
-                        addedTasks.append(INTask(title: speakableString, status: .notCompleted, taskType: .notCompletable, spatialEventTrigger: nil, temporalEventTrigger: nil, createdDateComponents: nil, modifiedDateComponents: nil, identifier: nil))
-                    } else {
-                        logger.e("Invalid state: Didn't find spoken phrase for list item: \(listItemName), spoken phrases: \(itemNames)", .db)
-                    }
-
+                let listItemName = successResult.listItem.product.product.product.item.name
+                if let speakableString = itemNamesDictionary[listItemName] {
+                    addedTasks.append(
+                        INTask(
+                            title: speakableString,
+                            status: .notCompleted,
+                            taskType: .notCompletable,
+                            spatialEventTrigger: nil,
+                            temporalEventTrigger: nil,
+                            createdDateComponents: nil,
+                            modifiedDateComponents: nil,
+                            identifier: nil)
+                    )
+                } else {
+                    logger.e("Invalid state: Didn't find spoken phrase for list item: \(listItemName), spoken phrases: \(itemNames)", .db)
                 }
             }
         }
@@ -95,29 +83,30 @@ class AddTaskRequestHandler: NSObject, INAddTasksIntentHandling {
         // Respond with the added items
         let response = INAddTasksIntentResponse(code: .success, userActivity: nil)
         response.addedTasks = addedTasks
-        completion(response)
+        return response
     }
 
-
     private func getPossibleLists(for listName: INSpeakableString, callback: @escaping ([INSpeakableString]) -> Void) {
-        var possibleLists = [INSpeakableString]()
 
         Prov.listProvider.lists(false) { result in
             if let lists = result.sucessResult {
+
+                var possibleLists = [INSpeakableString]()
 
                 for list in lists {
 
                     if list.name.lowercased() == listName.spokenPhrase.lowercased() {
                         callback([INSpeakableString(spokenPhrase: list.name)])
-                    }
-                    if list.name.lowercased().contains(listName.spokenPhrase.lowercased()) || listName.spokenPhrase.lowercased() == "all" {
+                        return
+
+                    } else if list.name.lowercased().contains(listName.spokenPhrase.lowercased()) || listName.spokenPhrase.lowercased() == "all" {
                         possibleLists.append(INSpeakableString(spokenPhrase: list.name))
                     }
                 }
+
+                callback(possibleLists)
             }
         }
-
-//        callback(possibleLists)
     }
 
     private func completeResolveTaskList(with possibleLists: [INSpeakableString], for listName: INSpeakableString, with completion: @escaping (INTaskListResolutionResult) -> Void) {

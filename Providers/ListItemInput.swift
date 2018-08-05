@@ -14,7 +14,7 @@ public struct ListItemInput {
     public let name: String
     public let quantity: Float
     public let section: String
-    public let sectionColor: UIColor
+    public let sectionColor: UIColor // TODO this should be hex - no UIKit in providers.
     public let note: String?
     public let brand: String
     public let edible: Bool

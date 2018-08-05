@@ -368,8 +368,8 @@ class RealmListItemProvider: RealmProvider {
         handler(loadFirstSync(filter: ListItem.createFilter(uuid)))
     }
 
-    func findListItemWithUnique(_ productName: String, productBrand: String, list: List, handler: @escaping (ListItem?) -> Void) {
-        handler(loadFirstSync(filter: ListItem.createFilterUniqueInList(productName, productBrand: productBrand, list: list)))
+    func findListItemWithUniqueSync(_ unique: QuantifiableProductUnique, list: List) -> ListItem? {
+        return loadFirstSync(filter: ListItem.createFilter(quantifiableProductUnique: unique, listUuid: list.uuid))
     }
 
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
@@ -1068,7 +1068,93 @@ class RealmListItemProvider: RealmProvider {
         return addedListItems
     }
 
-    
+    /// Siri
+    func addSync(name: String, list: List) -> AddListItemResult? {
+
+        func toListItemInput(refPrice: Float? = nil, refQuantity: Float? = nil, sectionName: String? = nil,
+                             sectionColor: String? = nil, baseQuantity: Float? = nil, secondBaseQuantity: Float? = nil,
+                             unitName: String? = nil, brand: String? = nil) -> ListItemInput {
+            return ListItemInput(
+                name: name,
+                quantity: 1,
+                refPrice: refPrice ?? 0,
+                refQuantity: refQuantity ?? 1,
+                section: sectionName ?? defaultSectionName,
+                sectionColor: sectionColor.map { UIColor(hexString: $0) } ?? UIColor(hexString: defaultSectionColor),
+                note: nil,
+                baseQuantity: baseQuantity ?? 1,
+                secondBaseQuantity: secondBaseQuantity ?? 1,
+                unit: unitName ?? noneUnitName,
+                brand: brand ?? "",
+                edible: true
+            )
+        }
+
+        func toListItemInput(match: MostCompleteItemMatch) -> ListItemInput {
+
+            switch match {
+            case .listItem(let listItem):
+                return toListItemInput(
+                    refPrice: listItem.product.refPrice.value,
+                    refQuantity: listItem.product.refQuantity.value,
+                    sectionName: listItem.section.name,
+                    sectionColor: listItem.section.color.hexStr,
+                    baseQuantity: listItem.product.product.baseQuantity,
+                    secondBaseQuantity: listItem.product.product.secondBaseQuantity,
+                    unitName: listItem.product.product.unit.name,
+                    brand: listItem.product.product.product.brand
+                )
+
+            case .storeProduct(let storeProduct):
+                return toListItemInput(
+                    refPrice: storeProduct.refPrice.value,
+                    refQuantity: storeProduct.refQuantity.value,
+                    sectionName: storeProduct.product.product.item.category.name,
+                    sectionColor: storeProduct.product.product.item.category.color.hexStr,
+                    baseQuantity: storeProduct.product.baseQuantity,
+                    secondBaseQuantity: storeProduct.product.secondBaseQuantity,
+                    unitName: storeProduct.product.unit.name,
+                    brand: storeProduct.product.product.brand
+                )
+
+            case .quantifiableProduct(let quantifiableProduct):
+                return toListItemInput(
+                    sectionName: quantifiableProduct.product.item.category.name,
+                    sectionColor: quantifiableProduct.product.item.category.color.hexStr,
+                    baseQuantity: quantifiableProduct.baseQuantity,
+                    secondBaseQuantity: quantifiableProduct.secondBaseQuantity,
+                    unitName: quantifiableProduct.unit.name,
+                    brand: quantifiableProduct.product.brand
+                )
+
+            case .product(let product):
+                return toListItemInput(
+                    sectionName: product.item.category.name,
+                    sectionColor: product.item.category.color.hexStr,
+                    brand: product.brand
+                )
+
+            case .item(let item):
+                return toListItemInput(
+                    sectionName: item.category.name,
+                    sectionColor: item.category.color.hexStr
+                )
+
+            case .none: return toListItemInput()
+            }
+        }
+
+        let listItemInput = toListItemInput(match: DBProv.storeProductProvider.mostCompleteProductMatchSync(itemName: name, list: list))
+        return addSync(
+            listItemInput: listItemInput,
+            list: list,
+            status: .todo,
+            overwriteColorIfAlreadyExists: false,
+            realmData: nil,
+            doTransaction: true
+        )
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Cart
     

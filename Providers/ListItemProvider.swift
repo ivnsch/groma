@@ -139,6 +139,9 @@ public protocol ListItemProvider {
     
     func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, overwriteColorIfAlreadyExists: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
 
+    // Siri
+    func addNewSync(itemName: String, list: List) -> ProviderResult<AddListItemResult>
+
     /// Quick add
     func addToCart(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ProviderResult<AddCartListItemResult>) -> Void)
     

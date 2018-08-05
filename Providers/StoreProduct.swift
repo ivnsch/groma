@@ -171,7 +171,11 @@ public class StoreProduct: DBSyncable, Identifiable, WithUuid {
     static func createFilter(unique: QuantifiableProductUnique) -> String {
         return "productOpt.productOpt.itemOpt.name == '\(unique.name)' AND productOpt.productOpt.brand == '\(unique.brand)' AND productOpt.baseQuantity == \(unique.baseQuantity) AND productOpt.unitOpt.name == '\(unique.unit)'"
     }
-    
+
+    static func createFilter(unique: QuantifiableProductUnique, store: String) -> String {
+        return "\(createFilter(unique: unique)) AND \(createFilterStore(store))"
+    }
+
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
     public static func createFilterDirtyAndValid() -> String {
