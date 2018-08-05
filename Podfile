@@ -8,7 +8,7 @@ project 'Providers/Providers.xcodeproj'
 
 def providersdeps
     pod 'Reachability', '~> 3.2'
-    pod 'RealmSwift', '~> 3.3.0'
+    pod 'RealmSwift', '~> 3.7.5'
     pod 'SwiftyBeaver', '~> 1.5.0'
 
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
@@ -68,7 +68,7 @@ end
 target 'Siri' do
     project 'shoppin.xcodeproj'
     platform :ios, '10.0'
-    pod 'RealmSwift', '~> 3.3.0'
+    providersdeps
 end
 
 

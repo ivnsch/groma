@@ -102,13 +102,13 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-iOS9.0/Alamofire.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Reachability-iOS9.0/Reachability.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift-iOS9.0/RealmSwift.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Valet/Valet.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Starscream-iOS9.0/Starscream.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SwiftyBeaver-iOS9.0/SwiftyBeaver.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Valet-iOS9.0/Valet.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework"
@@ -127,13 +127,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-iOS9.0/Alamofire.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Reachability-iOS9.0/Reachability.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift-iOS9.0/RealmSwift.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Valet/Valet.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Starscream-iOS9.0/Starscream.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SwiftyBeaver-iOS9.0/SwiftyBeaver.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Valet-iOS9.0/Valet.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework"

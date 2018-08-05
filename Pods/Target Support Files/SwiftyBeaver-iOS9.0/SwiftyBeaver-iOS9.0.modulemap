@@ -1,0 +1,6 @@
+framework module SwiftyBeaver {
+  umbrella header "SwiftyBeaver-iOS9.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

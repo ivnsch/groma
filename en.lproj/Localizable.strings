@@ -415,7 +415,7 @@ validation_password_characters = "The password must have at least 8 characters, 
 
 
 first_inventory_name = "Home";
-example_list_first_list = "My first list";
+example_list_first_list = "Example";
 example_group_fruits_salad = "Fruits salad";
 
 

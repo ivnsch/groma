@@ -1,0 +1,6 @@
+framework module Valet {
+  umbrella header "Valet-iOS10.0-umbrella.h"
+
+  export *
+  module * { export * }
+}
