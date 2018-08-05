@@ -111,6 +111,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     var notificationToken: NotificationToken!
 
     fileprivate func configRealm() {
+        RealmConfig.moveRealmToSharedFolderIfNecessary()
+
         if let user = SyncUser.current {
             logger.i("Realm user exists: \(String(describing: user.identity)), initializing synced realm.", .db)
             Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)

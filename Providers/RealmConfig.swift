@@ -13,24 +13,36 @@ import Realm.Dynamic
 
 public struct RealmConfig {
 
+    fileprivate static let remoteSyncHost = "gr.us1.cloud.realm.io"
+
     #if targetEnvironment(simulator)
-        fileprivate static let syncHost = "gr.us1.cloud.realm.io"
+        fileprivate static let syncHost = remoteSyncHost
     #else // device
-        fileprivate static let syncHost = "gr.us1.cloud.realm.io"
+        fileprivate static let syncHost = remoteSyncHost
     #endif
-    fileprivate static let syncRealmPath = "default"
 
     static let syncAuthURL = URL(string: "https://\(syncHost)")!
-    static let syncServerURL = URL(string: "realms://\(syncHost)/~/\(syncRealmPath)")!
+    static let syncServerURL = URL(string: "realms://\(syncHost)/~/default")!
     static let syncUserUrl = URL(string: "https://\(syncHost)/user/")!
 
-    fileprivate static var documentsDirectoryUrl: URL {
-        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.co.groma")!
-        //return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
+    fileprivate static var localRealmDirectoryPreV2_1: URL? {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
+    }
+
+    fileprivate static var localRealmDirectory: URL? {
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.co.groma")
+    }
+
+    fileprivate static var localRealmUrlPreV2_1: URL? {
+        return localRealmDirectoryPreV2_1.flatMap { localRealmUrlFor(directory: $0) }
     }
 
     fileprivate static var localRealmUrl: URL? {
-        return documentsDirectoryUrl.appendingPathComponent("default.realm")
+        return localRealmDirectory.flatMap { localRealmUrlFor(directory: $0) }
+    }
+
+    fileprivate static func localRealmUrlFor(directory: URL) -> URL? {
+        return directory.appendingPathComponent("default.realm")
     }
 
     fileprivate static let schemaVersion: UInt64 = 2
@@ -39,7 +51,7 @@ public struct RealmConfig {
         // Set the new schema version. This must be greater than the previously used
         // version (if you've never set a schema version before, the version is 0).
         schemaVersion: RealmConfig.schemaVersion,
-        
+
         // Set the block which will be called automatically when opening a Realm with
         // a schema version lower than the one set above
         migrationBlock: { migration, oldSchemaVersion in
@@ -50,6 +62,56 @@ public struct RealmConfig {
                 // And will update the schema on disk automatically
             }
     })
+
+    /**
+     * For app versions pre-2.1 Realm has to be moved to share folder.
+     * Shared folder is necessary to share Realm with SiriKit extension.
+     */
+    public static func moveRealmToSharedFolderIfNecessary() {
+        let fileManager = FileManager.default
+
+        guard let localRealmUrlPreV2_1 = localRealmUrlPreV2_1 else {
+            logger.e("FATAL No localRealmUrlPreV2_1 - can't move Realm", .db)
+            return
+        }
+
+        guard let localRealmUrl = localRealmUrl else {
+            logger.e("FATAL No localRealmUrl - can't move Realm", .db)
+            return
+        }
+
+        func sourceRealmExists() -> Bool {
+            return fileManager.fileExists(atPath: localRealmUrlPreV2_1.absoluteString)
+        }
+
+        func destinationRealmExists() -> Bool {
+            return fileManager.fileExists(atPath: localRealmUrl.absoluteString)
+        }
+
+
+        if (sourceRealmExists() && !destinationRealmExists()) {
+            do {
+                try fileManager.moveItem(atPath: localRealmUrlPreV2_1.absoluteString, toPath: localRealmUrl.absoluteString)
+
+                // Set Realm path to the new directory
+                Realm.Configuration.defaultConfiguration.fileURL = localRealmUrl
+                logger.i("Moved Realm to shared folder: \(localRealmUrl)")
+
+            } catch let e {
+                logger.e("FATAL: Couldn't move Realm to shared folder. " +
+                        "Source Realm exists: \(sourceRealmExists()), " +
+                        "destination Realm exists: \(destinationRealmExists()). " +
+                        "Error: \(e). " +
+                        "Will be ignored hoping that it's detected in logs and user doesn't use SiriKit.", .db)
+            }
+        } else {
+            #if DEBUG
+                logger.v("It was not needed to move Realm." +
+                        "Source Realm exists: \(sourceRealmExists()), " +
+                        "destination Realm exists: \(destinationRealmExists()).", db)
+            #endif
+        }
+    }
 
     public static var localRealmConfig: Realm.Configuration {
         var config = RealmConfig.config
@@ -104,8 +166,7 @@ public struct RealmConfig {
     }
 
     public static func realm() throws -> Realm {
-        return try Realm(configuration: localRealmConfig)
-//        return try Realm()
+        return try Realm()
     }
 
 }
