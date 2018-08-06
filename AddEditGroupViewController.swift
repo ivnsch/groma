@@ -115,7 +115,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         func setContrastingTextColor(_ color: UIColor) {
             guard groupNameInputField != nil else {logger.e("Outlets not initialised yet"); return}
             
-            let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            let contrastingTextColor = UIColor.white
             
             groupNameInputField.setPlaceholderWithColor(trans("placeholder_recipe_name"), color: contrastingTextColor)
             groupNameInputField.textColor = contrastingTextColor

@@ -31,7 +31,7 @@ class ExpandableItemsTableViewCell: UITableViewCell {
                 v.backgroundColor = c
                 selectedBackgroundView = v
                 
-                let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: model.bgColor, isFlat: true)
+                let contrastingTextColor = UIColor.white
                 listName.textColor = contrastingTextColor
                 
                 // For now no subtitle, it makes the screen look overloaded. If we enable it we also need to animate properly on open/close

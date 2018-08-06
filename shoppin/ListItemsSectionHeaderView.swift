@@ -26,7 +26,7 @@ class ListItemsSectionHeaderView: UIView {
         nameLabel.text = contracted ? "" : NSLocalizedString(section.name, comment: "").uppercased()
         
         backgroundColor = section.color
-        nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: section.color, isFlat: true)
+        nameLabel.textColor = UIColor.white
         //            nameLabel.textColor = headerFontColor
         //            nameLabel.font = headerFont
     }

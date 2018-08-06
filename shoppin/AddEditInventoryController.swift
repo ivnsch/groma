@@ -117,7 +117,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         func setContrastingTextColor(_ color: UIColor) {
             guard listNameInputField != nil else {logger.e("Outlets not initialised yet"); return}
             
-            let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            let contrastingTextColor = UIColor.white
             
             listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: contrastingTextColor)
             listNameInputField.textColor = contrastingTextColor

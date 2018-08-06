@@ -22,27 +22,28 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
     let flatColors: [UIColor] = [
         UIColor.flatRedDark,
         UIColor.flatOrangeDark,
-        UIColor.flatYellowDark,
-        UIColor.flatSandDark,
-        UIColor.flatNavyBlueDark,
-        UIColor.flatBlackDark,
-        UIColor.flatMagentaDark,
-        UIColor.flatTealDark,
-        UIColor.flatSkyBlueDark,
-        UIColor.flatGreenDark,
-        UIColor.flatMintDark,
-        UIColor.flatWhiteDark,
-        UIColor.flatGrayDark,
-        UIColor.flatForestGreenDark,
-        UIColor.flatPurpleDark,
-        UIColor.flatBrownDark,
-        UIColor.flatPlumDark,
         UIColor.flatWatermelonDark,
         UIColor.flatPinkDark,
+        UIColor(hexString: "FD3F92"), // fuchsia
+        UIColor.flatMagentaDark,
+        UIColor.flatPlumDark,
+        UIColor.flatPurpleDark,
+        UIColor.flatTealDark,
+        UIColor.flatNavyBlueDark,
+        UIColor.flatSkyBlueDark,
+        UIColor(hexString: "4169E1"), // blue
+        UIColor.flatBlueDark,
+        UIColor.flatPowderBlueDark,
+        UIColor.flatGreenDark,
+        UIColor(hexString: "2E9E3F"), // green
+        UIColor.flatMintDark,
+        UIColor.flatForestGreenDark,
+        UIColor(hexString: "9b870c"), // dark yellow
         UIColor.flatMaroonDark,
         UIColor.flatCoffeeDark,
-        UIColor.flatPowderBlueDark,
-        UIColor.flatBlueDark
+        UIColor.flatBrownDark,
+        UIColor.flatGrayDark,
+        UIColor.flatBlackDark,
     ]
     
     weak var delegate: FlatColorPickerControllerDelegate?

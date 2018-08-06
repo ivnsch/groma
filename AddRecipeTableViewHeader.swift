@@ -19,6 +19,6 @@ class AddRecipeTableViewHeader: UITableViewHeaderFooterView {
     func config(title: String, recipeColor: UIColor) {
         titleLabel.text = title
         titleLabel.backgroundColor = recipeColor
-        titleLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: recipeColor, isFlat: true)
+        titleLabel.textColor = UIColor.white
     }
 }

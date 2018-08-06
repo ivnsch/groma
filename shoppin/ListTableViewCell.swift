@@ -28,7 +28,7 @@ class ListTableViewCell: UITableViewCell {
                 v.backgroundColor = c
                 selectedBackgroundView = v
 
-                let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: list.color, isFlat: true)
+                let contrastingTextColor = UIColor.white
                 listName.textColor = contrastingTextColor
                 
                 let showUserInfo = list.users.count > 0

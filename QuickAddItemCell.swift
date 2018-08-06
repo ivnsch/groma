@@ -41,7 +41,7 @@ class QuickAddItemCell: UICollectionViewCell {
                 contentView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
                 contentView.backgroundColor = item.color
                 
-                let color = UIColor(contrastingBlackOrWhiteColorOn: item.color, isFlat: true)
+                let color = UIColor.white
 //                let color = UIColor.whiteColor()
                 
                 nameLabel.textColor = color

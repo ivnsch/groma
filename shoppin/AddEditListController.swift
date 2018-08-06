@@ -149,7 +149,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         func setContrastingTextColor(_ color: UIColor) {
             guard listNameInputField != nil else {logger.e("Outlets not initialised yet"); return}
             
-            let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            let contrastingTextColor = UIColor.white
             
             listNameInputField.setPlaceholderWithColor(trans("placeholder_list_name"), color: contrastingTextColor)
             storeInputField.setPlaceholderWithColor(trans("placeholder_store"), color: contrastingTextColor)
