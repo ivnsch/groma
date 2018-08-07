@@ -101,9 +101,11 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         } else {
             if let email = emailField.text {
                 progressVisible()
-                Prov.userProvider.forgotPassword(email, successHandler{[weak self] in
-                    self?.delegate?.onForgotPasswordSuccess()
-                    })
+                Prov.userProvider.forgotPassword(email, successHandler{ [weak self] in
+                    self?.showInfoAlert(message: trans("An email to reset your password was sent")) { [weak self] in
+                        self?.delegate?.onForgotPasswordSuccess()
+                    }
+                })
                 
             } else {
                 print("Error: validation was not implemented correctly")

@@ -205,10 +205,9 @@ extension UIViewController {
 
     // MARK: - Popup
     
-    func showInfoAlert(title: String? = nil, message: String) {
-        MyPopupHelper.showPopup(parent: self, type: .info, title: title, message: message, centerYOffset: -80)
+    func showInfoAlert(title: String? = nil, centerYOffset: CGFloat = -80, message: String, onOkOrCancel: (() -> Void)? = nil) {
+        MyPopupHelper.showPopup(parent: self, type: .info, title: title, message: message, centerYOffset: centerYOffset, onOkOrCancel: onOkOrCancel)
     }
-    
     
     // MARK: - Utils
     

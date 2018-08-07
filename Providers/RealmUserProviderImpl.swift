@@ -145,14 +145,17 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        logger.e("Not implemented") // TODO
-        handler(ProviderResult(status: .success))
-
-        guard let _ = SyncUser.current else {
-            logger.e("No current user! can't remove account", .api, .db)
-            handler(ProviderResult(status: .unknown))
-            return
-        }
+        SyncUser.requestPasswordReset(forAuthServer: RealmConfig.syncAuthURL, userEmail: email, completion: { errorMaybe in
+            DispatchQueue.main.async {
+                if let error = errorMaybe {
+                    logger.e("Error reseting password: \(error)", .db)
+                    handler(ProviderResult(status: .databaseUnknown))
+                } else {
+                    logger.i("Reset password call success", .db)
+                    handler(ProviderResult(status: .success))
+                }
+            }
+        })
     }
     
     func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {

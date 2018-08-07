@@ -245,7 +245,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     // MARK: ForgotPasswordDelegate
 
     func onForgotPasswordSuccess() {
-        showInfoAlert(message: trans("An email to reset your password was sent"))
+        _ = navigationController?.popViewController(animated: true)
     }
 
     // MARK:
