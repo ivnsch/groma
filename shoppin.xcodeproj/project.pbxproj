@@ -135,6 +135,8 @@
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AB3F5F820BAED070087A91D /* groma-intro-02.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AB3F5F720BAED070087A91D /* groma-intro-02.json */; };
 		6AB79F982038D88D00524FBC /* HandlingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB79F972038D88D00524FBC /* HandlingImageView.swift */; };
+		6AC5201C211F60E00077A972 /* TutorialHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC5201B211F60E00077A972 /* TutorialHelper.swift */; };
+		6ACAE1C2211B6E5600BF14D0 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACAE1C1211B6E5600BF14D0 /* TutorialView.swift */; };
 		6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */; };
 		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
 		6ACFFBEC1FE4376F0000DDEB /* ScrollableBottomAttacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */; };
@@ -724,6 +726,8 @@
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AB3F5F720BAED070087A91D /* groma-intro-02.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "groma-intro-02.json"; sourceTree = "<group>"; };
 		6AB79F972038D88D00524FBC /* HandlingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlingImageView.swift; sourceTree = "<group>"; };
+		6AC5201B211F60E00077A972 /* TutorialHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialHelper.swift; sourceTree = "<group>"; };
+		6ACAE1C1211B6E5600BF14D0 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsAccordionController.swift; path = ../ManageItemsAccordionController.swift; sourceTree = "<group>"; };
 		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
 		6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableBottomAttacher.swift; sourceTree = "<group>"; };
@@ -1377,6 +1381,7 @@
 				6A7C54B71E439B2800300F8D /* ItemsController.swift */,
 				6A7C54B81E439B2800300F8D /* ItemsController.xib */,
 				6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */,
+				6AC5201B211F60E00077A972 /* TutorialHelper.swift */,
 			);
 			name = generic;
 			sourceTree = "<group>";
@@ -2705,6 +2710,7 @@
 				6AB79F972038D88D00524FBC /* HandlingImageView.swift */,
 				6A42E79120B9DA6000166F32 /* pullToRefresh */,
 				6A42E78D20B9D5B900166F32 /* PullToRefreshArrowModel.swift */,
+				6ACAE1C1211B6E5600BF14D0 /* TutorialView.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3530,6 +3536,7 @@
 				6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
 				6A10276C1E5E11D8003D2972 /* BaseQuantityCell.swift in Sources */,
+				6ACAE1C2211B6E5600BF14D0 /* TutorialView.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
@@ -3740,6 +3747,7 @@
 				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
 				EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */,
 				EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */,
+				6AC5201C211F60E00077A972 /* TutorialHelper.swift in Sources */,
 				EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
 				6AF0C2851E65796100FE14FD /* EmptyViewController.swift in Sources */,

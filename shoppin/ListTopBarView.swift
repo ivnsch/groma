@@ -124,6 +124,10 @@ class ListTopBarView: UIView {
     // hack - TODO remove this - generic way to update state of buttons
     var expandSectionButton: ExpandCollapseButton?
 
+    var titleLabelFrame: CGRect {
+        return titleLabel.frame
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false

@@ -565,3 +565,6 @@ accessibility_general_button_toggle_sections = "Expandir o contraher secciones";
 accessibility_general_button_navigation_bar_title = "Título";
 accessibility_settings_button_help = "Ayuda %@";
 accessibility_general_search_input = "Buscar";
+
+tutorial_tap_to_go_back = "Pulsa para regresar";
+

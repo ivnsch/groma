@@ -567,3 +567,5 @@ accessibility_general_button_navigation_bar_title = "Title";
 accessibility_settings_button_help = "%@ help";
 accessibility_general_search_input = "Search input";
 
+tutorial_tap_to_go_back = "Tap to go back";
+

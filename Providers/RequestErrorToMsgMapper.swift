@@ -36,6 +36,7 @@ public struct RequestErrorToMsgMapper {
             case .socialLoginCancelled: return trans("social_login_cancelled") // this is not used (not an error) but we need exhaustive switch (without default case)
             case .socialLoginError: return trans("social_login_error")
             case .iCloudLoginError: return trans("error_unknown") // TODO specific text
+            case .sendingEmail: return trans("error_sending_email")
             case .socialAlreadyExists: return trans("social_already_exists")
             case .success: return trans("success") // this is not used (not an error) but we need exhaustive switch (without default case)
             case .noConnection: return trans("error_no_internet_connection")

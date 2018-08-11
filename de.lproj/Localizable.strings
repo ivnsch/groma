@@ -563,3 +563,6 @@ accessibility_general_button_toggle_sections = "Abteilungen expandieren/kontrahi
 accessibility_general_button_navigation_bar_title = "Titel";
 accessibility_settings_button_help = "%@ Hilfe";
 accessibility_general_search_input = "Suche";
+
+tutorial_tap_to_go_back = "Tappe um zurück zu navigieren";
+

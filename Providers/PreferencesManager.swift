@@ -31,7 +31,8 @@ public enum PreferencesManagerKey: String {
     case showedCanSwipeToIncrementCounter = "showedCanSwipeToIncrementCounter" // we show this after n times, since it's not critical and we don't want to overwhelm user with popups the first time they use the app.
     case showedLongTapToEditCounter = "showedLongTapToEditCounter" // we show this after n times, since it's not critical and we don't want to overwhelm user with popups the first time they use the app.
     case showedTapToEditCounter = "showedTapToEditCounter"
-    
+    case showedTapTitleToGoBack = "showedTapTitleToGoBack"
+
     case websocketUuid = "websocketUuid"
     
     case loginTokenFallback = "loginTokenFallback"
@@ -98,5 +99,18 @@ public class PreferencesManager {
     class fileprivate func loadPreference(key:String) -> Any? {
         let userDefaults = UserDefaults.standard
         return userDefaults.object(forKey: key)
+    }
+
+    /// Helper for preferences of type "already showed x (tooltip, tutorial, etc)"
+    public class func hasNotSeen(_ key: PreferencesManagerKey) -> Bool {
+        func alreadyShowed(_ key: PreferencesManagerKey) -> Bool {
+            return PreferencesManager.loadPreference(key) ?? false
+        }
+        return !alreadyShowed(key)
+    }
+
+    /// Helper for preferences of type "already showed x (tooltip, tutorial, etc)"
+    public class func markAsSeen(_ key: PreferencesManagerKey) {
+        PreferencesManager.savePreference(key, value: true)
     }
 }

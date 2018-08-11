@@ -10,8 +10,6 @@ import UIKit
 
 import Providers
 
-
-
 class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var pricesView: PricesView!

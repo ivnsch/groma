@@ -32,7 +32,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
     fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
-    
+
+    fileprivate var tutorialHelper: TutorialHelper?
+
     var isEmpty: Bool {
         return inventoryItemsResult?.isEmpty ?? true
     }
@@ -66,7 +68,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         _ = productsWithQuantityController.view // trigger view/outlets load - otherwise `var tableView` here crahes
 
         initTitleLabel()
-        
+
+        tutorialHelper = TutorialHelper(parentView: view)
+
         topBar.delegate = self
     }
     
@@ -158,6 +162,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
         onViewDidAppear?()
         onViewDidAppear = nil
+
+        tutorialHelper?.show(topBar: topBar)
     }
     
     fileprivate func toggleEditing() {

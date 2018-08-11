@@ -20,6 +20,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     
     fileprivate var emptyViewController: EmptyViewController!
 
+    fileprivate var tutorialHelper: TutorialHelper?
+
     weak var expandDelegate: Foo?
 
     // TODO rename these blocks, which are meant to be executed only once after loading accordingly e.g. onViewWillAppearOnce
@@ -66,6 +68,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         initTitleLabel()
 
+        tutorialHelper = TutorialHelper(parentView: view)
+
         topBar.delegate = self
     }
     
@@ -83,9 +87,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         emptyViewController.view.isHidden = true
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
     
     deinit {
         logger.v("Deinit list items controller")
@@ -171,6 +172,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         onViewDidAppear?()
         onViewDidAppear = nil
+
+        tutorialHelper?.show(topBar: topBar)
     }
 
     func setDefaultLeftButtons() {
