@@ -412,7 +412,7 @@ validation_password_characters = "Das Passwort musst mindestens 8 Zeichen enthal
 
 
 first_inventory_name = "Haushalt";
-example_list_first_list = "Meine erste Liste";
+example_list_first_list = "Beispiel";
 example_group_fruits_salad = "Obstsalat";
 
 
