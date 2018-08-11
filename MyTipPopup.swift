@@ -13,8 +13,15 @@ class MyTipPopup: CMPopTipView, CMPopTipViewDelegate {
 
     var onDismiss: (() -> Void)?
 
+    fileprivate var dummyTouchPointView: UIView?
+
     override init(customView: UIView) {
         super.init(customView: customView)
+        sharedInit()
+    }
+
+    override init(message: String) {
+        super.init(message: message)
         sharedInit()
     }
 
@@ -22,7 +29,18 @@ class MyTipPopup: CMPopTipView, CMPopTipViewDelegate {
         super.init(frame: frame)
         sharedInit()
     }
-    
+
+    /**
+    * Workaround - library doesn't accept point. So we add a small invisible dummy view where the point is and remove when tooltip is dimisseed
+    */
+    func presentPointing(at point: CGPoint, in view: UIView, animated: Bool) {
+        let dummyTouchPointView = UIView(size: CGSize(width: 1, height: 1), center: point)
+        dummyTouchPointView.backgroundColor = UIColor.clear
+        view.addSubview(dummyTouchPointView)
+        self.dummyTouchPointView = dummyTouchPointView
+        super.presentPointing(at: dummyTouchPointView, in: view, animated: animated)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -45,6 +63,7 @@ class MyTipPopup: CMPopTipView, CMPopTipViewDelegate {
     // MARK: - CMPopTipViewDelegate
 
     func popTipViewWasDismissed(byUser popTipView: CMPopTipView!) {
+        dummyTouchPointView?.removeFromSuperview()
         onDismiss?()
     }
 }

@@ -8,8 +8,8 @@
 
 import UIKit
 import MessageUI
-
 import Providers
+import CMPopTipView
 
 protocol EmailHelperDelegate: class {
     func onEmailSent()
@@ -26,7 +26,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
     }
     
     func showEmail(appendSpecs: Bool = true) {
-        let email = "info@groma.co"
+        let email = "contact@groma.co"
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
@@ -58,10 +58,45 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
 
             controller.present(mail, animated: true, completion: nil)
         } else {
-            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popup_couldnt_find_email_account"), centerYOffset: -80)
+            let message = trans("popup_couldnt_find_email_account", email)
+            let range: NSRange? = message.range(email) ?? {
+                logger.e("Invalid state email not contained in: \(message)", .ui)
+                return nil
+            }()
+
+            MyPopupHelper.showPopup(
+                parent: controller,
+                type: .info,
+                message: message,
+                highlightRanges: range.map { [$0] } ?? [],
+                okText: trans("popup_button_yes"),
+                centerYOffset: -80,
+                onMessageTap: { [weak self] touchPointInPopup, popupController, messageLabel in
+                    UIPasteboard.general.string = email
+
+                    let tooltipLocation: CGPoint = (
+                        range.flatMap { range in
+                            let center: CGPoint? = messageLabel.boundingRect(forCharacterRange: range)?.center
+                            return center.map { point in
+                                messageLabel.convert(point, to: popupController.view)
+                            }
+                        }
+                    ) ?? {
+                        logger.e("Invalid state - didn't find email / center in text - fallback to touch point", .ui)
+                        return touchPointInPopup
+                    }()
+
+                    self?.copiedEmailTooltip(location: tooltipLocation.copy(y: tooltipLocation.y - 20), popupView: popupController.view)
+            })
         }
     }
-    
+
+    fileprivate func copiedEmailTooltip(location: CGPoint, popupView: UIView) {
+        let popup = MyTipPopup(message: "Email copied")
+        popup.autoDismiss(animated: true, atTimeInterval: 4)
+        popup.presentPointing(at: location, in: popupView, animated: true)
+    }
+
     // MARK: - MFMailComposeViewControllerDelegate
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {

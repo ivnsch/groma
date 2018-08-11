@@ -44,6 +44,7 @@ class MyPopupDefaultContentViewController: UIViewController {
 
     var handleOkPress: (() -> Void)?
     var handleCancelPress: (() -> Void)?
+    var handleMessageTap: ((CGPoint, MyPopupDefaultContentViewController, UILabel) -> Void)?
 
     // maxMsgLines: override default from nib - can be used when showing exceptionally long messages
     func config(type: MyPopupDefaultContentType, title: String? = nil, message: String, highlightRanges: [NSRange] = [], maxMsgLines: Int? = nil) {
@@ -71,7 +72,17 @@ class MyPopupDefaultContentViewController: UIViewController {
         } else {
             if let fontSize = LabelMore.mapToFontSize(40) {
                 let normalFont = UIFont.systemFont(ofSize: fontSize)
-                messageTextView.attributedText = contents.message.applyBoldColor(ranges: contents.highlightRanges, font: normalFont, color: Theme.blue)
+                var attributedText = contents.message.applyBoldColor(ranges: contents.highlightRanges, font: normalFont, color: Theme.blue)
+
+                // Center attributed text. Note that it seems to work if we set this only on the uilabel, but can cause issues positioning substrings inside, like for the copy-paste tooltip in the email error popup.
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = NSTextAlignment.center
+                if let mutableAttributedString = attributedText.mutableCopy() as? NSMutableAttributedString {
+                    mutableAttributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: mutableAttributedString.string.fullRange)
+                    attributedText = mutableAttributedString
+                }
+                messageTextView.attributedText = attributedText
+
             } else {
                 logger.e("An error ocurred loading font/font size - defaulting to plain label", .ui)
                 messageTextView.text = contents.message
@@ -89,6 +100,11 @@ class MyPopupDefaultContentViewController: UIViewController {
         super.viewDidLoad()
 
         okButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
+
+        messageTextView.isUserInteractionEnabled = true
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onMessageTap(_:)))
+        tapRecognizer.cancelsTouchesInView = false
+        messageTextView.addGestureRecognizer(tapRecognizer)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -99,6 +115,10 @@ class MyPopupDefaultContentViewController: UIViewController {
 
         let contentHeight = topConstraint.constant + imageHeightConstraint.constant + imageBottomConstraint.constant + titleBottomConstraint.constant + messageBottomConstraint.constant + okButtonHeightConstraint.constant + okButtonBottomConstraint.constant + cancelButtonHeightConstraint.constant + cancelButtonBottomConstraint.constant + titleTextView.estimatedHeight(overrideWidth: labelsWidth) + messageTextView.estimatedHeight(overrideWidth: labelsWidth)
         self.view.frame = self.view.frame.copy(height: contentHeight)
+    }
+
+    @objc func onMessageTap(_ sender: UITapGestureRecognizer) {
+        handleMessageTap?(sender.location(in: self.view), self, messageTextView)
     }
 
     @IBAction func onOkPress(_ sender: UIButton) {

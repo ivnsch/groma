@@ -36,4 +36,25 @@ public extension UILabel {
         let labelWidth = overrideWidth ?? frame.width
         return sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude)).height
     }
+
+    func boundingRect(forCharacterRange range: NSRange) -> CGRect? {
+        guard let attributedText = attributedText else { return nil }
+
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        let layoutManager = NSLayoutManager()
+
+        textStorage.addLayoutManager(layoutManager)
+
+        let textContainer = NSTextContainer(size: bounds.size)
+        textContainer.lineFragmentPadding = 0.0
+
+        layoutManager.addTextContainer(textContainer)
+
+        var glyphRange = NSRange()
+
+        // Convert the range for glyphs.
+        layoutManager.characterRange(forGlyphRange: range, actualGlyphRange: &glyphRange)
+
+        return layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+    }
 }
