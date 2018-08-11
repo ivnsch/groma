@@ -356,7 +356,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     }
 
     fileprivate func setIsPasswordSecure(_ secure: Bool) {
-        eyeView.setImage(secure ? #imageLiteral(resourceName: "eye_open") : #imageLiteral(resourceName: "inventory"), for: .normal) // TODO# closed image
+        eyeView.setImage(secure ? #imageLiteral(resourceName: "eye_open") : #imageLiteral(resourceName: "eye_closed"), for: .normal)
         passwordField.isSecureTextEntry = secure
     }
 
