@@ -154,15 +154,11 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
                 progressVisible()
 
-                func onLoginOrRegister() {
-                    onLoginSuccess()
-                }
-
                 switch mode {
                 case .login:
                     let loginData = LoginData(email: email, password: password)
-                    Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: { syncResult in
-                        onLoginOrRegister()
+                    Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: { [weak self] syncResult in
+                        self?.onLoginSuccess()
 
                     }, onError: {[weak self] result in guard let weakSelf = self else {return}
                         switch result.status {
@@ -181,8 +177,8 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
                 case .register:
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
-                    Prov.userProvider.register(user, controller: self, successHandler{
-                        onLoginOrRegister()
+                    Prov.userProvider.register(user, controller: self, successHandler{ [weak self] in
+                        self?.onRegisterSuccess()
                     })
                 }
 
@@ -252,6 +248,11 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
     func onLoginSuccess() {
         delegate?.onLoginOrRegisterSuccess()
+    }
+
+    func onRegisterSuccess() {
+        // just pop to login - user has to enter data after confirming email
+        _ = navigationController?.popViewController(animated: true)
     }
 
     // MARK: Facebook

@@ -337,6 +337,7 @@ success = "Éxito";
 error_no_internet_connection = "No hay una conexión internet. Por favor intenta de nuevo cuando la tengas.";
 sync_failed = "Error de sincronización.\nSi el problema persiste, por favor consulta consulta las entradas de solución de problemas en la ayuda o contacta el soporte técnico (feedback email en la '...' tab).";
 error_user_already_exists = "La cuenta ya existe";
+error_sending_email = "Ocurrió un error enviando el email de confirmación. Por favor intenta de nuevo.";
 
 
 setting_overwrite_data = "Sobrescribir datos";

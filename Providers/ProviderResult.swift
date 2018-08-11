@@ -33,8 +33,8 @@ public enum ProviderStatusCode: Int {
     case syncFailed = 109 // Generic status code for a failed sync - for whatever reason - note this is client generated, the server status code that leads to this can be anything.
     case mustUpdateApp = 111
     case iCloudLoginError = 123
-    
-    
+    case sendingEmail = 130
+
     // DB related
     case databaseUnknown = 1000
     case databaseSavingError = 1001

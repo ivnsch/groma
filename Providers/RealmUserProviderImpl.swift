@@ -16,23 +16,34 @@ class RealmUserProviderImpl: UserProvider {
     fileprivate var notificationToken: NotificationToken?
 
     func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
-        loginOrRegister(loginData, register: false, controller: controller, handler)
+        login(loginData, register: false, controller: controller, handler)
     }
 
     func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         let loginData = LoginData(email: user.email, password: user.password)
-        loginOrRegister(loginData, register: true, controller: controller) {result in
-            handler(ProviderResult(status: result.status))
+        let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: true)
+
+        SyncUser.logIn(with: credentials, server: RealmConfig.syncAuthURL) { user, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    logger.e("Error registering: \(error)", .auth)
+                    handler(ProviderResult(status: .unknown))
+
+                } else {
+                    logger.i("Register success - send confirmation email", .auth)
+                    handler(ProviderResult(status: .success))
+                }
+            }
         }
     }
     
-    private func loginOrRegister(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    private func login(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: register)
-        loginOrRegister(credentials, userName: loginData.email, controller: controller, handler)
+        login(credentials, userName: loginData.email, controller: controller, handler)
     }
     
     // We pass userName separately because it's not safely retrievable from SyncCredentials
-    private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    private func login(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
 
         logger.v("Logging in with credentials: \(credentials)")
 
@@ -228,13 +239,13 @@ class RealmUserProviderImpl: UserProvider {
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
     func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         let credentials = SyncCredentials.facebook(token: token)
-        loginOrRegister(credentials, controller: controller, handler)
+        login(credentials, controller: controller, handler)
     }
     
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
     func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         let credentials = SyncCredentials.google(token: token)
-        loginOrRegister(credentials, controller: controller, handler)
+        login(credentials, controller: controller, handler)
     }
     
     func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
@@ -249,7 +260,7 @@ class RealmUserProviderImpl: UserProvider {
                 logger.d("Retrieved cloudKit token: \(userAccessToken), logging in...")
                 
                 let credentials = SyncCredentials.cloudKit(token: userAccessToken)
-                self.loginOrRegister(credentials, controller: controller, handler)
+                self.login(credentials, controller: controller, handler)
                 
             } else{
                 logger.e("Invalid state: No error, but also no user record")
