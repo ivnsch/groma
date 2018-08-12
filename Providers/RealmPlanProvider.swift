@@ -116,7 +116,7 @@ class RealmPlanProvider: RealmProvider {
                     
                     // fetch history to see how many items have been used so far
 //                    let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-                    let dbHistoryItems: [HistoryItem] = weakSelf.loadSync(realm, predicate: NSPredicate(format: "addedDate >= %@", Date().startOfMonth as CVarArg))
+                    let dbHistoryItems: [HistoryItem] = weakSelf.loadSync(realm, predicate: NSPredicate(format: "addedDate >= %@", Date().startOfMonth as CVarArg), sortDescriptor: nil)
                     let productQuantities = weakSelf.productsTotalQuantities(dbHistoryItems)
                     let savedPlanItems: [PlanItem] = planItemsToSave.map{
                         let usedQuantity = productQuantities[$0.product.uuid] ?? 0
@@ -181,7 +181,7 @@ class RealmPlanProvider: RealmProvider {
                     
                     // fetch history to see how many items have been used so far
 //                    let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-                    let dbHistoryItems: [HistoryItem] = weakSelf.loadSync(realm, predicate: NSPredicate(format: "addedDate >= %@",  Date().startOfMonth as CVarArg))
+                    let dbHistoryItems: [HistoryItem] = weakSelf.loadSync(realm, predicate: NSPredicate(format: "addedDate >= %@",  Date().startOfMonth as CVarArg), sortDescriptor: nil)
                     let productQuantities = weakSelf.productsTotalQuantities(dbHistoryItems)
                     let savedPlanItems: [PlanItem] = planItemsToSave.map{
                         let usedQuantity = productQuantities[$0.product.uuid] ?? 0

@@ -312,7 +312,7 @@ class RealmInventoryItemProvider: RealmProvider {
         }
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-        let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory))
+        let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory), sortDescriptor: nil)
         
         let addedOrIncrementedInventoryItem: (item: InventoryItem, isNew: Bool) = {
             if let existingInventoryItem = existingInventoryItems.first {

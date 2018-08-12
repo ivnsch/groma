@@ -222,20 +222,23 @@ class RealmProvider {
     // Special methods (with repeated code) for this, since on one side we want to do the conversion to array in the background together with loading the objs (so we can't use the methods that return Results) and on the other it was not possible to adjust the methods that return arrays and use mapper to make mapper optional. There seem to be a problem with the returned type "U" of the objects being the same as "T". TODO try to adjust methods with mapper. Or refactor in some other way.
     
     func load<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
-        
+        load(predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.map { [$0] } ?? [], range: rangeMaybe, handler: handler)
+    }
+
+    func load<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptors: [NSSortDescriptor] = [], range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
         let finished: ([T]) -> Void = {result in
             DispatchQueue.main.async(execute: {
                 handler(result)
             })
         }
-        
+
         DispatchQueue.global(qos: .background).async {
-            
+
             do {
                 let realm = try RealmConfig.realm()
-                let models: [T] = self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
+                let models: [T] = self.loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptors, range: rangeMaybe)
                 finished(models)
-                
+
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
@@ -244,35 +247,51 @@ class RealmProvider {
     }
     
     func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [T] {
+        return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.map { [$0] } ?? [], range: rangeMaybe)
+    }
+
+    func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptors: [NSSortDescriptor] = [], range rangeMaybe: NSRange? = nil) -> [T] {
         var results = realm.objects(T.self)
         if let predicate = predicateMaybe {
             results = results.filter(predicate)
         }
-        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
-            results = results.sorted(byKeyPath: key, ascending: sortDescriptor.ascending)
+        let realmSortDescriptiors: [SortDescriptor] = sortDescriptors.compactMap { descriptor in
+            descriptor.key.map { key in
+                SortDescriptor(keyPath: key, ascending: descriptor.ascending)
+            }
         }
-        
+        results = results.sorted(by: realmSortDescriptiors)
+
         return results.toArray(rangeMaybe)
     }
-    
+
+
     func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [T] {
-        
+        return loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.map { [$0] } ?? [], range: rangeMaybe)
+    }
+
+    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptors: [NSSortDescriptor] = [], range rangeMaybe: NSRange? = nil) -> [T] {
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
-        
-        return loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
+
+        return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptors, range: rangeMaybe)
+
     }
-    
+
     func load<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
-        
+        load(filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.map { [$0] } ?? [], range: rangeMaybe, handler: handler)
+    }
+
+    func load<T: Object>(filter filterMaybe: String? = nil, sortDescriptors sortDescriptorsMaybe: [NSSortDescriptor] = [], range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
+
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
-        
-        load(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe, handler: handler)
+
+        load(predicate: predicateMaybe, sortDescriptors: sortDescriptorsMaybe, range: rangeMaybe, handler: handler)
     }
-    
+
     //////////////////////
     
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
@@ -299,14 +318,22 @@ class RealmProvider {
     }
     
     func loadSync<T: Object, U>(_ realm: Realm, mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
+        return loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.map { [$0]} ?? [], range: rangeMaybe)
+    }
+
+    func loadSync<T: Object, U>(_ realm: Realm, mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptors: [NSSortDescriptor] = [], range rangeMaybe: NSRange? = nil) -> [U] {
+
         var results = realm.objects(T.self)
         if let predicate = predicateMaybe {
             results = results.filter(predicate)
         }
-        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
-            results = results.sorted(byKeyPath: key, ascending: sortDescriptor.ascending)
+        let realmSortDescriptiors: [SortDescriptor] = sortDescriptors.compactMap { descriptor in
+            descriptor.key.map { key in
+                SortDescriptor(keyPath: key, ascending: descriptor.ascending)
+            }
         }
-        
+        results = results.sorted(by: realmSortDescriptiors)
+
         let objs: [T] = results.toArray(rangeMaybe)
         return objs.map{mapper($0)}
     }

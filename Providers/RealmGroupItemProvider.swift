@@ -61,7 +61,7 @@ class RealmGroupItemProvider: RealmProvider {
     fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (groupItem: GroupItem, delta: Float) {
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-        let existingGroupItems: [GroupItem] = loadSync(realm, filter: GroupItem.createFilter(product, group: group))
+        let existingGroupItems: [GroupItem] = loadSync(realm, filter: GroupItem.createFilter(product, group: group), sortDescriptor: nil)
         
         let addedOrIncrementedGroupItem: GroupItem = {
             if let existingGroupItem = existingGroupItems.first {
@@ -91,7 +91,7 @@ class RealmGroupItemProvider: RealmProvider {
                 // load items
                 let realm = try RealmConfig.realm()
 
-                let items: [GroupItem] = self.loadSync(realm, filter: GroupItem.createFilterGroupItemsUuids(groupItems))
+                let items: [GroupItem] = self.loadSync(realm, filter: GroupItem.createFilterGroupItemsUuids(groupItems), sortDescriptor: nil)
 //                let items: [GroupItem] = realm.objects(GroupItem.self).filter(GroupItem.createFilterGroupItemsUuids(groupItems))
                 
                 // decide if add/increment

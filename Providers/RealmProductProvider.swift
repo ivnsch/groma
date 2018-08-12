@@ -263,15 +263,21 @@ class RealmProductProvider: RealmProvider {
 
     // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice products with new uuids
     // TODO refactor with products() above? (this is a copy with few necessary changes for quantifiable product). Or maybe remove above, since now we need only this?
+    // NOTE: For now ignoring sortBy value - sorting both for fav and alphabetic (this is needed currently for where this method is used)
     func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: Results<QuantifiableProduct>?) -> Void) {
         
-        let sortData: (key: String, ascending: Bool) = {
-            switch sortBy {
-            case .alphabetic: return ("productOpt.itemOpt.name", true)
-            case .fav: return ("fav", false)
-            }
-        }()
-        
+//        let sortData: (key: String, ascending: Bool) = {
+//            switch sortBy {
+//            case .alphabetic: return ("productOpt.itemOpt.name", true)
+//            case .fav: return ("fav", false)
+//            }
+//        }()
+
+        let sortDescriptors: [NSSortDescriptor] = [
+            NSSortDescriptor(key: "fav", ascending: false),
+            NSSortDescriptor(key: "productOpt.itemOpt.name", ascending: true)
+        ]
+
         let filterMaybe: String? = substring.flatMap {
             $0.isEmpty ? nil : QuantifiableProduct.createFilterNameContains($0)
         }
@@ -279,7 +285,7 @@ class RealmProductProvider: RealmProvider {
         background({() -> [String]? in
             do {
                 let realm = try RealmConfig.realm()
-                let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+                let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptors, range: range)
                 return products.map{$0.uuid}
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -291,7 +297,12 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+                    let realmSortDescriptiors: [SortDescriptor] = sortDescriptors.compactMap { descriptor in
+                        descriptor.key.map { key in
+                            SortDescriptor(keyPath: key, ascending: descriptor.ascending)
+                        }
+                    }
+                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptors: realmSortDescriptiors)
                     handler(substring, products)
                     
                 } else {
@@ -395,13 +406,18 @@ class RealmProductProvider: RealmProvider {
                                      sortBy: ProductSortBy,
                                      handler: @escaping (_ substring: String?,
         _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
-        let sortData: (key: String, ascending: Bool) = {
-            switch sortBy {
-            case .alphabetic: return ("itemOpt.name", true)
-            case .fav: return ("fav", false)
-            }
-        }()
-        
+//        let sortData: (key: String, ascending: Bool) = {
+//            switch sortBy {
+//            case .alphabetic: return ("itemOpt.name", true)
+//            case .fav: return ("fav", false)
+//            }
+//        }()
+
+        let sortDescriptors: [NSSortDescriptor] = [
+            NSSortDescriptor(key: "fav", ascending: false),
+            NSSortDescriptor(key: "itemOpt.name", ascending: true)
+        ]
+
         let filterMaybe: String? = substring.flatMap {
             $0.isEmpty ? nil : Product.createFilterNameContains($0)
         }
@@ -411,7 +427,12 @@ class RealmProductProvider: RealmProvider {
         let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
-            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
+            let realmSortDescriptiors: [SortDescriptor] = sortDescriptors.compactMap { descriptor in
+                descriptor.key.map { key in
+                    SortDescriptor(keyPath: key, ascending: descriptor.ascending)
+                }
+            }
+            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptors: realmSortDescriptiors/*, range: range*/)
             
             let categoryNames = products.map{$0.item.category.name}.distinct()
             
