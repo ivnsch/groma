@@ -373,10 +373,7 @@ public class SuggestionsPrefiller {
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sponge_wire", lang), category: cleaningCat)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mop", lang), category: cleaningCat)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_brush", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_5", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_10", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_30", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_60", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags", lang), category: cleaningCat)),
 
             // dips
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salad_dressing", lang), category: dipsCat, edible: true)),
@@ -617,10 +614,7 @@ public class SuggestionsPrefiller {
             Product(uuid: uuid, name: tr("pr_sponge_wire", lang), category: cleaningCat),
             Product(uuid: uuid, name: tr("pr_mop", lang), category: cleaningCat),
             Product(uuid: uuid, name: tr("pr_brush", lang), category: cleaningCat),
-            Product(uuid: uuid, name: tr("pr_waste_bags_5", lang), category: cleaningCat),
-            Product(uuid: uuid, name: tr("pr_waste_bags_10", lang), category: cleaningCat),
-            Product(uuid: uuid, name: tr("pr_waste_bags_30", lang), category: cleaningCat),
-            Product(uuid: uuid, name: tr("pr_waste_bags_60", lang), category: cleaningCat),
+            Product(uuid: uuid, name: tr("pr_waste_bags", lang), category: cleaningCat),
 
             // dips
             Product(uuid: uuid, name: tr("pr_salad_dressing", lang), category: dipsCat),
