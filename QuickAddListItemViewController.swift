@@ -125,7 +125,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         onViewDidLoad?()
         
         if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flow.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20)
+            flow.sectionInset = UIEdgeInsetsMake(0, 20, 10, 20)
         } else {
             logger.e("Invalid collection view layout - can't set insets")
         }
@@ -603,12 +603,12 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        
-        if (maximumOffset - currentOffset) <= 40 {
-            loadPossibleNextPage(false)
-        }
+        // TODO re-active pagination (by uncommenting this block and adding pagination support to (at least)realm product provider (see todo there)
+//        let currentOffset = scrollView.contentOffset.y
+//        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+//        if (maximumOffset - currentOffset) <= 40 {
+//            loadPossibleNextPage(false)
+//        }
     }
     
     // TODO refactor this, it was implemented without time and motivation
