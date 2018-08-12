@@ -61,7 +61,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // developer
     fileprivate let addDummyHistoryItemsSetting = SimpleSetting(id: .addDummyHistoryItems, label: "Add dummy history items") // debug
 
-    fileprivate var settings: [Setting] = []
+    fileprivate var settings: [Setting] { return [restorePrefillProductsSetting,
+                                                  restoreHintsSetting, restoreUnitsSetting, clearAllDataSetting]
+    }
     
     fileprivate let overwritePopupMessage: String = trans("popups_settings_overwrite")
     fileprivate let restoreProductsMessage: String = trans("popups_restore_bundled_products")
@@ -71,48 +73,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        updateServerRelatedItemsUI()
-    }
-    
-    fileprivate func updateServerRelatedItemsUI() {
-        let showServerThings = ConnectionProvider.connectedAndLoggedIn
-        
-        if showServerThings {
-//            let realTimeConnectionSetting = SwitchSetting(id: .enableRealTime, label: trans("setting_real_time_connection"), on: Prov.userProvider.isWebsocketConnected())
-            
-            settings = [
-//                clearHistorySetting,
-//                realTimeConnectionSetting,
-//                overwriteDataSetting,
-//                removeAccountSetting, // TODO!!!!!!!!!!!!!!!!!!!!!!! how to do this with Realm?
-//                addDummyHistoryItemsSetting,
-                restorePrefillProductsSetting,
-                restoreHintsSetting,
-                restoreUnitsSetting,
-                clearAllDataSetting
-            ]
-        } else {
-            settings = [
-//                clearHistorySetting,
-//                addDummyHistoryItemsSetting,
-//                clearAllDataSetting,
-                restorePrefillProductsSetting,
-                restoreHintsSetting,
-                restoreUnitsSetting,
-                clearAllDataSetting
-            ]
-        }
-        
-        tableView.reloadData()
-    }
-    
     // MARK: -
     
     // Debug only
@@ -141,8 +104,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
 
                     func onOkOrDismiss() {
-                        // TODO check that the user here is logged out already
-                        weakSelf.updateServerRelatedItemsUI()
                     }
 
                     weakSelf.showPopup(type: .info, message: trans("popup_your_account_was_removed"), onOk: {
