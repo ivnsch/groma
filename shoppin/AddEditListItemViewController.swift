@@ -847,7 +847,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             
             // TODO dynamic
             let topBarHeight: CGFloat = Theme.navBarHeight
-            let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
+//            let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
 //            let tabBarHeight: CGFloat = 49
             
             let x: CGFloat = {
@@ -859,7 +859,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }()
             
             let w = width ?? windowView.frame.width
-            let h = height ?? (windowView.frame.height - pricesViewHeight - topBarHeight)
+            let h = height ?? (windowView.frame.height - topBarHeight)
             controller.view.frame = CGRect(x: x, y: topBarHeight + topOffset, width: w, height: h)
             
             windowView.addSubview(controller.view)
