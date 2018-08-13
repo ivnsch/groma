@@ -335,7 +335,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         // We just open the top controller - when the data is submitted it will call onSubmitAddEditItem on this controller, which forwards the result to the cart (if it's open, which is assumed to be still the case at that point since the UI doesn't allow to close the cart controller while the add/edit controller is open)
         onListItemSelected(listItem, indexPath: indexPath)
     }
-    
+
+    func onCartDeepTouchListItem(listItem: ListItem, indexPath: IndexPath) {
+        onListItemDeepTouch(tableViewListItem: listItem, indexPath: indexPath)
+    }
+
     var cartParentForAddButton: UIView {
         return view
     }

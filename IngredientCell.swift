@@ -12,6 +12,7 @@ import Providers
 
 
 protocol IngredientCellDelegate: class {
+    func onCellDeepTouch(cell: IngredientCell)
 }
 
 
@@ -70,10 +71,16 @@ class IngredientCell: UITableViewCell {
         super.awakeFromNib()
         
         selectionStyle = .none
+
+        let deepTouchRecognizer = DeepPressGestureRecognizer()
+        addGestureRecognizer(deepTouchRecognizer)
+        deepTouchRecognizer.onDeepPress = { [weak self] in guard let weakSelf = self else { return }
+            weakSelf.delegate?.onCellDeepTouch(cell: weakSelf)
+        }
     }
-    
+
     func setRightSideOffset(offset: CGFloat, animated: Bool) {
-     
+
         func f() {
             nameLeadingConstraint.constant = offset
         }

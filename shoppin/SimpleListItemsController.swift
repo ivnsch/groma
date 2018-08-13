@@ -287,7 +287,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             
         }
     }
-    
+
+    func onListItemDeepTouch(tableViewListItem: ListItem, indexPath: IndexPath) {}
+
     func onListItemSwiped(_ tableViewListItem: ListItem, indexPath: IndexPath) {
         // TODO!!!!!!!!!!!!!!!!!!!!! update for new UI - we probably will not use "select" anymore but swipe and without undo
         
@@ -805,6 +807,11 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     func onDelete(_ listItem: ListItem) {
         guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         listItemsTableViewController.deleteListItem(indexPath: indexPath)
+    }
+
+    func onDeepPress(_ listItem: ListItem) {
+        guard let indexPath = indexPathFor(listItem: listItem) else { return }
+        onListItemDeepTouch(tableViewListItem: listItem, indexPath: indexPath)
     }
 }
 

@@ -28,6 +28,7 @@ protocol CartListItemsControllerDelegate: class {
     var cartParentForAddButton: UIView {get}
     
     func onCartSelectListItem(listItem: ListItem, indexPath: IndexPath)
+    func onCartDeepTouchListItem(listItem: ListItem, indexPath: IndexPath)
 }
 
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
@@ -165,5 +166,10 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     override func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
         super.onListItemSelected(tableViewListItem, indexPath: indexPath)
         delegate?.onCartSelectListItem(listItem: tableViewListItem, indexPath: indexPath)
+    }
+
+    override func onListItemDeepTouch(tableViewListItem: ListItem, indexPath: IndexPath) {
+        super.onListItemDeepTouch(tableViewListItem: tableViewListItem, indexPath: indexPath)
+        delegate?.onCartDeepTouchListItem(listItem: tableViewListItem, indexPath: indexPath)
     }
 }

@@ -14,6 +14,7 @@ import RealmSwift
 protocol ListItemsTableViewDelegateNew: class {
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath)
+    func onListItemDeepTouch(tableViewListItem: ListItem, indexPath: IndexPath)
     func onListItemSwiped(_ tableViewListItem: ListItem, indexPath: IndexPath)
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: Section)
@@ -432,7 +433,12 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         deleteListItem(indexPath: indexPath)
     }
-    
+
+    func onDeepPress(_ listItem: ListItem) {
+        guard let indexPath = indexPathFor(listItem: listItem) else { return }
+        listItemsTableViewDelegate?.onListItemDeepTouch(tableViewListItem: listItem, indexPath: indexPath)
+    }
+
     // MARK: - ListItemsSectionHeaderViewDelegate
     
     func onHeaderTap(_ header: ListItemsSectionHeaderView) {

@@ -325,9 +325,17 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
         if isEditing {
-            beforeToggleTopAddController(willExpand: true)
-            openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
+            openQuickAddToEdit(tableViewListItem: tableViewListItem, indexPath: indexPath)
         }
+    }
+
+    func onListItemDeepTouch(tableViewListItem: ListItem, indexPath: IndexPath) {
+        openQuickAddToEdit(tableViewListItem: tableViewListItem, indexPath: indexPath)
+    }
+
+    fileprivate func openQuickAddToEdit(tableViewListItem: ListItem, indexPath: IndexPath) {
+        beforeToggleTopAddController(willExpand: true)
+        openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
     }
     
     func onListItemSwiped(_ tableViewListItem: ListItem, indexPath: IndexPath) {

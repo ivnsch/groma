@@ -18,6 +18,7 @@ protocol ListItemCellDelegateNew: class {
     func onChangeQuantity(_ listItem: ListItem, delta: Float)
     func onQuantityInput(_ listItem: ListItem, quantity: Float)
     func onDelete(_ listItem: ListItem)
+    func onDeepPress(_ listItem: ListItem)
     var isControllerInEditMode: Bool {get}
 }
 
@@ -285,6 +286,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         quantityViewTrailingConstraint.constant = DimensionsManager.leftRightPaddingConstraint
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+        longPress.delegate = self
         addGestureRecognizer(longPress)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
@@ -292,7 +294,18 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         tap.delegate = self
         addGestureRecognizer(tap)
         tap.require(toFail: longPress)
-        
+
+        let deepTouchRecognizer = DeepPressGestureRecognizer()
+        deepTouchRecognizer.delegate = self
+        addGestureRecognizer(deepTouchRecognizer)
+        deepTouchRecognizer.require(toFail: longPress)
+        deepTouchRecognizer.onDeepPress = { [weak self] in
+            longPress.cancel()
+            if let listItem = self?.tableViewListItem {
+                self?.delegate?.onDeepPress(listItem)
+                return
+            }
+        }
     }
     
     // MARK: - UIGestureRecognizerDelegate
@@ -301,6 +314,11 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         if touch.view?.isDescendant(of: quantityView) ?? false {
             return false
         }
+
+        if gestureRecognizer is UILongPressGestureRecognizer {
+            print("long press should receive?")
+        }
+
         return true
     }
     
@@ -479,7 +497,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             mode = .note
         }
     }
-    
+
+
     // MARK: - QuantityViewDelegate
     
     func onRequestUpdateQuantity(_ delta: Float) {
@@ -497,3 +516,4 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         delegate?.onQuantityInput(tableViewListItem, quantity: quantity)
     }
 }
+

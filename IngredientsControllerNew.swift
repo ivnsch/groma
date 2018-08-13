@@ -993,7 +993,8 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             }
         } else { // Normal cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "ingredientCell", for: indexPath) as! IngredientCell
-            
+
+            cell.delegate = self
 //            let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
             let row = false ? indexPath.row - 1 : indexPath.row
             
@@ -1070,11 +1071,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
             } else { // Ingredient row
                 let ingredient = itemsResult[indexPath.row]
-
-                topQuickAddControllerManager?.height = 120
-                super.openQuickAdd(itemToEdit: AddEditItem(item: ingredient))
-                scrollableBottomAttacher?.bottom.config(productName: ingredient.item.name, unit: ingredient.unit, whole: Int(ingredient.quantity), fraction: ingredient.fraction)
-                topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+                openQuickAddToEdit(ingredient: ingredient)
             }
         } else {
             // enter edit (specifically the recipe text cell) mode if showing the "tap to add text" placeholder
@@ -1084,5 +1081,23 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             }
         }
+    }
+
+    fileprivate func openQuickAddToEdit(ingredient: Ingredient) {
+        topQuickAddControllerManager?.height = 120
+        super.openQuickAdd(itemToEdit: AddEditItem(item: ingredient))
+        scrollableBottomAttacher?.bottom.config(productName: ingredient.item.name, unit: ingredient.unit, whole: Int(ingredient.quantity), fraction: ingredient.fraction)
+        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+}
+
+extension IngredientsControllerNew: IngredientCellDelegate {
+
+    func onCellDeepTouch(cell: IngredientCell) {
+        guard let ingredient = cell.ingredient else {
+            logger.e("Invalid state: pressed cell has no ingredient", .ui)
+            return
+        }
+        openQuickAddToEdit(ingredient: ingredient)
     }
 }

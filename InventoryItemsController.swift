@@ -604,21 +604,26 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onModelSelected(_ index: Int) {
-        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return}
-        
         if productsWithQuantityController.isEditing {
-            
-            let inventoryItem = inventoryItemsResult[index]
-            
-            topQuickAddControllerManager?.expand(true)
-            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
-            
-            topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
-            ])
+            openQuickAddToEdit(index: index)
         }
     }
 
+    func onDeepPress(_ index: Int) {
+        openQuickAddToEdit(index: index)
+    }
+
+    fileprivate func openQuickAddToEdit(index: Int) {
+        guard let inventoryItemsResult = inventoryItemsResult else { logger.e("No result"); return }
+        let inventoryItem = inventoryItemsResult[index]
+
+        topQuickAddControllerManager?.expand(true)
+        topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
+
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
+        ])
+    }
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
         return (text: trans("empty_inventory_line1"), text2: trans("empty_inventory_line2"), imgName: "empty_page")

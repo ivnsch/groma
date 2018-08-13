@@ -28,6 +28,7 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
     func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void)
     
     func onModelSelected(_ index: Int)
+    func onDeepPress(_ index: Int)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
     func onEmpty(_ empty: Bool)
@@ -40,7 +41,7 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
 class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, ExplanationViewDelegate {
-    
+
     @IBOutlet weak var tableView: UITableView!
 
     @IBOutlet weak var topMenuView: UIView!
@@ -276,7 +277,15 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.onModelSelected(indexPath.row)
     }
-    
+
+    func onDeepPress(_ cell: ProductWithQuantityTableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            delegate?.onDeepPress(indexPath.row)
+        } else {
+            logger.e("Invalid state: No index path for pressed cell: \(cell)", .ui)
+        }
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: true)

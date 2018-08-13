@@ -219,6 +219,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
+    func onDeepPress(_ cell: ProductWithQuantityTableViewCell) {
+        // TODO Outdated class - remove it?
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: true)

@@ -14,6 +14,7 @@ protocol ProductWithQuantityTableViewCellDelegate: class {
     func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float)
     func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float)
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell)
+    func onDeepPress(_ cell: ProductWithQuantityTableViewCell)
     var isControllerInEditMode: Bool { get }
 }
 
@@ -132,6 +133,14 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         tap.delegate = self
         addGestureRecognizer(tap)
         tap.require(toFail: longPress)
+
+        let deepTouchRecognizer = DeepPressGestureRecognizer()
+        deepTouchRecognizer.delegate = self
+        addGestureRecognizer(deepTouchRecognizer)
+        deepTouchRecognizer.onDeepPress = { [weak self] in guard let weakSelf = self else { return }
+            longPress.cancel()
+            self?.delegate?.onDeepPress(weakSelf)
+        }
     }
 
     // MARK: - UIGestureRecognizerDelegate
@@ -158,7 +167,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             setMode(.readonly, animated: true)
         }
     }
-    
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         

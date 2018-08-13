@@ -849,7 +849,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             let topBarHeight: CGFloat = Theme.navBarHeight
 //            let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
 //            let tabBarHeight: CGFloat = 49
-            
+
             let x: CGFloat = {
                 if let width = width {
                     return (windowView.frame.width - width) / 2
