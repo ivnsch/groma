@@ -310,9 +310,9 @@ popup_you_cant_delete_default_base_quantity = "Die Default Basismenge kann nicht
 
 error_not_authenticated = "Nicht authentifiziert. Bitte log dich ein und versuch es noch mal.";
 error_already_exists = "Eintrag existiert bereits";
-error_list_already_exists = "Die Liste \"%@\" existiert bereits.";
-error_inventory_already_exists = "Das Inventar \"%@\" existiert bereits.";
-error_recipe_already_exists = "Das Repezept \"%@\" existiert bereits.";
+error_list_already_exists = "Die Liste %@ existiert bereits.";
+error_inventory_already_exists = "Das Inventar %@ existiert bereits.";
+error_recipe_already_exists = "Das Repezept %@ existiert bereits.";
 error_not_found = "Eintrag Konnte nicht gefunden werden";
 error_invalid_credentials = "Ungültige Zugangsdaten";
 error_blacklisted = "Dein Account hatte verdächtige Aktivitäten und wurde blockiert.\nBitte kontaktiere Support (hierfür kannst du die Feedback Option unter '...' benutzen).";

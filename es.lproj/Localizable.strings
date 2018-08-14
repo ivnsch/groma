@@ -312,9 +312,9 @@ popup_you_cant_delete_default_base_quantity = "La cantidad básica default no se
 
 error_not_authenticated = "No hay una sesión activa. Por favor conéctate e intenta de nuevo.";
 error_already_exists = "Ya existe";
-error_list_already_exists = "La lista \"%@\" ya existe.";
-error_inventory_already_exists = "El inventario \"%@\" ya existe.";
-error_recipe_already_exists = "La receta \"%@\" ya existe.";
+error_list_already_exists = "La lista %@ ya existe.";
+error_inventory_already_exists = "El inventario %@ ya existe.";
+error_recipe_already_exists = "La receta %@ ya existe.";
 error_not_found = "No se ha encontrado";
 error_invalid_credentials = "Datos de acceso inválidos";
 error_blacklisted = "Tu cuenta estaba reportando actividades inusuales y fue suspendida.\nPor favor contacta el soporte técnico (usa el feedback en la tab '...').";
