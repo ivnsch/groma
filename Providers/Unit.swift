@@ -75,24 +75,24 @@ public class Unit: DBSyncable, Identifiable, WithUuid {
 
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilter(id: UnitId) -> String {
-        return "idVal == \(id.rawValue)"
+    static func createFilter(id: UnitId) -> NSPredicate {
+        return NSPredicate(format: "idVal = %@", id.rawValue)
     }
     
-    static func createFilter(name: String) -> String {
-        return "name == '\(name)'"
+    static func createFilter(name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
     
-    static func createBuyable(buyable: Bool) -> String {
-        return "buyable == \(buyable)"
+    static func createBuyable(buyable: Bool) -> NSPredicate {
+        return NSPredicate(format: "buyable = %@", buyable)
     }
 
     // Used to convert List to Results

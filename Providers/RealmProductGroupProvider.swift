@@ -30,13 +30,12 @@ class RealmProductGroupProvider: RealmProvider {
         
         
         withRealm({realm -> [String]? in
-            let filterMaybe: String? = substring.flatMap {
+            let filterMaybe: NSPredicate? = substring.flatMap {
                 $0.isEmpty ? nil : ProductGroup.createFilterNameContains($0)
             }
-            let groups: Results<ProductGroup> = self.loadSync(realm, filter: filterMaybe,
-                                                              sortDescriptor: SortDescriptor(keyPath: sortData.key,
-                                                                                             ascending:
-                                                                sortData.ascending))
+            let groups: Results<ProductGroup> = self.loadSync(realm, predicate: filterMaybe,
+                                                              sortDescriptor: NSSortDescriptor(key: sortData.key,
+                                                                                               ascending: sortData.ascending))
             return groups.toArray(range).map{$0.uuid}
             
         }) {uuidsMaybe in
@@ -44,7 +43,8 @@ class RealmProductGroupProvider: RealmProvider {
                 if let uuids = uuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let groups: Results<ProductGroup> = self.loadSync(realm, filter: ProductGroup.createFilterUuids(uuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+                    let groups: Results<ProductGroup> = self.loadSync(realm, predicate: ProductGroup.createFilterUuids(uuids),
+                                                                      sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
                     let groupsArray: [ProductGroup] = groups.toArray()
                     handler((substring, groupsArray))
                     

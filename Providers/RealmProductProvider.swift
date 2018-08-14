@@ -84,7 +84,7 @@ class RealmProductProvider: RealmProvider {
         do {
             let realm = try RealmConfig.realm()
             // TODO review if it's necessary to pass the sort descriptor here again
-            let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(uuid)).first
+            let productMaybe: Product? = self.loadSync(realm, predicate: Product.createFilter(uuid)).first
             handler(productMaybe)
             
         } catch let e {
@@ -99,7 +99,7 @@ class RealmProductProvider: RealmProvider {
         background({() -> String? in
             do {
                 let realm = try RealmConfig.realm()
-                let product: Product? = self.loadSync(realm, filter: Product.createFilterNameBrand(name, brand: brand)).first
+                let product: Product? = self.loadSync(realm, predicate: Product.createFilterNameBrand(name, brand: brand)).first
                 return product?.uuid
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -111,7 +111,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuid = productUuidMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(productUuid)).first
+                    let productMaybe: Product? = self.loadSync(realm, predicate: Product.createFilter(productUuid)).first
                     if productMaybe == nil {
                         logger.e("Unexpected: product with just fetched uuid is not there")
                     }
@@ -142,7 +142,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids))
+                    let products: Results<Product> = self.loadSync(realm, predicate: Product.createFilterUuids(productUuids))
                     handler(products.toArray())
                     
                 } else {
@@ -168,7 +168,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuid = productUuidMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let productMaybe: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(productUuid)).first
+                    let productMaybe: QuantifiableProduct? = self.loadSync(realm, predicate: QuantifiableProduct.createFilter(productUuid)).first
                     if productMaybe == nil {
                         logger.e("Unexpected: product with just fetched uuid is not there")
                     }
@@ -226,14 +226,14 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe: String? = substring.flatMap {
+        let filterMaybe: NSPredicate? = substring.flatMap {
             $0.isEmpty ? nil : Product.createFilterNameContains($0)
         }
         
         background({() -> [String]? in
             do {
                 let realm = try RealmConfig.realm()
-                let products: [Product] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+                let products: [Product] = self.loadSync(realm, predicate: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -245,7 +245,9 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+                    let products: Results<Product> = self.loadSync(realm,
+                                                                   predicate: Product.createFilterUuids(productUuids),
+                                                                   sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
                     
                 } else {
@@ -278,14 +280,14 @@ class RealmProductProvider: RealmProvider {
             NSSortDescriptor(key: "productOpt.itemOpt.name", ascending: true)
         ]
 
-        let filterMaybe: String? = substring.flatMap {
+        let filterMaybe: NSPredicate? = substring.flatMap {
             $0.isEmpty ? nil : QuantifiableProduct.createFilterNameContains($0)
         }
         
         background({() -> [String]? in
             do {
                 let realm = try RealmConfig.realm()
-                let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptors, range: range)
+                let products: [QuantifiableProduct] = self.loadSync(realm, predicate: filterMaybe, sortDescriptors: sortDescriptors, range: range)
                 return products.map{$0.uuid}
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -302,7 +304,7 @@ class RealmProductProvider: RealmProvider {
                             SortDescriptor(keyPath: key, ascending: descriptor.ascending)
                         }
                     }
-                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptors: realmSortDescriptiors)
+                    let products: Results<QuantifiableProduct> = self.loadSync(realm, predicate: Product.createFilterUuids(productUuids), sortDescriptors: realmSortDescriptiors)
                     handler(substring, products)
                     
                 } else {
@@ -335,7 +337,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     func quantifiableProducts(product: Product, handler: @escaping ([QuantifiableProduct]?) -> Void) {
-        handler(loadSync(filter: QuantifiableProduct.createFilterProduct(product.uuid))?.toArray())
+        handler(loadSync(predicate: QuantifiableProduct.createFilterProduct(product.uuid))?.toArray())
     }
     
     // TODO range, maybe remove this as we are now using (again) products for this instead of quantifiable products
@@ -351,7 +353,7 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe: String? = substring.flatMap {
+        let filterMaybe: NSPredicate? = substring.flatMap {
             $0.isEmpty ? nil : QuantifiableProduct.createFilterNameContains($0)
         }
         
@@ -360,7 +362,10 @@ class RealmProductProvider: RealmProvider {
         let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
-            let products: Results<QuantifiableProduct> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
+            let products: Results<QuantifiableProduct> = weakSelf.loadSync(realm,
+                                                                           predicate: filterMaybe,
+                                                                           sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)
+                /*, range: range*/)
             
             let categoryNames = products.map{$0.product.item.category.name}.distinct()
         
@@ -418,7 +423,7 @@ class RealmProductProvider: RealmProvider {
             NSSortDescriptor(key: "itemOpt.name", ascending: true)
         ]
 
-        let filterMaybe: String? = substring.flatMap {
+        let filterMaybe: NSPredicate? = substring.flatMap {
             $0.isEmpty ? nil : Product.createFilterNameContains($0)
         }
 
@@ -432,7 +437,7 @@ class RealmProductProvider: RealmProvider {
                     SortDescriptor(keyPath: key, ascending: descriptor.ascending)
                 }
             }
-            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptors: realmSortDescriptiors/*, range: range*/)
+            let products: Results<Product> = weakSelf.loadSync(realm, predicate: filterMaybe, sortDescriptors: realmSortDescriptiors/*, range: range*/)
             
             let categoryNames = products.map{$0.item.category.name}.distinct()
             
@@ -913,7 +918,7 @@ class RealmProductProvider: RealmProvider {
     
     func categoriesContaining(_ text: String, handler: @escaping ([String]) -> Void) {
         let mapper: (Product) -> String = {$0.item.category.name}
-        self.load(mapper, filter: Product.createFilterCategoryNameContains(text)) {categories in
+        self.load(mapper, predicate: Product.createFilterCategoryNameContains(text)) {categories in
             let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
             handler(distinctCategories)
         }
@@ -927,7 +932,7 @@ class RealmProductProvider: RealmProvider {
         background({() -> String? in
             do {
                 let realm = try RealmConfig.realm()
-                let obj: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
+                let obj: ProductCategory? = self.loadSync(realm, predicate: ProductCategory.createFilterName(name)).first
                 return obj?.uuid
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -939,7 +944,7 @@ class RealmProductProvider: RealmProvider {
                 if let uuid = uuidMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let objMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilter(uuid)).first
+                    let objMaybe: ProductCategory? = self.loadSync(realm, predicate: ProductCategory.createFilter(uuid)).first
                     if objMaybe == nil {
                         logger.e("Unexpected: obj with just fetched uuid is not there")
                     }
@@ -1294,19 +1299,19 @@ class RealmProductProvider: RealmProvider {
     
     func loadProductWithUniqueSync(_ unique: ProductUnique) -> Product? {
         return withRealmSync {(realm) -> Product? in
-            return self.loadSync(realm, filter: Product.createFilter(unique: unique)).first
+            return self.loadSync(realm, predicate: Product.createFilter(unique: unique)).first
         }
     }
     
     func loadQuantifiableProductWithUniqueSync(_ unique: QuantifiableProductUnique) -> QuantifiableProduct? {
         return withRealmSync {(realm) -> QuantifiableProduct? in
-            return self.loadSync(realm, filter: QuantifiableProduct.createFilter(unique: unique)).first
+            return self.loadSync(realm, predicate: QuantifiableProduct.createFilter(unique: unique)).first
         }
     }
 
     func loadStoreProductWithUniqueSync(_ unique: QuantifiableProductUnique) -> StoreProduct? {
         return withRealmSync {(realm) -> StoreProduct? in
-            return self.loadSync(realm, filter: StoreProduct.createFilter(unique: unique)).first
+            return self.loadSync(realm, predicate: StoreProduct.createFilter(unique: unique)).first
         }
     }
     
@@ -1467,7 +1472,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     func storeProductsSync(quantifiableProduct: QuantifiableProduct) -> [StoreProduct]? {
-        return loadSync(filter: StoreProduct.createFilterProduct(quantifiableProduct.uuid))?.toArray()
+        return loadSync(predicate: StoreProduct.createFilterProduct(quantifiableProduct.uuid))?.toArray()
 //        return [StoreProduct(uuid: UUID().uuidString, price: 123.4, product: quantifiableProduct)] // testing
     }
     

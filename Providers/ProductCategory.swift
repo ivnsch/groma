@@ -62,27 +62,30 @@ public class ProductCategory: DBSyncable, Identifiable, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilterName(_ name: String) -> String {
-        return "name = '\(name)'"
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
     
-    static func createFilterUuids(_ uuids: [String]) -> String {
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
         let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return "uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
     }
     
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
-    static func createFilterDirtyAndValid() -> String {
-        return "\(DBSyncable.dirtyFilter()) && uuid != ''"
+    static func createFilterDirtyAndValid() -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DBSyncable.dirtyFilter(),
+            NSPredicate(format: "uuid != %@", "")
+        ])
     }
     
     // MARK: -

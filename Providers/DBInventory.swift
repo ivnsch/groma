@@ -45,12 +45,12 @@ public class DBInventory: DBSyncable, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
 
-    static func createFilter(name: String) -> String {
-        return "name == '\(name)'"
+    static func createFilter(name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
     
     // MARK: - Update

@@ -53,33 +53,42 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilterGroup(_ groupUuid: String) -> String {
-        return "groupOpt.uuid = '\(groupUuid)'"
+    static func createFilterGroup(_ groupUuid: String) -> NSPredicate {
+        return NSPredicate(format: "groupOpt.uuid = %@", groupUuid)
     }
 
-    static func createFilterProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid = '\(productUuid)'"
+    static func createFilterProduct(_ productUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.uuid = %@", productUuid)
     }
     
-    static func createFilter(_ product: QuantifiableProduct, group: ProductGroup) -> String {
+    static func createFilter(_ product: QuantifiableProduct, group: ProductGroup) -> NSPredicate {
         return createFilter(groupUuid: group.uuid, quantifiableProductUnique: product.unique)
     }
 
-    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-        return "\(createFilterGroup(groupUuid)) AND productOpt.productOpt.itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitOpt.name = '\(unique.unit)' AND productOpt.baseQuantity = \(unique.baseQuantity)"
+    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterGroup(groupUuid),
+            NSPredicate(format: "productOpt.productOpt.itemOpt.name == %@", unique.name),
+            NSPredicate(format: "productOpt.productOpt.brand == %@", unique.brand),
+            NSPredicate(format: "productOpt.unitOpt.name == %@", unique.unit),
+            NSPredicate(format: "productOpt.baseQuantity == %@", unique.baseQuantity),
+        ])
     }
 
-    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> String {
-        return "\(createFilter(groupUuid: groupUuid, quantifiableProductUnique: unique)) AND uuid != '\(notUuid)'"
+    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilter(groupUuid: groupUuid, quantifiableProductUnique: unique),
+            NSPredicate(format: "uuid != %@", notUuid)
+        ])
     }
     
-    static func createFilterGroupItemsUuids(_ groupItems: [GroupItem]) -> String {
+    static func createFilterGroupItemsUuids(_ groupItems: [GroupItem]) -> NSPredicate {
         let groupItemsUuidsStr = groupItems.map{"'\($0.uuid)'"}.joined(separator: ",")
-        return "uuid IN {\(groupItemsUuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", groupItemsUuidsStr)
     }
     
     // MARK: -

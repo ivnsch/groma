@@ -42,8 +42,8 @@ public class DBPlanItem: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilterWithProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
+    static func createFilterWithProduct(_ productUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.uuid = %@", productUuid)
     }
     
     // MARK: -

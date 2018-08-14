@@ -43,22 +43,22 @@ public class ProductGroup: DBSyncable, Identifiable, WithUuid {
     }
     
     // MARK: - Filters
-    
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilterName(_ name: String) -> String {
-        return "name = '\(name)'"
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
     
-    static func createFilterUuids(_ uuids: [String]) -> String {
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
         let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return "uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
     }
     
     // MARK: - Update

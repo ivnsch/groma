@@ -41,7 +41,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func loadSectionWithUnique(_ unique: SectionUnique, handler: @escaping (Section?) -> Void) {
-        handler(loadFirstSync(filter: Section.createFilter(unique: unique)))
+        handler(loadFirstSync(predicate: Section.createFilter(unique: unique)))
     }
     
     func loadSection(_ name: String, list: List, handler: @escaping (Section?) -> ()) {
@@ -54,7 +54,7 @@ class RealmSectionProvider: RealmProvider {
     }
 
     func loadSectionsSync(_ names: [String], list: List) -> ProvResult<Results<Section>?, DatabaseError> {
-        return .ok(loadSync(filter: Section.createFilterWithNames(names, listUuid: list.uuid)))
+        return .ok(loadSync(predicate: Section.createFilterWithNames(names, listUuid: list.uuid)))
     }
     
     func loadSectionsSync(list: List) -> ProvResult<RealmSwift.List<Section>, DatabaseError> {
@@ -67,12 +67,12 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func loadSections(_ names: [String], list: List, handler: @escaping (Results<Section>?) -> Void) {
-        handler(loadSync(filter: Section.createFilterWithNames(names, listUuid: list.uuid)))
+        handler(loadSync(predicate: Section.createFilterWithNames(names, listUuid: list.uuid)))
     }
 
     // Loads sections with given name from all the lists
     func loadSections(_ name: String, handler: @escaping (Results<Section>?) -> Void) {
-        handler(loadSync(filter: Section.createFilterWithName(name)))
+        handler(loadSync(predicate: Section.createFilterWithName(name)))
     }
 
     func saveSection(_ section: Section, handler: @escaping (Bool) -> ()) {
@@ -170,14 +170,14 @@ class RealmSectionProvider: RealmProvider {
 
             // Sections
             let unfilteredSections = realm.objects(Section.self)
-            let sectionFilterMaybe: String? = text.isEmpty ? nil : Section.createFilterNameContains(text)
+            let sectionFilterMaybe: NSPredicate? = text.isEmpty ? nil : Section.createFilterNameContains(text)
             let filteredSections: Results<Section> = sectionFilterMaybe.map { unfilteredSections.filter($0) }
                 ?? unfilteredSections
             let sectionNames: [String] = filteredSections.map{$0.name}
 
             // Categories
             let unfilteredCategories = realm.objects(ProductCategory.self)
-            let categoryFilterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+            let categoryFilterMaybe: NSPredicate? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
             let filteredCategories: Results<ProductCategory> = categoryFilterMaybe.map {
                 unfilteredCategories.filter($0)} ?? unfilteredCategories
             let categoryNames: [String] = filteredCategories.map{$0.name}
@@ -396,7 +396,7 @@ class RealmSectionProvider: RealmProvider {
     // Load the sections directly from Realm - to ensure the resulting RealmSwift.List references a realm (which is not the case when using "copy") as well as it's fetched from the current thread.
     // RealmSwift.List not referencing a Realm currently results in an exception when calling filter on it - "This method may only be called on RLMArray instances retrieved from an RLMRealm"
     func sectionsSync(list: List, status: ListItemStatus) -> RealmSwift.List<Section>? {
-        if let l: List = loadSync(filter: List.createFilter(uuid: list.uuid))?.first {
+        if let l: List = loadSync(predicate: List.createFilter(uuid: list.uuid))?.first {
             return l.sections(status: status)
         } else {
             return nil

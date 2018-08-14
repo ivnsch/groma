@@ -27,7 +27,11 @@ class RealmGroupItemProvider: RealmProvider {
                 }
             }()
             
-            let items: Results<GroupItem> = self.loadSync(realm, filter: GroupItem.createFilterGroup(groupCopy.uuid), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+            let items: Results<GroupItem> = self.loadSync(
+                realm,
+                predicate: GroupItem.createFilterGroup(groupCopy.uuid),
+                sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)
+            )
             handler(items)
             
         } catch let e {
@@ -61,7 +65,7 @@ class RealmGroupItemProvider: RealmProvider {
     fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (groupItem: GroupItem, delta: Float) {
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-        let existingGroupItems: [GroupItem] = loadSync(realm, filter: GroupItem.createFilter(product, group: group), sortDescriptor: nil)
+        let existingGroupItems: [GroupItem] = loadSync(realm, predicate: GroupItem.createFilter(product, group: group), sortDescriptor: nil)
         
         let addedOrIncrementedGroupItem: GroupItem = {
             if let existingGroupItem = existingGroupItems.first {
@@ -91,7 +95,7 @@ class RealmGroupItemProvider: RealmProvider {
                 // load items
                 let realm = try RealmConfig.realm()
 
-                let items: [GroupItem] = self.loadSync(realm, filter: GroupItem.createFilterGroupItemsUuids(groupItems), sortDescriptor: nil)
+                let items: [GroupItem] = self.loadSync(realm, predicate: GroupItem.createFilterGroupItemsUuids(groupItems), sortDescriptor: nil)
 //                let items: [GroupItem] = realm.objects(GroupItem.self).filter(GroupItem.createFilterGroupItemsUuids(groupItems))
                 
                 // decide if add/increment
@@ -148,7 +152,7 @@ class RealmGroupItemProvider: RealmProvider {
             do {
                 let realm = try RealmConfig.realm()
                 // TODO!! why looking here for unique instead of uuid? when add group item with product we should be able to find the product using only the uuid?
-                if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilter(groupUuid: item.group.uuid, quantifiableProductUnique: groupItem.product.unique)).first {
+                if let item: GroupItem = loadSync(realm, predicate: GroupItem.createFilter(groupUuid: item.group.uuid, quantifiableProductUnique: groupItem.product.unique)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     _ = saveObjSync(incremented, update: true)
                     return incremented
@@ -262,7 +266,7 @@ class RealmGroupItemProvider: RealmProvider {
     func overwrite(_ items: [GroupItem], groupUuid: String, clearTombstones: Bool, handler: @escaping (Bool) -> Void) {
         let dbObjs: [GroupItem] = items.map{$0.copy()}
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))} : nil
-        self.overwrite(dbObjs, deleteFilter: GroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
+        self.overwrite(dbObjs, deletePredicate: GroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?

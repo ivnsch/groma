@@ -69,16 +69,16 @@ public class List: DBSyncable, Identifiable, WithUuid {
         
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
 
-    static func createFilter(name: String) -> String {
-        return "name == '\(name)'"
+    static func createFilter(name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
 
-    static func createInventoryFilter(_ inventoryUuid: String) -> String {
-        return "inventoryOpt.uuid == '\(inventoryUuid)'"
+    static func createInventoryFilter(_ inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "inventoryOpt.uuid = %@", inventoryUuid)
     }
     
     // MARK: - Update

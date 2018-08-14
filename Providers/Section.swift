@@ -144,38 +144,48 @@ public class Section: DBSyncable, Identifiable {
     // MARK: - Filters
     
     // TODO review why this is used
-    static func createFilterWithName(_ name: String) -> String {
-        return "name == '\(name)'"
+    static func createFilterWithName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
 
-    static func createFilter(unique: SectionUnique) -> String {
-        return "name == '\(unique.name)' AND listOpt.uuid == '\(unique.listUuid)' AND statusVal == \(unique.status.rawValue)"
+    static func createFilter(unique: SectionUnique) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "name = %@", unique.name),
+            NSPredicate(format: "listOpt.uuid = %@", unique.listUuid),
+            NSPredicate(format: "statusVal = %@", unique.status.rawValue)
+        ])
     }
 
     // TODO review why this is used
-    static func createFilterWithNames(_ names: [String], listUuid: String) -> String {
+    static func createFilterWithNames(_ names: [String], listUuid: String) -> NSPredicate {
         let sectionsNamesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
-        return "name IN {\(sectionsNamesStr)} AND listOpt.uuid = '\(listUuid)'"
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "name IN {%@}", sectionsNamesStr),
+            NSPredicate(format: "listOpt.uuid = %@", listUuid)
+        ])
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
     
-    static func createFilterList(_ listUuid: String) -> String {
-        return "listOpt.uuid == '\(listUuid)'"
+    static func createFilterList(_ listUuid: String) -> NSPredicate {
+        return NSPredicate(format: "listOpt.uuid = %@", listUuid)
     }
 
-    static func createFilter(inventoryUuid: String) -> String {
-        return "listOpt.inventoryOpt.uuid == '\(inventoryUuid)'"
+    static func createFilter(inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "listOpt.inventoryOpt.uuid = %@", inventoryUuid)
     }
 
-    static func createFilterListStatus(listUuid: String, status: ListItemStatus) -> String {
-        return "listOpt.uuid == '\(listUuid)' AND statusVal == \(status.rawValue)"
+    static func createFilterListStatus(listUuid: String, status: ListItemStatus) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "listOpt.uuid = %@", listUuid),
+            NSPredicate(format: "statusVal = %@", status.rawValue)
+        ])
     }
 
-    static func createFilterListItemsIsEmpty() -> String {
-        return "listItems.@count == 0"
+    static func createFilterListItemsIsEmpty() -> NSPredicate {
+        return NSPredicate(format: "listItems.@count == 0")
     }
     
     // MARK: -

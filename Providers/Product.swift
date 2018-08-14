@@ -91,63 +91,70 @@ public class Product: DBSyncable, Identifiable, WithUuid {
 
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilter(itemUuid: String) -> String {
-        return "itemOpt.uuid == '\(itemUuid)'"
+    static func createFilter(itemUuid: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.uuid = %@", itemUuid)
     }
     
-    static func createFilterBrand(_ brand: String) -> String {
-        return "brand == '\(brand)'"
+    static func createFilterBrand(_ brand: String) -> NSPredicate {
+        return NSPredicate(format: "brand = %@", brand)
     }
     
-    static func createFilter(unique: ProductUnique) -> String {
+    static func createFilter(unique: ProductUnique) -> NSPredicate {
         return createFilterNameBrand(unique.name, brand: unique.brand)
     }
     
-    static func createFilterNameBrand(_ name: String, brand: String) -> String {
-        return "\(createFilterName(name)) AND \(createFilterBrand(brand))"
+    static func createFilterNameBrand(_ name: String, brand: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterName(name),
+            createFilterBrand(brand)
+        ])
     }
     
-    static func createFilterName(_ name: String) -> String {
-        return "itemOpt.name = '\(name)'"
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.name = %@", name)
     }
     
-    static func createFilter(base: String) -> String {
-        return "baseQuantity = '\(base)'"
+    static func createFilter(base: String) -> NSPredicate {
+        return NSPredicate(format: "baseQuantity = %@", base)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "itemOpt.name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.name CONTAINS[c] %@", text)
     }
     
-    static func createFilterBrandContains(_ text: String) -> String {
-        return "brand CONTAINS[c] '\(text)'"
+    static func createFilterBrandContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "brand CONTAINS[c] %@", text)
     }
     
-    static func createFilterStoreContains(_ text: String) -> String {
-        return "store CONTAINS[c] '\(text)'"
+    static func createFilterStoreContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "store CONTAINS[c] %@", text)
     }
     
-    static func createFilterCategory(_ categoryUuid: String) -> String {
-        return "itemOpt.categoryOpt.uuid = '\(categoryUuid)'"
+    static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.categoryOpt.uuid = %@", categoryUuid)
     }
     
-    static func createFilterCategoryNameContains(_ text: String) -> String {
-        return "itemOpt.categoryOpt.name CONTAINS[c] '\(text)'"
+    static func createFilterCategoryNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.categoryOpt.name CONTAINS[c] %@", text)
     }
     
-    static func createFilterUuids(_ uuids: [String]) -> String {
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
         let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return "uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
+
     }
     
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
-    static func createFilterDirtyAndValid() -> String {
-        return "\(DBSyncable.dirtyFilter()) && uuid != ''"
+    static func createFilterDirtyAndValid() -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DBSyncable.dirtyFilter(),
+            NSPredicate(format: "uuid != %@", "")
+        ])
     }
     
     // MARK: -

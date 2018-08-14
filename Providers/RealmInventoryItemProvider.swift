@@ -20,12 +20,12 @@ class RealmInventoryItemProvider: RealmProvider {
     // TODO does this function still makes sense (now InventoryItem is always a realm object)
     func findInventoryItem(_ item: InventoryItem, handler: @escaping (InventoryItem?) -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
-        self.loadFirst(mapper, filter: InventoryItem.createFilter(item.product, item.inventory), handler: handler)
+        self.loadFirst(mapper, predicate: InventoryItem.createFilter(item.product, item.inventory), handler: handler)
     }
     
     func findInventoryItem(_ uuid: String, _ handler: @escaping (InventoryItem?) -> Void) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
-        self.loadFirst(mapper, filter: InventoryItem.createFilterUuid(uuid), handler: handler)
+        self.loadFirst(mapper, predicate: InventoryItem.createFilterUuid(uuid), handler: handler)
     }
     
     
@@ -39,7 +39,7 @@ class RealmInventoryItemProvider: RealmProvider {
         
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveInventoryItem.self, DBRemoveInventoryItem.createFilterForInventory(inventoryUuid))} : nil
         
-        self.overwrite(dbObjs, deleteFilter: InventoryItem.createFilterInventory(inventoryUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
+        self.overwrite(dbObjs, deletePredicate: InventoryItem.createFilterInventory(inventoryUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     func saveInventoryItem(_ item: InventoryItem, dirty: Bool, handler: @escaping (Bool) -> ()) {
@@ -312,7 +312,7 @@ class RealmInventoryItemProvider: RealmProvider {
         }
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-        let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory), sortDescriptor: nil)
+        let existingInventoryItems: [InventoryItem] = loadSync(realm, predicate: InventoryItem.createFilter(product, inventory), sortDescriptor: nil)
         
         let addedOrIncrementedInventoryItem: (item: InventoryItem, isNew: Bool) = {
             if let existingInventoryItem = existingInventoryItems.first {

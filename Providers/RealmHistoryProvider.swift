@@ -114,7 +114,7 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     func loadHistoryItem(_ uuid: String, handler: @escaping (HistoryItem?) -> Void) {
-        handler(loadFirstSync(filter: HistoryItem.createFilter(uuid)))
+        handler(loadFirstSync(predicate: HistoryItem.createFilter(uuid)))
     }
     
     func removeHistoryItemsForGroupDate(_ date: Int64, inventoryUuid: String, handler: @escaping (Bool) -> Void) {
@@ -414,10 +414,10 @@ class RealmHistoryProvider: RealmProvider {
     // MARK: - Sync
     
     func loadHistoryItemSync(uuid: String) -> HistoryItem? {
-        return loadFirstSync(filter: HistoryItem.createFilter(uuid))
+        return loadFirstSync(predicate: HistoryItem.createFilter(uuid))
     }
     
     func loadHistoryItemsSync(uuids: [String]) -> Results<HistoryItem>? {
-        return loadSync(filter: HistoryItem.createFilter(uuids: uuids))
+        return loadSync(predicate: HistoryItem.createFilter(uuids: uuids))
     }
 }

@@ -91,42 +91,48 @@ public final class Ingredient: Object, WithUuid {
     }
     
     // MARK: - Filters
-    
-    static func createFilter(uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+
+    static func createFilter(uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
 
-    static func createFilter(itemUuid: String) -> String {
-        return "itemOpt.uuid == '\(itemUuid)'"
+    static func createFilter(itemUuid: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.uuid = %@", itemUuid)
     }
     
-    static func createFilter(name: String, recipeUuid: String) -> String {
-        return "itemOpt.name == '\(name)' AND recipeOpt.uuid == '\(recipeUuid)'"
+    static func createFilter(name: String, recipeUuid: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "itemOpt.name = %@", name),
+            NSPredicate(format: "recipeOpt.uuid = %@", recipeUuid)
+        ])
     }
     
-    static func createFilter(recipeUuid: String) -> String {
-        return "recipeOpt.uuid = '\(recipeUuid)'"
+    static func createFilter(recipeUuid: String) -> NSPredicate {
+        return NSPredicate(format: "recipeOpt.uuid = %@", recipeUuid)
     }
     
-    static func createFilter(item: Item, recipe: Recipe) -> String {
-        return "\(createFilter(recipeUuid: recipe.uuid)) AND itemOpt.uuid == '\(item.uuid)'"
+    static func createFilter(item: Item, recipe: Recipe) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilter(recipeUuid: recipe.uuid),
+            NSPredicate(format: "itemOpt.uuid = %@", item.uuid)
+        ])
     }
     
-//    static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-//        return "\(createFilter(recipeUuid: recipeUuid)) AND itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = \(unique.baseQuantity)"
-//    }
-    
-    static func createFilter(recipeUuid: String, name: String, notUuid: String) -> String {
-        return "\(createFilter(name: name, recipeUuid: recipeUuid)) AND uuid != '\(notUuid)'"
+    static func createFilter(recipeUuid: String, name: String, notUuid: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilter(name: name, recipeUuid: recipeUuid),
+            NSPredicate(format: "uuid != %@", notUuid)
+        ])
     }
     
-    static func createFilterGroupItemsUuids(ingredients: [Ingredient]) -> String {
+    static func createFilterGroupItemsUuids(ingredients: [Ingredient]) -> NSPredicate {
         let ingredientsUuidsStr = ingredients.map{"'\($0.uuid)'"}.joined(separator: ",")
-        return "uuid IN {\(ingredientsUuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", ingredientsUuidsStr)
     }
     
-    static func createFilter(unitName: String) -> String {
-        return "unitOpt.name = '\(unitName)'"
+    static func createFilter(unitName: String) -> NSPredicate {
+        return NSPredicate(format: "unitOpt.name = %@", unitName)
+
     }
     
     public override static func ignoredProperties() -> [String] {

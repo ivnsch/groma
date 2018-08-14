@@ -89,73 +89,83 @@ public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)' AND secondBaseQuantity == \(unique.secondBaseQuantity)"
+    static func createFilter(unique: QuantifiableProductUnique) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "productOpt.itemOpt.name = %@", unique.name),
+            NSPredicate(format: "productOpt.brand = %@", unique.brand),
+            NSPredicate(format: "baseQuantity = %@", unique.baseQuantity),
+            NSPredicate(format: "unitOpt.name = %@", unique.unit),
+            NSPredicate(format: "secondBaseQuantity = %@", unique.secondBaseQuantity)
+        ])
     }
     
-    static func createFilterBrand(_ brand: String) -> String {
-        return "productOpt.brand == '\(brand)'"
+    static func createFilterBrand(_ brand: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.brand = %@", brand)
     }
     
-    static func createFilterStore(_ store: String) -> String {
-        return "store == '\(store)'"
+    static func createFilterStore(_ store: String) -> NSPredicate {
+        return NSPredicate(format: "store = %@", store)
     }
     
-    static func createFilterProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
+    static func createFilterProduct(_ productUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.uuid = %@", productUuid)
     }
 
-    static func createFilterNameBrand(_ name: String, brand: String, store: String) -> String {
-        return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
+    static func createFilterNameBrand(_ name: String, brand: String, store: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterName(name),
+            createFilterBrand(brand),
+            createFilterStore(store)
+        ])
     }
     
-    static func createFilterName(_ name: String) -> String {
-        return "productOpt.itemOpt.name = '\(name)'"
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.itemOpt.name = %@", name)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "productOpt.itemOpt.name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.itemOpt.name CONTAINS[c] %@", text)
     }
     
-    static func createFilterBrandContains(_ text: String) -> String {
-        return "productOpt.brand CONTAINS[c] '\(text)'"
+    static func createFilterBrandContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.brand CONTAINS[c] %@", text)
     }
     
-    static func createFilterStoreContains(_ text: String) -> String {
-        return "store CONTAINS[c] '\(text)'"
+    static func createFilterStoreContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "store CONTAINS[c] %@", text)
     }
     
-    static func createFilterCategory(_ categoryUuid: String) -> String {
-        return "productOpt.categoryOpt.uuid = '\(categoryUuid)'"
+    static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.categoryOpt.uuid = %@", categoryUuid)
     }
     
-    static func createFilterCategoryNameContains(_ text: String) -> String {
-        return "productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
+    static func createFilterCategoryNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.categoryOpt.name CONTAINS[c] %@", text)
     }
     
     public override static func ignoredProperties() -> [String] {
         return ["product", "unit", "baseQuantityFloat"]
     }
 
-    static func createFilterBaseQuantityContains(_ text: String) -> String {
-        return "baseQuantity CONTAINS[c] '\(text)'"
+    static func createFilterBaseQuantityContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "baseQuantity CONTAINS[c] %@", text)
     }
     
-    static func createFilter(base: Float) -> String {
-        return "baseQuantity = \(base)"
+    static func createFilter(base: Float) -> NSPredicate {
+        return NSPredicate(format: "baseQuantity = %@", base)
     }
     
     // Deletes by unit name
-    static func createFilter(unit: Unit) -> String {
+    static func createFilter(unit: Unit) -> NSPredicate {
         return createFilter(unitName: unit.name)
     }
     
-    static func createFilter(unitName: String) -> String {
-        return "unitOpt.name = '\(unitName)'"
+    static func createFilter(unitName: String) -> NSPredicate {
+        return NSPredicate(format: "unitOpt.name = %@", unitName)
     }
     
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {

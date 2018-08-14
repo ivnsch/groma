@@ -122,15 +122,15 @@ class RealmProvider {
         }
     }
 
-    func loadFirst<T: Object, U>(_ mapper: @escaping (T) -> U, filter filterMaybe: String? = nil, handler: @escaping (U?) -> ()) {
-        self.load(mapper, filter: filterMaybe, handler: {results in
+    func loadFirst<T: Object, U>(_ mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate? = nil, handler: @escaping (U?) -> ()) {
+        self.load(mapper, predicate: predicateMaybe, handler: {results in
             if results.count > 1 {
-                logger.d("Multiple items found in load first \(String(describing: filterMaybe))") // sometimes we expect only 1 item to be in the database, log this just in case
+                logger.d("Multiple items found in load first \(String(describing: predicateMaybe))") // sometimes we expect only 1 item to be in the database, log this just in case
             }
             handler(results.first)
         })
     }
-    
+
     //////////////////////
 
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
@@ -177,7 +177,18 @@ class RealmProvider {
             return nil
         }
     }
-    
+
+    func loadSync<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptors: [SortDescriptor]) -> Results<T>? {
+        do {
+            let realm = try RealmConfig.realm()
+            return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptors)
+
+        } catch let e {
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
+            return nil
+        }
+    }
+
     func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
 //        var results = realm.objects(T.self)
 //        if let predicate = predicateMaybe {
@@ -213,10 +224,10 @@ class RealmProvider {
         return self.loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptors)
     }
     
-    func loadFirstSync<T: Object>(filter filterMaybe: String? = nil) -> T? {
-        return loadSync(filter: filterMaybe, sortDescriptor: nil)?.first
+    func loadFirstSync<T: Object>(predicate predicateMaybe: NSPredicate? = nil) -> T? {
+        return loadSync(predicate: predicateMaybe, sortDescriptor: nil)?.first
     }
-    
+
     //////////////////////
     // Load array without mapper
     // Special methods (with repeated code) for this, since on one side we want to do the conversion to array in the background together with loading the objs (so we can't use the methods that return Results) and on the other it was not possible to adjust the methods that return arrays and use mapper to make mapper optional. There seem to be a problem with the returned type "U" of the objects being the same as "T". TODO try to adjust methods with mapper. Or refactor in some other way.
@@ -403,20 +414,20 @@ class RealmProvider {
     // WARN: passing nil as pred will remove ALL objects of objType
     // additionalActions: optional actions to be executed after delete in the same transaction
     // Returns count of removed items or nil if there was an error.
-    func removeReturnCount<T: Object>(_ pred: String?, handler: @escaping (Int?) -> Void, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) {
-        doInWriteTransaction({[weak self] realm in
+    func removeReturnCount<T: Object>(_ pred: NSPredicate?, handler: @escaping (Int?) -> Void, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) {
+        doInWriteTransaction({ [weak self] realm in
             return self?.removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
-        }, finishHandler: {countMaybe in
-            handler(countMaybe)
+            }, finishHandler: { countMaybe in
+                handler(countMaybe)
         })
     }
-    
-    func removeReturnCountSync<T: Object>(_ pred: String?, objType: T.Type, realmData: RealmData?, doTransaction: Bool = true, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
-        
+
+    func removeReturnCountSync<T: Object>(_ pred: NSPredicate?, objType: T.Type, realmData: RealmData?, doTransaction: Bool = true, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
+
         func transactionContent(realm: Realm) -> Int? {
             return removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
         }
-        
+
         if doTransaction {
             return doInWriteTransactionSync(realmData: realmData) {realm in
                 return transactionContent(realm: realm)
@@ -430,7 +441,8 @@ class RealmProvider {
             }
         }
     }
-    
+
+    // TODO remove
     // Expects to be executed in a transaction
     func removeReturnCountSync<T: Object>(_ realm: Realm, pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
         var results: Results<T> = realm.objects(T.self)
@@ -445,7 +457,22 @@ class RealmProvider {
         
         return count
     }
-    
+
+    // Expects to be executed in a transaction
+    func removeReturnCountSync<T: Object>(_ realm: Realm, pred: NSPredicate?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
+        var results: Results<T> = realm.objects(T.self)
+        if let pred = pred {
+            results = results.filter(pred)
+        }
+
+        let count = results.count
+
+        realm.delete(results)
+        additionalActions?(realm)
+
+        return count
+    }
+
     func doInWriteTransaction<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: @escaping (Realm) -> T?, finishHandler: @escaping (T?) -> Void) {
         
         let finished: (T?) -> Void = {obj in
@@ -570,16 +597,16 @@ class RealmProvider {
             return nil
         }
     }
-    
+
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
     // additionalActions: optional additional actions to be executed in the transaction
-    func overwrite<T: Sequence>(_ newObjects: T, deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, idExtractor: @escaping (T.Iterator.Element) -> String, additionalActions: ((Realm) -> Void)? = nil, handler: @escaping (Bool) -> ()) where T.Iterator.Element: DBSyncable {
+    func overwrite<T: Sequence>(_ newObjects: T, deletePredicate deletePredicateMaybe: NSPredicate? = nil, resetLastUpdateToServer: Bool = true, idExtractor: @escaping (T.Iterator.Element) -> String, additionalActions: ((Realm) -> Void)? = nil, handler: @escaping (Bool) -> ()) where T.Iterator.Element: DBSyncable {
         
         self.doInWriteTransaction({realm in
             
             var results: Results<T.Iterator.Element> = realm.objects(T.Iterator.Element.self)
 
-            if let filter = deleteFilterMaybe {
+            if let filter = deletePredicateMaybe {
                 results = results.filter(filter)
             }
             

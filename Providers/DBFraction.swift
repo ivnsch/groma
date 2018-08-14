@@ -49,12 +49,15 @@ public class DBFraction: Object {
     
     // MARK: - Filters
     
-    static func createFilter(fraction: DBFraction) -> String {
+    static func createFilter(fraction: DBFraction) -> NSPredicate {
         return createFilter(numerator: fraction.numerator, denominator: fraction.denominator)
     }
     
-    static func createFilter(numerator: Int, denominator: Int) -> String {
-        return "numerator == \(numerator) && denominator == \(denominator)"
+    static func createFilter(numerator: Int, denominator: Int) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "numerator = %@", numerator),
+            NSPredicate(format: "denominator = %@", denominator)
+        ])
     }
     
     // MARK: -

@@ -72,43 +72,53 @@ public class HistoryItem: DBSyncable, Identifiable, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilter(quantifiableProductUuid: String) -> String {
-        return "productOpt.uuid == '\(quantifiableProductUuid)'"
+    static func createFilter(quantifiableProductUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.uuid = %@", quantifiableProductUuid)
     }
 
-    static func createFilter(quantifiableProductUuids: [String]) -> String {
+    static func createFilter(quantifiableProductUuids: [String]) -> NSPredicate {
         let uuidsStr: String = quantifiableProductUuids.map{"'\($0)'"}.joined(separator: ",")
-        return "productOpt.uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "productOpt.uuid IN {%@}", uuidsStr)
     }
 
-    static func createFilterWithInventory(_ inventoryUuid: String) -> String {
-        return "inventoryOpt.uuid == '\(inventoryUuid)'"
+    static func createFilterWithInventory(_ inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "inventoryOpt.uuid = %@", inventoryUuid)
     }
 
-    static func createFilter(_ historyItemGroup: HistoryItemGroup) -> String {
+    static func createFilter(_ historyItemGroup: HistoryItemGroup) -> NSPredicate {
         return createFilter(uuids: historyItemGroup.historyItems.map{$0.uuid})
     }
     
-    static func createFilter(uuids: [String]) -> String {
+    static func createFilter(uuids: [String]) -> NSPredicate {
         let historyItemsUuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return "uuid IN {\(historyItemsUuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", historyItemsUuidsStr)
     }
-    
-    
+
     static func createPredicate(_ addedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "addedDate >= %@", NSNumber(value: Int64(addedDate) as Int64)),
+            NSPredicate(format: "inventoryOpt.uuid == %@", inventoryUuid)
+        ])
     }
     
     static func createPredicate(_ productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "productOpt.name == %@", productName),
+            NSPredicate(format: "addedDate >= %@", NSNumber(value: Int64(addedDate) as Int64)),
+            NSPredicate(format: "inventoryOpt.uuid == %@", inventoryUuid)
+        ])
     }
     
     static func createPredicate(_ startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(startAddedDate) as Int64), NSNumber(value: Int64(endAddedDate) as Int64), inventoryUuid)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "addedDate >= %@", NSNumber(value: Int64(startAddedDate) as Int64)),
+            NSPredicate(format: "addedDate <= %@", NSNumber(value: Int64(endAddedDate) as Int64)),
+            NSPredicate(format: "inventoryOpt.uuid == %@", inventoryUuid)
+        ])
     }
     
     static func createPredicateOlderThan(_ addedDate: Int64) -> NSPredicate {

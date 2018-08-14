@@ -197,7 +197,7 @@ class RealmUnitProvider: RealmProvider {
     // MARK: - Sync
 
     func findUnit(name: String) -> Unit? {
-        return loadFirstSync(filter: Unit.createFilter(name: name))
+        return loadFirstSync(predicate: Unit.createFilter(name: name))
     }
 
     func unitsSync(buyable: Bool?) -> Results<Unit>? {
@@ -276,8 +276,8 @@ class RealmUnitProvider: RealmProvider {
     }
     
     func unitsContainingTextSync(_ text: String) -> Results<Unit>? {
-        let filterMaybe: String? = text.isEmpty ? nil : Unit.createFilterNameContains(text)
-        return loadSync(filter: filterMaybe)
+        let filterMaybe: NSPredicate? = text.isEmpty ? nil : Unit.createFilterNameContains(text)
+        return loadSync(predicate: filterMaybe)
     }
     
     

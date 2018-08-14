@@ -40,7 +40,7 @@ class RealmItemProvider: RealmProvider {
         background({() -> [String]? in
             do {
                 let realm = try RealmConfig.realm()
-                let items: [Item] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+                let items: [Item] = self.loadSync(realm, predicate: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return items.map{$0.uuid}
             } catch let e {
                 logger.e("Error creating Realm, returning empty results, error: \(e)")
@@ -52,7 +52,9 @@ class RealmItemProvider: RealmProvider {
                 if let itemUuids = itemUuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let items: Results<Item> = self.loadSync(realm, filter: Item.createFilterUuids(itemUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+                    let items: Results<Item> = self.loadSync(realm,
+                                                             predicate: Item.createFilterUuids(itemUuids),
+                                                             sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
                     handler(substring, items)
                     
                 } else {
@@ -153,23 +155,23 @@ class RealmItemProvider: RealmProvider {
 //    }
     
     func deleteSync(name: String) -> Bool {
-        return deleteItemsSync(filter: Item.createFilter(name: name), realmData: nil) // TODO? realm data
+        return deleteItemsSync(predicate: Item.createFilter(name: name), realmData: nil) // TODO? realm data
     }
     
     func deleteSync(uuid: String, realmData: RealmData) -> Bool {
-        return deleteItemsSync(filter: Item.createFilter(uuid: uuid), realmData: realmData)
+        return deleteItemsSync(predicate: Item.createFilter(uuid: uuid), realmData: realmData)
     }
     
-    fileprivate func deleteItemsSync(filter: String, realmData: RealmData?) -> Bool {
+    fileprivate func deleteItemsSync(predicate: NSPredicate, realmData: RealmData?) -> Bool {
         return doInWriteTransactionSync(realmData: realmData) {realm -> Bool in
-            if let item = realm.objects(Item.self).filter(filter).first {
+            if let item = realm.objects(Item.self).filter(predicate).first {
                 _ = DBProv.productProvider.deleteProductsAndDependenciesSync(realm, itemUuid: item.uuid, markForSync: true)
                 _ = DBProv.ingredientProvider.deleteIngredientsAndDependenciesSync(realm: realm, itemUuid: item.uuid)
                 realm.delete(item)
                 return true
                 
             } else {
-                logger.w("Didn't find item with filter: \(filter) to be deleted. Do nothing.")
+                logger.w("Didn't find item with predicate: \(predicate) to be deleted. Do nothing.")
                 return true // Don't see a particular reason to show the user an error here, so we just log a warning and return success.
             }
         } ?? false

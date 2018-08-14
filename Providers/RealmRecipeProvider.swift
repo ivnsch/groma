@@ -32,18 +32,20 @@ class RealmRecipeProvider: RealmProvider {
         
         
         withRealm({realm -> [String]? in
-            let filterMaybe: String? = substring.isEmpty ? nil : Recipe.createFilterNameContains(substring)
-            let recipes: Results<Recipe> = self.loadSync(realm, filter: filterMaybe,
-                                                         sortDescriptor: SortDescriptor(keyPath: sortData.key,
-                                                                                        ascending: sortData.ascending))
+            let predicateMaybe: NSPredicate? = substring.isEmpty ? nil : Recipe.createFilterNameContains(substring)
+            let recipes: Results<Recipe> = self.loadSync(realm, predicate: predicateMaybe,
+                                                         sortDescriptor: NSSortDescriptor(key: sortData.key,
+                                                                                          ascending: sortData.ascending))
             return recipes.toArray(range).map{$0.uuid}
             
-        }) {uuidsMaybe in
+        }) { uuidsMaybe in
             do {
                 if let uuids = uuidsMaybe {
                     let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let recipes: Results<Recipe> = self.loadSync(realm, filter: Recipe.createFilterUuids(uuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+                    let recipes: Results<Recipe> = self.loadSync(realm, predicate: Recipe.createFilterUuids(uuids),
+                                                                 sortDescriptor: NSSortDescriptor(key: sortData.key,
+                                                                                                  ascending: sortData.ascending))
                     handler((substring, recipes.toArray()))
                     
                 } else {
@@ -153,6 +155,6 @@ class RealmRecipeProvider: RealmProvider {
     }
 
     func loadRecipeSync(name: String) -> Recipe? {
-        return loadFirstSync(filter: Recipe.createFilterName(name))
+        return loadFirstSync(predicate: Recipe.createFilterName(name))
     }
 }

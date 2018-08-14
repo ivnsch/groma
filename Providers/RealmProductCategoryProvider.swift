@@ -21,8 +21,8 @@ class RealmProductCategoryProvider: RealmProvider {
         background({() -> [String]? in
             do {
                 let realm = try RealmConfig.realm()
-                let filterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
-                let result: Results<ProductCategory> = self.loadSync(realm, filter: filterMaybe)
+                let filterMaybe: NSPredicate? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+                let result: Results<ProductCategory> = self.loadSync(realm, predicate: filterMaybe)
                 return result.map{$0.uuid}
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -33,7 +33,7 @@ class RealmProductCategoryProvider: RealmProvider {
             do {
                 if let uuids = uuidsMaybe {
                     let realm = try RealmConfig.realm()
-                    handler(self.loadSync(realm, filter: ProductCategory.createFilterUuids(uuids)))
+                    handler(self.loadSync(realm, predicate: ProductCategory.createFilterUuids(uuids)))
                 
                 } else {
                     logger.v("No categories with text: \(text)")
@@ -50,14 +50,14 @@ class RealmProductCategoryProvider: RealmProvider {
     // TODO range
     func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (_ text: String?,
         _ categories: Results<ProductCategory>?) -> Void) {
-        let filterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
-        load(filter: filterMaybe) {categories in
+        let filterMaybe: NSPredicate? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+        load(predicate: filterMaybe) {categories in
             handler(text, categories)
         }
     }
 
     func categoriesWithNameSync(_ name: String) -> Results<ProductCategory>? {
-        return loadSync(filter: ProductCategory.createFilterName(name))
+        return loadSync(predicate: ProductCategory.createFilterName(name))
     }
     
     func updateCategory(_ category: ProductCategory, _ handler: @escaping (Bool) -> Void) {
@@ -211,7 +211,7 @@ class RealmProductCategoryProvider: RealmProvider {
     
     func loadCategoryWithUniqueSync(_ name: String) -> ProvResult<ProductCategory?, DatabaseError> {
         return withRealmSync {realm in
-            let categoryMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
+            let categoryMaybe: ProductCategory? = self.loadSync(realm, predicate: ProductCategory.createFilterName(name)).first
             return .ok(categoryMaybe)
         }!
     }

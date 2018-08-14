@@ -45,7 +45,7 @@ class RealmInventoryProvider: RealmProvider {
                 }
             }()
             
-            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptors: sortDescriptors)
+            let items: Results<InventoryItem> = self.loadSync(realm, predicate: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptors: sortDescriptors)
             handler(items)
 
         } catch let e {
@@ -295,7 +295,7 @@ class RealmInventoryProvider: RealmProvider {
     }
 
     func loadInventorySync(name: String) -> DBInventory? {
-        return loadFirstSync(filter: DBInventory.createFilter(name: name))
+        return loadFirstSync(predicate: DBInventory.createFilter(name: name))
     }
 
     //////////////////////////////////////////////////////////

@@ -333,15 +333,15 @@ class RealmListItemProvider: RealmProvider {
             return [SortDescriptor(keyPath: sectionOrderFieldName, ascending: true), SortDescriptor(keyPath: listItemOrderFieldName, ascending: true)]
         } ?? []
         
-        let filter = status.map {status in
+        let filter: NSPredicate = status.map {status in
             ListItem.createFilter(listUuid: listUuid, status: status)
         } ?? ListItem.createFilterList(listUuid)
 
-        handler(loadSync(filter: filter, sortDescriptors: sortDescriptors))
+        handler(loadSync(predicate: filter, sortDescriptors: sortDescriptors))
     }
     
     func loadListItems(_ uuids: [String], handler: @escaping (Results<ListItem>?) -> Void) {
-        handler(loadSync(filter: ListItem.createFilterForUuids(uuids), sortDescriptor: nil))
+        handler(loadSync(predicate: ListItem.createFilterForUuids(uuids), sortDescriptor: nil))
     }
     
     
@@ -361,15 +361,15 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func listItem(_ list: List, product: Product, handler: @escaping (ListItem?) -> Void) {
-        handler(loadFirstSync(filter: ListItem.createFilter(list, product: product)))
+        handler(loadFirstSync(predicate: ListItem.createFilter(list, product: product)))
     }
     
     func findListItem(_ uuid: String, _ handler: @escaping (ListItem?) -> Void) {
-        handler(loadFirstSync(filter: ListItem.createFilter(uuid)))
+        handler(loadFirstSync(predicate: ListItem.createFilter(uuid)))
     }
 
     func findListItemWithUniqueSync(_ unique: QuantifiableProductUnique, list: List) -> ListItem? {
-        return loadFirstSync(filter: ListItem.createFilter(quantifiableProductUnique: unique, listUuid: list.uuid))
+        return loadFirstSync(predicate: ListItem.createFilter(quantifiableProductUnique: unique, listUuid: list.uuid))
     }
 
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
@@ -392,7 +392,7 @@ class RealmListItemProvider: RealmProvider {
     func deletePossibleListItemWithUniqueSync(_ productName: String, productBrand: String, notUuid: String, list: List, realmData: RealmData?, doTransaction: Bool = true) -> Bool {
         
         func transactionContent(realm: Realm) -> Bool {
-            return removeReturnCountSync(realm, pred: ListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), objType: ListItem.self).map {removedCount in
+            return removeReturnCountSync(realm, pred: ListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), objType: ListItem.self).map { removedCount in
                 if removedCount > 0 {
                     logger.d("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
                 }
@@ -502,7 +502,7 @@ class RealmListItemProvider: RealmProvider {
     func overwrite(_ listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
         let dbListItems: [ListItem] = listItems.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))} : nil
-        self.overwrite(dbListItems, deleteFilter: ListItem.createFilterList(listUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
+        self.overwrite(dbListItems, deletePredicate: ListItem.createFilterList(listUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     /**

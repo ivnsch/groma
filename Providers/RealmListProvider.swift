@@ -248,11 +248,11 @@ class RealmListProvider: RealmProvider {
     // MARK: - Sync
     
     func loadListSync(uuid: String) -> List? {
-        return loadFirstSync(filter: List.createFilter(uuid: uuid))
+        return loadFirstSync(predicate: List.createFilter(uuid: uuid))
     }
 
     func loadListSync(name: String) -> List? {
-        return loadFirstSync(filter: List.createFilter(name: name))
+        return loadFirstSync(predicate: List.createFilter(name: name))
     }
 
 }

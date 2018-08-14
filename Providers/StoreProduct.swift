@@ -105,81 +105,98 @@ public class StoreProduct: DBSyncable, Identifiable, WithUuid {
 
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(_ uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
 
-    static func createFilter(quantifiableProductUuids: [String]) -> String {
+    static func createFilter(quantifiableProductUuids: [String]) -> NSPredicate {
         let uuidsStr: String = quantifiableProductUuids.map{"'\($0)'"}.joined(separator: ",")
-        return "productOpt.uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "productOpt.uuid IN {%@}", uuidsStr)
     }
 
-    static func createFilterBrand(_ brand: String) -> String {
-        return "productOpt.productOpt.brand == '\(brand)'"
+    static func createFilterBrand(_ brand: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.brand = %@", brand)
     }
     
-    static func createFilterStore(_ store: String) -> String {
-        return "store == '\(store)'"
+    static func createFilterStore(_ store: String) -> NSPredicate {
+        return NSPredicate(format: "store = %@", store)
     }
 
-    static func createFilterProduct(_ quantifiableProductUuid: String) -> String {
-        return "productOpt.uuid == '\(quantifiableProductUuid)'"
+    static func createFilterProduct(_ quantifiableProductUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.uuid = %@", quantifiableProductUuid)
     }
 
-    static func createFilterProductStore(quantifiableProductUuid: String, store: String) -> String {
-        return "\(createFilterProduct(quantifiableProductUuid)) && store == '\(store)'"
+    static func createFilterProductStore(quantifiableProductUuid: String, store: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterProduct(quantifiableProductUuid),
+            NSPredicate(format: "store = %@", store)
+        ])
     }
 
-    static func createFilterProductsStores(_ products: [QuantifiableProduct], store: String) -> String {
+    static func createFilterProductsStores(_ products: [QuantifiableProduct], store: String) -> NSPredicate {
         let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joined(separator: ",")
-        return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
-    }
-    
-//    static func createFilterProductsStores(_ products: [Product], store: String) -> String {
-//        let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joined(separator: ",")
-//        return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
-//    }
-    
-    static func createFilterNameBrand(_ name: String, brand: String, store: String) -> String {
-        return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
-    }
-    
-    static func createFilterName(_ name: String) -> String {
-        return "productOpt.productOpt.itemOpt.name = '\(name)'"
-    }
-    
-    static func createFilterNameContains(_ text: String) -> String {
-        return "productOpt.productOpt.itemOpt.name CONTAINS[c] '\(text)'"
-    }
-    
-    static func createFilterBrandContains(_ text: String) -> String {
-        return "productOpt.productOpt.brand CONTAINS[c] '\(text)'"
-    }
-    
-    static func createFilterStoreContains(_ text: String) -> String {
-        return "store CONTAINS[c] '\(text)'"
-    }
-    
-    static func createFilterCategory(_ categoryUuid: String) -> String {
-        return "productOpt.productOpt.categoryOpt.uuid = '\(categoryUuid)'"
-    }
-    
-    static func createFilterCategoryNameContains(_ text: String) -> String {
-        return "productOpt.productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
-    }
-    
-    static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.productOpt.itemOpt.name == '\(unique.name)' AND productOpt.productOpt.brand == '\(unique.brand)' AND productOpt.baseQuantity == \(unique.baseQuantity) AND productOpt.unitOpt.name == '\(unique.unit)'"
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "productOpt.uuid IN {%@}", productsUuidsStr),
+            NSPredicate(format: "store = %@", store)
+        ])
     }
 
-    static func createFilter(unique: QuantifiableProductUnique, store: String) -> String {
-        return "\(createFilter(unique: unique)) AND \(createFilterStore(store))"
+    static func createFilterNameBrand(_ name: String, brand: String, store: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterName(name),
+            createFilterBrand(brand),
+            createFilterStore(store)
+        ])
+    }
+    
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.itemOpt.name = %@", name)
+    }
+    
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.itemOpt.name CONTAINS[c] %@", text)
+    }
+    
+    static func createFilterBrandContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.brand CONTAINS[c] %@", text)
+    }
+    
+    static func createFilterStoreContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "store CONTAINS[c] %@", text)
+    }
+    
+    static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.categoryOpt.uuid = %@", categoryUuid)
+    }
+    
+    static func createFilterCategoryNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.productOpt.categoryOpt.name CONTAINS[c] %@", text)
+    }
+    
+    static func createFilter(unique: QuantifiableProductUnique) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "productOpt.productOpt.itemOpt.name = %@", unique.name),
+            NSPredicate(format: "productOpt.productOpt.brand = %@", unique.brand),
+            NSPredicate(format: "productOpt.baseQuantity = %@", unique.baseQuantity),
+            NSPredicate(format: "productOpt.unitOpt.name = %@", unique.unit),
+            NSPredicate(format: "productOpt.secondBaseQuantity = %@", unique.secondBaseQuantity),
+        ])
+    }
+
+    static func createFilter(unique: QuantifiableProductUnique, store: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilter(unique: unique),
+            createFilterStore(store)
+        ])
     }
 
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
-    public static func createFilterDirtyAndValid() -> String {
-        return "\(DBSyncable.dirtyFilter()) && uuid != ''"
+    public static func createFilterDirtyAndValid() -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DBSyncable.dirtyFilter(),
+            NSPredicate(format: "uuid != %@", "")
+        ])
     }
 
     func toRealmMigrationDict(quantifiableProduct: QuantifiableProduct) -> [String: AnyObject] {

@@ -13,16 +13,16 @@ import RealmSwift
 class RealmStoreProductProvider: RealmProvider {
       
     func storeProduct(_ uuid: String, handler: @escaping (StoreProduct?) -> Void) {
-        handler(loadFirstSync(filter: StoreProduct.createFilter(uuid)))
+        handler(loadFirstSync(predicate: StoreProduct.createFilter(uuid)))
     }
     
     func storeProductSync(uuid: String) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilter(uuid))
+        return loadFirstSync(predicate: StoreProduct.createFilter(uuid))
     }
 
 
     func storeProductSync(quantifiableProductUnique: QuantifiableProductUnique, list: List) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilter(unique: quantifiableProductUnique, store: list.store ?? ""))
+        return loadFirstSync(predicate: StoreProduct.createFilter(unique: quantifiableProductUnique, store: list.store ?? ""))
     }
 
     func storeProduct(_ product: QuantifiableProduct, store: String, handler: @escaping (StoreProduct?) -> Void) {
@@ -30,11 +30,11 @@ class RealmStoreProductProvider: RealmProvider {
     }
     
     func storeProductSync(product: QuantifiableProduct, store: String) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
+        return loadFirstSync(predicate: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
     }
     
     func storeProductsSync(_ products: [QuantifiableProduct], store: String) -> Results<StoreProduct>? {
-        return loadSync(filter: StoreProduct.createFilterProductsStores(products, store: store), sortDescriptor: nil)
+        return loadSync(predicate: StoreProduct.createFilterProductsStores(products, store: store), sortDescriptor: nil)
         
 //        return withRealmSync {[weak self] realm in
 //            let mapper = {StoreProductMapper.productWithDB($0)}
@@ -123,7 +123,7 @@ class RealmStoreProductProvider: RealmProvider {
     // MARK: - Sync
     
     func storeProductSync(_ product: QuantifiableProduct, store: String) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
+        return loadFirstSync(predicate: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
     }
     
     func deleteStoreProductSync(uuid: String) -> Bool {

@@ -61,23 +61,26 @@ public class Item: DBSyncable, Identifiable, WithUuid {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
-        return "uuid == '\(uuid)'"
+    static func createFilter(uuid: String) -> NSPredicate {
+        return NSPredicate(format: "uuid = %@", uuid)
     }
     
-    static func createFilter(name: String) -> String {
-        return "name = '\(name)'"
+    static func createFilter(name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
     }
     
-    static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
     
-    static func createFilterNameContainsAndEdible(_ text: String, edible: Bool) -> String {
+    static func createFilterNameContainsAndEdible(_ text: String, edible: Bool) -> NSPredicate {
         if text.isEmpty {
             return createFilter(edible: edible)
         } else {
-            return "\(createFilterNameContains(text)) AND \(createFilter(edible: edible))"
+            return NSCompoundPredicate(andPredicateWithSubpredicates: [
+                createFilterNameContains(text),
+                createFilter(edible: edible)
+            ])
         }
     }
     
@@ -85,18 +88,18 @@ public class Item: DBSyncable, Identifiable, WithUuid {
         return uuid == rhs.uuid
     }
     
-    static func createFilterUuids(_ uuids: [String]) -> String {
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
         let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return "uuid IN {\(uuidsStr)}"
+        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
     }
     
-    static func createFilter(names: [String]) -> String {
+    static func createFilter(names: [String]) -> NSPredicate {
         let namesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
-        return "name IN {\(namesStr)}"
+        return NSPredicate(format: "name IN {%@}", namesStr)
     }
     
-    static func createFilter(edible: Bool) -> String {
-        return "edible == \(edible)"
+    static func createFilter(edible: Bool) -> NSPredicate {
+        return NSPredicate(format: "edible == %@", edible)
     }
     
     // MARK: -
