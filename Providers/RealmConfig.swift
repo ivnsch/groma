@@ -162,6 +162,8 @@ public struct RealmConfig {
 
     public static func syncedRealmConfigutation(user: SyncUser) -> Realm.Configuration {
         var config = Realm.Configuration()
+        
+        RealmSwift.SyncManager.shared.logLevel = SyncLogLevel.all
 
         config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
         config.objectTypes = [List.self, DBInventory.self, Section.self, Product.self, DBSharedUser.self,

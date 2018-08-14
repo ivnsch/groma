@@ -33,7 +33,7 @@ class RealmUnitProvider: RealmProvider {
         Fraction(numerator: 1, denominator: 8),
         Fraction(numerator: 2, denominator: 3),
         Fraction(numerator: 3, denominator: 4),
-        ]
+    ]
 
     var predefinedUnits: [Unit] {
         return [

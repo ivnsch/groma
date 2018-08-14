@@ -89,17 +89,15 @@ public class Item: DBSyncable, Identifiable, WithUuid {
     }
     
     static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
-        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
+        return NSPredicate(format: "uuid IN %@", uuids)
     }
-    
+
     static func createFilter(names: [String]) -> NSPredicate {
-        let namesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
-        return NSPredicate(format: "name IN {%@}", namesStr)
+        return NSPredicate(format: "name IN %@", names)
     }
-    
+
     static func createFilter(edible: Bool) -> NSPredicate {
-        return NSPredicate(format: "edible == %@", edible)
+        return NSPredicate(format: "edible == %@", NSNumber(booleanLiteral: edible))
     }
     
     // MARK: -

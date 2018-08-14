@@ -118,20 +118,12 @@ public class Product: DBSyncable, Identifiable, WithUuid {
         return NSPredicate(format: "itemOpt.name = %@", name)
     }
     
-    static func createFilter(base: String) -> NSPredicate {
-        return NSPredicate(format: "baseQuantity = %@", base)
-    }
-    
     static func createFilterNameContains(_ text: String) -> NSPredicate {
         return NSPredicate(format: "itemOpt.name CONTAINS[c] %@", text)
     }
     
     static func createFilterBrandContains(_ text: String) -> NSPredicate {
         return NSPredicate(format: "brand CONTAINS[c] %@", text)
-    }
-    
-    static func createFilterStoreContains(_ text: String) -> NSPredicate {
-        return NSPredicate(format: "store CONTAINS[c] %@", text)
     }
     
     static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
@@ -143,11 +135,9 @@ public class Product: DBSyncable, Identifiable, WithUuid {
     }
     
     static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
-        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
-
+        return NSPredicate(format: "uuid IN %@", uuids)
     }
-    
+
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
     static func createFilterDirtyAndValid() -> NSPredicate {

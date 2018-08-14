@@ -113,13 +113,23 @@ class ProvidersTests: XCTestCase {
 
         // Add base quantities
         let baseQuantities = RealmUnitProvider().defaultBaseQuantities
-        realm.add(baseQuantities)
-        baseQuantitiesContainer.bases.add(baseQuantities)
+        var inputDbBaseQuantities: [BaseQuantity] = []
+        for base in baseQuantities {
+            let dbBase = BaseQuantity(base)
+            inputDbBaseQuantities.append(dbBase)
+            realm.add(dbBase)
+            baseQuantitiesContainer.bases.append(dbBase)
+        }
 
         // Add fractions
         let fractions = RealmUnitProvider().defaultFractions
-        realm.add(fractions)
-        fractionsContainer.fractions.add(fractions)
+        var inputDbFractions: [DBFraction] = []
+        for fraction in fractions {
+            let dbFraction = DBFraction(numerator: fraction.numerator, denominator: fraction.denominator)
+            inputDbFractions.append(dbFraction)
+            realm.add(dbFraction)
+            fractionsContainer.fractions.append(dbFraction)
+        }
 
         // Add categories and quantifiable products (which adds items and products as well)
         let prefiller = SuggestionsPrefiller()
@@ -146,7 +156,7 @@ class ProvidersTests: XCTestCase {
         realm.add(inventoryItems)
 
         // Add list
-        let list = List(uuid: UUID().uuidString, name: "my list", color: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
+        let list = List(uuid: UUID().uuidString, name: "my list", color: UIColor.orange, order: 0, inventory: inventory, store: nil)
         realm.add(list)
         let lists = [list]
         listsContainer.lists.add([list])
@@ -161,8 +171,8 @@ class ProvidersTests: XCTestCase {
         }
 
         // Add some sections
-        let section1 = Section(uuid: "1", name: "section1", color: UIColor.blue, list: list, order: ListItemStatusOrder(status: .todo, order: 0), status: .todo)
-        let section2 = Section(uuid: "2", name: "section2", color: UIColor.red, list: list, order: ListItemStatusOrder(status: .done, order: 0), status: .done)
+        let section1 = Section(name: "section1", color: UIColor.blue, list: list, order: ListItemStatusOrder(status: .todo, order: 0), status: .todo)
+        let section2 = Section(name: "section2", color: UIColor.red, list: list, order: ListItemStatusOrder(status: .done, order: 0), status: .done)
         let sections = [section1, section2]
         for section in sections {
             realm.add(section)
@@ -202,16 +212,16 @@ class ProvidersTests: XCTestCase {
         realm.add(textSpans, update: false)
 
         // Add Recipe
-        let recipe = Recipe(uuid: UUID().uuidString, name: "my recipe", color: UIColor.flatBlue, fav: 2, text: "foo bar", spans: textSpans)
+        let recipe = Recipe(uuid: UUID().uuidString, name: "my recipe", color: UIColor.blue, fav: 2, text: "foo bar", spans: textSpans)
         realm.add(recipe)
         let recipes = [recipe]
         recipesContainer.recipes.add([recipe])
 
         // Add some ingredients
         let item = quantifiableProducts[0].product.item
-        let ingredient1 = Ingredient(uuid: "1", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
-        let ingredient2 = Ingredient(uuid: "2", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
-        let ingredient3 = Ingredient(uuid: "3", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
+        let ingredient1 = Ingredient(uuid: "1", quantity: 1, fraction: fractions[0], unit: units[0], item: item, recipe: recipe)
+        let ingredient2 = Ingredient(uuid: "2", quantity: 1, fraction: fractions[0], unit: units[0], item: item, recipe: recipe)
+        let ingredient3 = Ingredient(uuid: "3", quantity: 1, fraction: fractions[0], unit: units[0], item: item, recipe: recipe)
         let ingredients = [ingredient1, ingredient2, ingredient3]
         realm.add(ingredients)
 
@@ -247,9 +257,9 @@ class ProvidersTests: XCTestCase {
             // Base quantities
             let dbBaseQuantities = realm.objects(BaseQuantity.self)
             XCTAssertEqual(dbBaseQuantities.count, baseQuantities.count)
-            EqualityTests.equals(arr1: baseQuantities.sortedByVal(), arr2: dbBaseQuantities.toArray().sortedByVal())
+            EqualityTests.equals(arr1: inputDbBaseQuantities.sortedByVal(), arr2: dbBaseQuantities.toArray().sortedByVal())
             XCTAssertEqual(baseQuantitiesContainers.first!.bases.count, baseQuantities.count)
-            EqualityTests.equals(arr1: baseQuantities.sortedByVal(), arr2: baseQuantitiesContainers.first!.bases.toArray().sortedByVal())
+            EqualityTests.equals(arr1: inputDbBaseQuantities.sortedByVal(), arr2: baseQuantitiesContainers.first!.bases.toArray().sortedByVal())
 
             // Items
             let items = extractAllItems(quantifiableProducts: quantifiableProducts)
@@ -298,16 +308,16 @@ class ProvidersTests: XCTestCase {
             // Sections
             let dbSections = realm.objects(Section.self)
             XCTAssertEqual(dbSections.count, sections.count)
-            EqualityTests.equals(arr1: sections.sortedByUuid(), arr2: dbSections.toArray().sortedByUuid())
+            EqualityTests.equals(arr1: sections.sortedByName(), arr2: dbSections.toArray().sortedByName())
             XCTAssertEqual(lists.first!.todoSections.count, todoSections.count)
-            EqualityTests.equals(arr1: lists.first!.todoSections.toArray().sortedByUuid(), arr2: todoSections.sortedByUuid())
+            EqualityTests.equals(arr1: lists.first!.todoSections.toArray().sortedByName(), arr2: todoSections.sortedByName())
             let dbTodoSections = realm.objects(Section.self).filter(Section.createFilterListStatus(listUuid: lists.first!.uuid, status: .todo))
 
             XCTAssertEqual(dbTodoSections.count, todoSections.count)
-            EqualityTests.equals(arr1: dbTodoSections.toArray().sortedByUuid(), arr2: todoSections.sortedByUuid())
+            EqualityTests.equals(arr1: dbTodoSections.toArray().sortedByName(), arr2: todoSections.sortedByName())
             let dbDoneSections = realm.objects(Section.self).filter(Section.createFilterListStatus(listUuid: lists.first!.uuid, status: .done))
             XCTAssertEqual(dbDoneSections.count, doneSections.count)
-            EqualityTests.equals(arr1: dbDoneSections.toArray().sortedByUuid(), arr2: doneSections.sortedByUuid())
+            EqualityTests.equals(arr1: dbDoneSections.toArray().sortedByName(), arr2: doneSections.sortedByName())
 
             // List items
             let dbListItems = realm.objects(ListItem.self)

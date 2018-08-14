@@ -8,6 +8,13 @@
 import UIKit
 import Providers
 
+let nonExistentString: String = "nonexistent"
+let specialCharsTestString: String = "_s2>,.^ && | .* <'2@# ü^~👻 \t A\\_-    "
+
+func uuid() -> String {
+    return UUID().uuidString
+}
+
 extension Array where Element: WithUuid {
 
     func sortedByUuid() -> [Element] {
