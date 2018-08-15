@@ -102,7 +102,31 @@ public class Product: DBSyncable, Identifiable, WithUuid {
     static func createFilterBrand(_ brand: String) -> NSPredicate {
         return NSPredicate(format: "brand = %@", brand)
     }
-    
+
+    static func createFilterName(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.name = %@", name)
+    }
+
+    static func createFilterNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.name CONTAINS[c] %@", text)
+    }
+
+    static func createFilterBrandContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "brand CONTAINS[c] %@", text)
+    }
+
+    static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.categoryOpt.uuid = %@", categoryUuid)
+    }
+
+    static func createFilterCategoryNameContains(_ text: String) -> NSPredicate {
+        return NSPredicate(format: "itemOpt.categoryOpt.name CONTAINS[c] %@", text)
+    }
+
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
+        return NSPredicate(format: "uuid IN %@", uuids)
+    }
+
     static func createFilter(unique: ProductUnique) -> NSPredicate {
         return createFilterNameBrand(unique.name, brand: unique.brand)
     }
@@ -112,30 +136,6 @@ public class Product: DBSyncable, Identifiable, WithUuid {
             createFilterName(name),
             createFilterBrand(brand)
         ])
-    }
-    
-    static func createFilterName(_ name: String) -> NSPredicate {
-        return NSPredicate(format: "itemOpt.name = %@", name)
-    }
-    
-    static func createFilterNameContains(_ text: String) -> NSPredicate {
-        return NSPredicate(format: "itemOpt.name CONTAINS[c] %@", text)
-    }
-    
-    static func createFilterBrandContains(_ text: String) -> NSPredicate {
-        return NSPredicate(format: "brand CONTAINS[c] %@", text)
-    }
-    
-    static func createFilterCategory(_ categoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "itemOpt.categoryOpt.uuid = %@", categoryUuid)
-    }
-    
-    static func createFilterCategoryNameContains(_ text: String) -> NSPredicate {
-        return NSPredicate(format: "itemOpt.categoryOpt.name CONTAINS[c] %@", text)
-    }
-    
-    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
-        return NSPredicate(format: "uuid IN %@", uuids)
     }
 
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust

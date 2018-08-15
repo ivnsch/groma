@@ -143,32 +143,15 @@ public class Section: DBSyncable, Identifiable {
     
     // MARK: - Filters
     
-    // TODO review why this is used
+    // TODO review why this is exposed
     static func createFilterWithName(_ name: String) -> NSPredicate {
         return NSPredicate(format: "name = %@", name)
     }
 
-    static func createFilter(unique: SectionUnique) -> NSPredicate {
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "name = %@", unique.name),
-            NSPredicate(format: "listOpt.uuid = %@", unique.listUuid),
-            NSPredicate(format: "statusVal = %@", unique.status.rawValue)
-        ])
-    }
-
-    // TODO review why this is used
-    static func createFilterWithNames(_ names: [String], listUuid: String) -> NSPredicate {
-        let sectionsNamesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "name IN {%@}", sectionsNamesStr),
-            NSPredicate(format: "listOpt.uuid = %@", listUuid)
-        ])
-    }
-    
     static func createFilterNameContains(_ text: String) -> NSPredicate {
         return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
-    
+
     static func createFilterList(_ listUuid: String) -> NSPredicate {
         return NSPredicate(format: "listOpt.uuid = %@", listUuid)
     }
@@ -177,17 +160,37 @@ public class Section: DBSyncable, Identifiable {
         return NSPredicate(format: "listOpt.inventoryOpt.uuid = %@", inventoryUuid)
     }
 
-    static func createFilterListStatus(listUuid: String, status: ListItemStatus) -> NSPredicate {
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "listOpt.uuid = %@", listUuid),
-            NSPredicate(format: "statusVal = %@", status.rawValue)
-        ])
-    }
-
     static func createFilterListItemsIsEmpty() -> NSPredicate {
         return NSPredicate(format: "listItems.@count == 0")
     }
-    
+
+    fileprivate static func createFilter(status: ListItemStatus) -> NSPredicate {
+        return NSPredicate(format: "statusVal = %d", status.rawValue)
+    }
+
+    static func createFilterListStatus(listUuid: String, status: ListItemStatus) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterList(listUuid),
+            createFilter(status: status)
+        ])
+    }
+
+    static func createFilter(unique: SectionUnique) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            createFilterWithName(unique.name),
+            createFilterList(unique.listUuid),
+            createFilter(status: unique.status)
+        ])
+    }
+
+    // TODO review why this is used
+    static func createFilterWithNames(_ names: [String], listUuid: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "name IN %@", names),
+            createFilterList(listUuid)
+        ])
+    }
+
     // MARK: -
 
     static func fromDict(_ dict: [String: AnyObject], list: List) -> Section {

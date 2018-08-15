@@ -75,7 +75,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameContainsUppercaseFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
 
         // Test
         let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains(obj1.name.uppercased()))
@@ -318,7 +318,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsAndEdible() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
 
         // Test
         let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj", edible: true))
@@ -336,7 +336,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsPerfectMatchAndEdible() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
 
         // Test
         let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj1", edible: true))
@@ -354,7 +354,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsAndEdibleEmpty() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
 
         // Test
         let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible(nonExistentString, edible: true))

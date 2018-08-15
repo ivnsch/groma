@@ -92,7 +92,7 @@ public class Unit: DBSyncable, Identifiable, WithUuid {
     }
     
     static func createBuyable(buyable: Bool) -> NSPredicate {
-        return NSPredicate(format: "buyable = %@", buyable)
+        return NSPredicate(format: "buyable = %@", NSNumber(booleanLiteral: buyable))
     }
 
     // Used to convert List to Results

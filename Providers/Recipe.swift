@@ -70,8 +70,7 @@ public class Recipe: Object, Identifiable, WithUuid {
     }
     
     static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
-        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
-        return NSPredicate(format: "uuid IN {%@}", uuidsStr)
+        return NSPredicate(format: "uuid IN %@", uuids)
     }
     
     // MARK: - Update

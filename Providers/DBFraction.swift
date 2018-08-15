@@ -55,8 +55,8 @@ public class DBFraction: Object {
     
     static func createFilter(numerator: Int, denominator: Int) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "numerator = %@", numerator),
-            NSPredicate(format: "denominator = %@", denominator)
+            NSPredicate(format: "numerator = %d", numerator),
+            NSPredicate(format: "denominator = %d", denominator)
         ])
     }
     

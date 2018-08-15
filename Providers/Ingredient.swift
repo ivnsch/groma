@@ -99,42 +99,41 @@ public final class Ingredient: Object, WithUuid {
     static func createFilter(itemUuid: String) -> NSPredicate {
         return NSPredicate(format: "itemOpt.uuid = %@", itemUuid)
     }
-    
-    static func createFilter(name: String, recipeUuid: String) -> NSPredicate {
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "itemOpt.name = %@", name),
-            NSPredicate(format: "recipeOpt.uuid = %@", recipeUuid)
-        ])
-    }
-    
+
     static func createFilter(recipeUuid: String) -> NSPredicate {
         return NSPredicate(format: "recipeOpt.uuid = %@", recipeUuid)
     }
-    
+
+    static func createFilter(unitName: String) -> NSPredicate {
+        return NSPredicate(format: "unitOpt.name = %@", unitName)
+    }
+
+    static func createFilterGroupItemsUuids(ingredients: [Ingredient]) -> NSPredicate {
+        let ingredientsUuids = ingredients.map{$0.uuid}
+        return NSPredicate(format: "uuid IN %@", ingredientsUuids)
+    }
+
+    static func createFilter(name: String, recipeUuid: String) -> NSPredicate {
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "itemOpt.name = %@", name),
+            createFilter(recipeUuid: recipeUuid)
+        ])
+    }
+
     static func createFilter(item: Item, recipe: Recipe) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [
             createFilter(recipeUuid: recipe.uuid),
-            NSPredicate(format: "itemOpt.uuid = %@", item.uuid)
+            createFilter(itemUuid: item.uuid)
         ])
     }
-    
+
     static func createFilter(recipeUuid: String, name: String, notUuid: String) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [
             createFilter(name: name, recipeUuid: recipeUuid),
             NSPredicate(format: "uuid != %@", notUuid)
         ])
     }
-    
-    static func createFilterGroupItemsUuids(ingredients: [Ingredient]) -> NSPredicate {
-        let ingredientsUuidsStr = ingredients.map{"'\($0.uuid)'"}.joined(separator: ",")
-        return NSPredicate(format: "uuid IN {%@}", ingredientsUuidsStr)
-    }
-    
-    static func createFilter(unitName: String) -> NSPredicate {
-        return NSPredicate(format: "unitOpt.name = %@", unitName)
 
-    }
-    
     public override static func ignoredProperties() -> [String] {
         return ["recipe", "item", "unit", "fraction"]
     }

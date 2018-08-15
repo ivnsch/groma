@@ -39,7 +39,7 @@ public class DBSyncable: Object {
     }
     
     static func dirtyFilter(_ dirty: Bool = true) -> NSPredicate {
-        return NSPredicate(format: "\(dirtyFieldName) = %@", dirty)
+        return NSPredicate(format: "\(dirtyFieldName) = %@", NSNumber(booleanLiteral: dirty))
     }
     
     // Helper for common code for different objects where we want to update the last server update timestamp on server response. The dirty flag is set to false, we assume this is called after server operation success so the object is synced.

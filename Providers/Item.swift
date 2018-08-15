@@ -72,7 +72,19 @@ public class Item: DBSyncable, Identifiable, WithUuid {
     static func createFilterNameContains(_ text: String) -> NSPredicate {
         return NSPredicate(format: "name CONTAINS[c] %@", text)
     }
-    
+
+    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
+        return NSPredicate(format: "uuid IN %@", uuids)
+    }
+
+    static func createFilter(names: [String]) -> NSPredicate {
+        return NSPredicate(format: "name IN %@", names)
+    }
+
+    static func createFilter(edible: Bool) -> NSPredicate {
+        return NSPredicate(format: "edible = %@", NSNumber(booleanLiteral: edible))
+    }
+
     static func createFilterNameContainsAndEdible(_ text: String, edible: Bool) -> NSPredicate {
         if text.isEmpty {
             return createFilter(edible: edible)
@@ -83,25 +95,13 @@ public class Item: DBSyncable, Identifiable, WithUuid {
             ])
         }
     }
-    
+
+    // MARK: -
+
     public func same(_ rhs: Item) -> Bool {
         return uuid == rhs.uuid
     }
-    
-    static func createFilterUuids(_ uuids: [String]) -> NSPredicate {
-        return NSPredicate(format: "uuid IN %@", uuids)
-    }
 
-    static func createFilter(names: [String]) -> NSPredicate {
-        return NSPredicate(format: "name IN %@", names)
-    }
-
-    static func createFilter(edible: Bool) -> NSPredicate {
-        return NSPredicate(format: "edible == %@", NSNumber(booleanLiteral: edible))
-    }
-    
-    // MARK: -
-    
     fileprivate func update(_ item: Item, category: ProductCategory) -> Item {
         return copy(name: item.name, category: category, fav: item.fav)
     }
