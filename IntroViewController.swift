@@ -10,6 +10,7 @@ import UIKit
 import SwipeView
 import Lottie
 import Providers
+import Intents
 
 enum IntroMode {
     case launch, more
@@ -394,10 +395,16 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
         _ = navigationController?.pushViewController(registerController, animated: true)
     }
 
-    
     @IBAction func skipTapped(_ sender: UIButton) {
         if mode == .launch {
-            exit()
+            if #available(iOS 10.0, *) {
+                INPreferences.requestSiriAuthorization { [weak self] authorizationStatus in
+                    logger.i("Siri authorized: \(authorizationStatus)")
+                    self?.exit()
+                }
+            } else {
+                exit()
+            }
         }
     }
 

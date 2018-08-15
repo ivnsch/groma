@@ -15,7 +15,6 @@ import GoogleSignIn
 import RealmSwift
 import Providers
 import FBSDKLoginKit
-import Intents
 
 @objc
 @UIApplicationMain
@@ -80,17 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         checkClearHistory()
 
-        initSiri()
-
         return initFb
-    }
-
-    fileprivate func initSiri() {
-        if #available(iOS 10.0, *) {
-            INPreferences.requestSiriAuthorization { authorizationStatus in
-                logger.i("Siri authorized: \(authorizationStatus)")
-            }
-        }
     }
 
     // In this app we use sometimes a custom view nav bar (to be able to have expand animation with dot) so it's necessary to use a hardcoded height.
