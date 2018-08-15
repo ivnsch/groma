@@ -9,6 +9,7 @@ pr_bakery = "Bakery";
 pr_rice = "Rice";
 pr_nuts = "Nuts";
 pr_oil = "Oil";
+pr_clothes = "Clothes";
 pr_cleaning = "Cleaning";
 pr_milk = "Milk";
 pr_fish = "Fish";
