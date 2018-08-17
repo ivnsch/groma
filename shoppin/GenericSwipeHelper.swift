@@ -23,12 +23,15 @@ class GenericSwipeHelper: NSObject, UIGestureRecognizerDelegate {
     fileprivate let onEnded: ((CGFloat) -> Void)
     fileprivate let onDelta: ((CGFloat, CGFloat) -> Void)
 
+    fileprivate var cancelTouches: Bool
+
     init(view: UIView, delta: CGFloat = 50, orientation: Orientation = .horizontal, cancelTouches: Bool = true, onDelta: @escaping ((CGFloat, CGFloat) -> Void), onEnded: @escaping ((CGFloat) -> Void)) {
         self.view = view
         self.delta = delta
         self.orientation = orientation
         self.onDelta = onDelta
         self.onEnded = onEnded
+        self.cancelTouches = cancelTouches
 
         super.init()
 
@@ -39,7 +42,7 @@ class GenericSwipeHelper: NSObject, UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return !cancelTouches
     }
 
     fileprivate func getDeltas(currentPoint: CGPoint) -> (CGFloat, CGFloat) {
