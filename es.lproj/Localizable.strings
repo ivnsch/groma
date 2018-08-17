@@ -455,6 +455,7 @@ more_community = "Comunidad";
 
 about_company_information = "Información legal";
 about_vat_id = "No. id. fiscal: %@";
+about_follow_twitter = "Sigue Groma en Twitter";
 
 register_accept_terms = "Acepto los %%términos y condiciones%%";
 

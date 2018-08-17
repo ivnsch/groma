@@ -13,6 +13,7 @@ class AboutController: UIViewController {
 
     @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var vatinLabel: UILabel!
+    @IBOutlet weak var followTwitterLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,5 +24,10 @@ class AboutController: UIViewController {
         }
 
         vatinLabel.text = trans("about_vat_id", "DE289356506")
+        followTwitterLabel.text = trans("about_follow_twitter")
+    }
+
+    @IBAction func didPressFollowOnTwitter(_ sender: UIButton) {
+        TwitterShareHelper.followOnTwitter()
     }
 }

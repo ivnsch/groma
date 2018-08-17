@@ -151,6 +151,17 @@ SXZhbiBTY2jDvHR64oCoQmlya2Vuc3RyYcOfZSAxNRER4oCoMTA1NTkgQmVybGluEeKAqEdlcm1hbnk
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Follow Groma on Twitter" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lC1-fh-mxp" customClass="LabelMore" customModule="groma">
+                                <rect key="frame" x="70" y="269" width="166" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Legal information:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T8u-pq-ieB" customClass="LabelMore" customModule="groma">
                                 <rect key="frame" x="20" y="129" width="149" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -195,19 +206,40 @@ SXZhbiBTY2jDvHR64oCoQmlya2Vuc3RyYcOfZSAxNRER4oCoMTA1NTkgQmVybGluEeKAqEdlcm1hbnk
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iVW-F4-fiK">
+                                <rect key="frame" x="20" y="258" width="216" height="40"/>
+                                <connections>
+                                    <action selector="didPressFollowOnTwitter:" destination="imb-x4-nbm" eventType="touchUpInside" id="3Sf-9e-akm"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter" translatesAutoresizingMaskIntoConstraints="NO" id="5bQ-xw-Qfz">
+                                <rect key="frame" x="20" y="258" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="VZL-07-plp"/>
+                                    <constraint firstAttribute="height" constant="40" id="kcg-i6-rUa"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="T8u-pq-ieB" secondAttribute="bottom" constant="8" id="1wK-nk-lot"/>
                             <constraint firstItem="sTL-iB-l5L" firstAttribute="top" secondItem="zw0-xd-kdS" secondAttribute="bottom" constant="8" id="3el-9a-RRU"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="9z5-GK-HTV"/>
+                            <constraint firstItem="iVW-F4-fiK" firstAttribute="bottom" secondItem="5bQ-xw-Qfz" secondAttribute="bottom" id="Ar9-Tp-4w6"/>
+                            <constraint firstItem="lC1-fh-mxp" firstAttribute="trailing" secondItem="iVW-F4-fiK" secondAttribute="trailing" id="F9b-f8-gSV"/>
                             <constraint firstItem="sTL-iB-l5L" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="R2w-TV-kQE"/>
+                            <constraint firstItem="lC1-fh-mxp" firstAttribute="centerY" secondItem="5bQ-xw-Qfz" secondAttribute="centerY" id="TJn-9F-hH4"/>
+                            <constraint firstItem="iVW-F4-fiK" firstAttribute="top" secondItem="5bQ-xw-Qfz" secondAttribute="top" id="e5h-xZ-JNB"/>
+                            <constraint firstItem="lC1-fh-mxp" firstAttribute="leading" secondItem="5bQ-xw-Qfz" secondAttribute="trailing" constant="10" id="eiz-1M-sd5"/>
+                            <constraint firstItem="iVW-F4-fiK" firstAttribute="leading" secondItem="5bQ-xw-Qfz" secondAttribute="leading" id="fc9-iR-PxX"/>
                             <constraint firstItem="kXw-c4-GiG" firstAttribute="leading" secondItem="RDW-hy-ch1" secondAttribute="leading" id="ffV-Ep-5og"/>
                             <constraint firstAttribute="trailing" secondItem="RDW-hy-ch1" secondAttribute="trailing" constant="20" id="hVQ-BL-sft" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="T8u-pq-ieB" firstAttribute="leading" secondItem="zw0-xd-kdS" secondAttribute="leading" id="iDc-GD-qfP"/>
                             <constraint firstItem="zw0-xd-kdS" firstAttribute="leading" secondItem="nyx-EU-a0C" secondAttribute="leading" constant="20" id="lme-Sb-KU4" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                            <constraint firstItem="5bQ-xw-Qfz" firstAttribute="leading" secondItem="RDW-hy-ch1" secondAttribute="leading" id="n2N-io-KPf"/>
                             <constraint firstItem="kXw-c4-GiG" firstAttribute="top" secondItem="RDW-hy-ch1" secondAttribute="bottom" constant="8" id="oWe-pK-hkd"/>
                             <constraint firstItem="zw0-xd-kdS" firstAttribute="top" secondItem="vCj-Rn-aKt" secondAttribute="bottom" constant="60" id="pfK-hU-jd8"/>
+                            <constraint firstItem="5bQ-xw-Qfz" firstAttribute="top" secondItem="kXw-c4-GiG" secondAttribute="bottom" constant="20" id="qJT-to-ogD"/>
                             <constraint firstItem="T8u-pq-ieB" firstAttribute="top" secondItem="sTL-iB-l5L" secondAttribute="bottom" constant="20" id="y1H-wD-7wU"/>
                         </constraints>
                     </view>
@@ -216,6 +248,7 @@ SXZhbiBTY2jDvHR64oCoQmlya2Vuc3RyYcOfZSAxNRER4oCoMTA1NTkgQmVybGluEeKAqEdlcm1hbnk
                     </navigationItem>
                     <connections>
                         <outlet property="appVersionLabel" destination="sTL-iB-l5L" id="f2O-ZM-DoC"/>
+                        <outlet property="followTwitterLabel" destination="lC1-fh-mxp" id="5Rd-rT-A4P"/>
                         <outlet property="vatinLabel" destination="kXw-c4-GiG" id="gie-sD-kH6"/>
                     </connections>
                 </viewController>
@@ -1966,6 +1999,7 @@ SXZhbiBTY2jDvHR64oCoQmlya2Vuc3RyYcOfZSAxNRER4oCoMTA1NTkgQmVybGluEeKAqEdlcm1hbnk
         <image name="more_selected" width="25" height="6"/>
         <image name="stats" width="30" height="25"/>
         <image name="stats_selected" width="28" height="25"/>
+        <image name="twitter" width="200" height="200"/>
         <image name="user" width="18" height="18"/>
     </resources>
 </document>
