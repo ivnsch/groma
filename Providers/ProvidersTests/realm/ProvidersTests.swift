@@ -7,20 +7,30 @@
 
 import XCTest
 import RealmSwift
-//import Providers
 @testable import Providers
 
 // TODO Move these tests to new class "RealmMigrationTests"
 class ProvidersTests: XCTestCase {
 
-    let srcRealm = try! Realm(fileURL: ProvidersTests.localRealmUrl(fileName: "srcRealm.realm"))
-    let dstRealm = try! Realm(fileURL: ProvidersTests.localRealmUrl(fileName: "targetRealm.realm"))
-
-    fileprivate static var documentsDirectoryUrl: URL {
+    fileprivate var documentsDirectoryUrl: URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
     }
 
-    fileprivate static func localRealmUrl(fileName: String) -> URL {
+    lazy var srcRealm: Realm = self.createRealm(name: "srcRealm.realm", logIdentifier: "Source")
+    lazy var dstRealm: Realm = self.createRealm(name: "targetRealm.realm", logIdentifier: "Target")
+
+    fileprivate func createRealm(name: String, logIdentifier: String) -> Realm {
+        let documentsDirectory = documentsDirectoryUrl
+        if !FileManager.default.fileExists(atPath: documentsDirectory.path) {
+            try! FileManager.default.createDirectory(atPath: documentsDirectory.path, withIntermediateDirectories: true, attributes: nil)
+        }
+        let realmUrl = documentsDirectoryUrl.appendingPathComponent(name)
+
+        print("\(logIdentifier) Realm path: \(realmUrl)")
+        return try! Realm(fileURL: realmUrl)
+    }
+
+    fileprivate func localRealmUrl(fileName: String) -> URL {
         return documentsDirectoryUrl.appendingPathComponent(fileName)
     }
 
@@ -47,7 +57,7 @@ class ProvidersTests: XCTestCase {
     }
 
     func testDeleteAll() {
-        let realm = try! Realm(fileURL: ProvidersTests.localRealmUrl(fileName: "myrealm.realm"))
+        let realm = createRealm(name: "myrealm.realm", logIdentifier: "Tmp")
 
         realm.beginWrite()
         let firstCategory = ProductCategory(uuid: "1", name: "foo", color: "#000000")
