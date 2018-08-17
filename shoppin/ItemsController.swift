@@ -207,7 +207,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     fileprivate func onCloseTopControllers(rotateTopBarButton: Bool = true) {
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
-        
+        tableView.showsVerticalScrollIndicator = true
+
         if rotateTopBarButton {
             topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
         }
@@ -259,10 +260,12 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         if open {
             openQuickAdd(rotateTopBarButton: rotateTopBarButton)
+            tableView.showsVerticalScrollIndicator = false
             return true
 
         } else {
             closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+            tableView.showsVerticalScrollIndicator = true
             return false
         }
     }
