@@ -137,6 +137,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         tableView.showsVerticalScrollIndicator = true
+        tableView.bottomInset = 0
     }
     
     fileprivate func topBarOnCloseExpandable() {
@@ -235,6 +236,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if rotateTopBarButton {
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
             }
+            tableView.bottomInset = 0
             tableView.showsVerticalScrollIndicator = true
 
         } else { // if there's no top controller open, open the quick add controller
@@ -249,7 +251,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 if rotateTopBarButton {
                     topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))])
                 }
-
+                tableView.bottomInset = productsWithQuantityController.bottomInsetWhileTopMenuOpen
                 tableView.showsVerticalScrollIndicator = false
             }
             

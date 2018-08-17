@@ -55,7 +55,13 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         super.viewDidLoad()
         
         todoListItemsEditBottomView?.delegate = self
-        
+
+        pricesView.onExpanded = { [weak self] expanded in guard let weakSelf = self else { return }
+            let pricesViewHeight = expanded ? weakSelf.pricesView.originalHeight : 0
+            weakSelf.bottomInsetWhileTopMenuClosed = pricesViewHeight
+            weakSelf.tableView.bottomInset = pricesViewHeight
+        }
+
         addPinch()
     }
     

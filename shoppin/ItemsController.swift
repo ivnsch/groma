@@ -58,7 +58,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     fileprivate var currentNotePopup: MyPopup?
-    
+
+    var bottomInsetWhileTopMenuOpen: CGFloat = 0
+    var bottomInsetWhileTopMenuClosed: CGFloat = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -208,6 +211,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         tableView.showsVerticalScrollIndicator = true
+        tableView.bottomInset = bottomInsetWhileTopMenuClosed
 
         if rotateTopBarButton {
             topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
@@ -261,11 +265,13 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         if open {
             openQuickAdd(rotateTopBarButton: rotateTopBarButton)
             tableView.showsVerticalScrollIndicator = false
+            tableView.bottomInset = bottomInsetWhileTopMenuOpen
             return true
 
         } else {
             closeTopControllers(rotateTopBarButton: rotateTopBarButton)
             tableView.showsVerticalScrollIndicator = true
+            tableView.bottomInset = bottomInsetWhileTopMenuClosed
             return false
         }
     }

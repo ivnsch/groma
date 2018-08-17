@@ -110,7 +110,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
         if !initializedTableViewBottomInset {
             initializedTableViewBottomInset = true
-            listItemsTableViewController.tableView.bottomInset = listItemsTableViewController.tableView.height - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+            bottomInsetWhileTopMenuOpen = listItemsTableViewController.tableView.height - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+            tableView.bottomInset = bottomInsetWhileTopMenuClosed
         }
     }
     

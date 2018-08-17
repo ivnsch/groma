@@ -92,6 +92,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     var placeHolderItem: (indexPath: IndexPath, item: InventoryItem)?
     
     fileprivate var initializedTableViewBottomInset = false
+    var bottomInsetWhileTopMenuOpen: CGFloat = 0
 
     fileprivate var pullToAdd: PullToAddHelper?
 
@@ -190,7 +191,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
         if !initializedTableViewBottomInset {
             initializedTableViewBottomInset = true
-            tableView.bottomInset = tableView.height + topMenusHeightConstraint.constant - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+            bottomInsetWhileTopMenuOpen = tableView.height + topMenusHeightConstraint.constant - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+            tableView.bottomInset = 0
         }
     }
 

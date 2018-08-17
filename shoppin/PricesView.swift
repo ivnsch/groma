@@ -41,7 +41,13 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate let openWidth: CGFloat = -60 // width constant while showing stash view behind
     
     fileprivate(set) var open: Bool = false // when stash view behind is visible
-    fileprivate var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
+    fileprivate var expanded: Bool = true { // if vertically minimized or expanded (expanded is normal size)
+        didSet {
+            onExpanded?(expanded)
+        }
+    }
+
+    var onExpanded: ((Bool) -> Void)?
 
     var allowOpen: Bool = false {
         didSet {
@@ -317,7 +323,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             todoController.view.layoutIfNeeded()
             todoController.view.bringSubview(toFront: self) // without this would be hidden by todoListItemsEditBottomView in some cases
             
-        }) {finished in
+        }) { [weak self] finished in
             onFinishAnim?()
         }
     }
