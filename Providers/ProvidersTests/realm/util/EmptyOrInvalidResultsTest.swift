@@ -16,7 +16,7 @@ protocol EmptyOrInvalidResultsTest {
 extension EmptyOrInvalidResultsTest where Self: RealmTestCase {
 
     func testEmptyOrInvalidResults(filter: NSPredicate) {
-        let results = testRealm.objects(ObjectType.self).filter(filter)
+        let results = realm.objects(ObjectType.self).filter(filter)
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }

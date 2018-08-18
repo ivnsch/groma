@@ -12,7 +12,7 @@ protocol ResultMatches {
 
 extension ResultMatches where Self: RealmTestCase {
     func getTestResultWithOneObject<T: Object>(predicate: NSPredicate) -> T {
-        let results = testRealm.objects(T.self).filter(predicate)
+        let results = realm.objects(T.self).filter(predicate)
         XCTAssert(results.count == 1)
         return results[0]
     }

@@ -46,6 +46,9 @@ public class List: DBSyncable, Identifiable, WithUuid {
     }
 
     public var todoSections = RealmSwift.List<Section>()
+
+    // These are not ordered inside sections in the UI so list references items directly
+    // We use list of sections when we need order by section in the UI
     public var doneListItems = RealmSwift.List<ListItem>()
     public var stashListItems = RealmSwift.List<ListItem>()
     

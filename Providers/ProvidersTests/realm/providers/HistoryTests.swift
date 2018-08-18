@@ -15,22 +15,22 @@ class HistoryTests: RealmTestCase {
 
     func testAddHistoryItemWithAddingManuallyDependencies() {
 
-        testRealm.beginWrite()
+        realm.beginWrite()
 
         // Prepare
         let inventory = DBInventory(uuid: uuid(), name: "inventory", users: [], bgColor: UIColor.black, order: 0)
         let category = ProductCategory(uuid: uuid(), name: "category", color: UIColor.red)
         let item1 = Item(uuid: uuid(), name: "item1", category: category, fav: 0, edible: true)
-        testRealm.add(item1)
+        realm.add(item1)
         let product = Product(uuid: uuid(), item: item1, brand: "brand1", fav: 0)
-        testRealm.add(product)
+        realm.add(product)
         let unit = Providers.Unit(uuid: uuid(), name: "unit1", id: .can, buyable: true)
-        testRealm.add(unit)
+        realm.add(unit)
         let quantifiableProduct = QuantifiableProduct(uuid: uuid(), baseQuantity: 1, secondBaseQuantity: 1, unit: unit, product: product, fav: 0)
-        testRealm.add(quantifiableProduct)
+        realm.add(quantifiableProduct)
         let obj = HistoryItem(uuid: uuid(), inventory: inventory, product: quantifiableProduct, addedDate: Date().toMillis(), quantity: 1, user: DBSharedUser(email: "foo1@bar.com"), paidPrice: 1)
 
-        try! testRealm.commitWrite()
+        try! realm.commitWrite()
 
         // Test
         let success = provider.add(historyItem: obj)
@@ -63,7 +63,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadSortedByDateInDescendingOrder() {
         // Prepare
-        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let results = provider.loadHistoryItems(inventory: obj1.inventory)
@@ -85,7 +85,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadWithStartDate() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let results = provider.loadHistoryItems(startDate: obj2.addedDate, inventory: obj1.inventory)
@@ -99,7 +99,7 @@ class HistoryTests: RealmTestCase {
     /// Same as testLoadWithStartDate but using the start date of first item instead of second
     func testLoadWithStartDate2() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let results = provider.loadHistoryItems(startDate: obj1.addedDate, inventory: obj1.inventory)
@@ -111,7 +111,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadWithProductNameAndStartDate() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let results = provider.loadHistoryItems("item1", startDate: obj2.addedDate, inventory: obj1.inventory)
@@ -123,7 +123,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadAllHistoryItems() {
         // Prepare
-        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let results = provider.loadAllHistoryItems()
@@ -137,7 +137,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadWithMonthYear() {
         // Prepare
-        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let pastMonthYear = Date().inMonths(-1).dayMonthYear
@@ -151,7 +151,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadWithStartAndEndDate() {
         // Prepare
-        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Debug
         print("obj1 added date: \(Date.from(millis: obj1.addedDate)), millis: \(obj1.addedDate)")
@@ -175,7 +175,7 @@ class HistoryTests: RealmTestCase {
 
     func testLoadGroups() {
         // Prepare
-        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: testRealm)
+        let (obj1, obj2, obj3) = DummyTestObjects.insert3HistoryItems(realm: realm)
 
         // Test
         let groups = provider.loadHistoryItemsGroups(NSRange(location: 0, length: 10), inventory: obj1.inventory)

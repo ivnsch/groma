@@ -126,19 +126,11 @@ public class Section: DBSyncable, Identifiable {
 
         updateCompoundKey()
     }
-    
+
+    // TODO redundancy order(ListItemStatusOrder)/status
     // NOTE: we reuse ListItemStatusOrder from list items, as content is what we need here also, maybe we should rename it
-    public convenience init(name: String, color: UIColor, list: List, order: ListItemStatusOrder, status: ListItemStatus, lastServerUpdate: Int64? = nil, removed: Bool = false) {
-        
-        let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
-            switch order.status {
-            case .todo: return (order.order, 0, 0)
-            case .done: return (0, order.order, 0)
-            case .stash: return (0, 0, order.order)
-            }
-        }()
-        
-        self.init(name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, status: status, lastServerUpdate: lastServerUpdate, removed: removed)
+    public convenience init(name: String, color: UIColor, list: List, status: ListItemStatus, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+        self.init(name: name, color: color, list: list, todoOrder: 0, doneOrder: 0, stashOrder: 0, status: status, lastServerUpdate: lastServerUpdate, removed: removed)
     }
     
     // MARK: - Filters

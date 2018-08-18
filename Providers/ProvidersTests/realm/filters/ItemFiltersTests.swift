@@ -14,7 +14,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testUuidFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Item.createFilter(uuid: obj1.uuid)), obj2: obj1)
@@ -23,7 +23,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Item.createFilter(name: obj1.name)), obj2: obj1)
@@ -32,17 +32,17 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameUppercaseFilter() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(name: obj1.name.uppercased()))
+        let results = realm.objects(Item.self).filter(Item.createFilter(name: obj1.name.uppercased()))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameInvalidCharsFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm, specialCharsName: true)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Item.createFilter(name: obj1.name)), obj2: obj1)
@@ -51,10 +51,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameContainsFilterMultipleMatches() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains("ob"))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains("ob"))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -64,10 +64,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameContainsFilterSingleMatch() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains("obj1"))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains("obj1"))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -75,10 +75,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameContainsUppercaseFilter() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains(obj1.name.uppercased()))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains(obj1.name.uppercased()))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -86,38 +86,38 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameContainsFilterNoMatches() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains(nonExistentString))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains(nonExistentString))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameContainsFilterNoMatchesSpecialCharsQuery() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains(specialCharsTestString))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains(specialCharsTestString))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameContainsFilterNoMatchesSpecialChars() {
         // Prepare
-        testRealm.beginWrite()
+        realm.beginWrite()
 
         let category = ProductCategory(uuid: uuid(), name: "category", color: UIColor.red)
-        testRealm.add(category)
+        realm.add(category)
 
         let obj1 = Item(uuid: uuid(), name: specialCharsTestString, category: category, fav: 0, edible: true)
-        testRealm.add(obj1)
+        realm.add(obj1)
 
-        try! testRealm.commitWrite()
+        try! realm.commitWrite()
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterNameContains(specialCharsTestString))
+        let results = realm.objects(Item.self).filter(Item.createFilterNameContains(specialCharsTestString))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -125,10 +125,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterUuids() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid, obj2.uuid]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid, obj2.uuid]))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -138,10 +138,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterUuidsContainsOnlyOne() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -149,40 +149,40 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterUuidsEmptyArray() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids([]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids([]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsContainsNone() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids(["foo", "bar"]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids(["foo", "bar"]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsSpecialCharactersQuery() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids([specialCharsTestString]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids([specialCharsTestString]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsRepeatedParameters() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid, obj1.uuid]))
+        let results = realm.objects(Item.self).filter(Item.createFilterUuids([obj1.uuid, obj1.uuid]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -190,10 +190,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNames() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj2.name]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj2.name]))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -203,10 +203,10 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNamesContainsOnlyOne() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: [obj1.name]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: [obj1.name]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -214,30 +214,30 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNamesEmptyArray() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: []))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: []))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterNamesContainsNone() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: ["foo", "bar"]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: ["foo", "bar"]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterNamesRepeatedParameters() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj1.name]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj1.name]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -245,20 +245,20 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNamesSpecialCharactersQuery() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: [specialCharsTestString]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: [specialCharsTestString]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterNamesSpecialCharacters() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm, specialCharsName: true)
 
         // Test
-        let results = testRealm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj2.name]))
+        let results = realm.objects(Item.self).filter(Item.createFilter(names: [obj1.name, obj2.name]))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -268,7 +268,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testUuidFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(uuid: nonExistentString))
@@ -276,7 +276,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(name: nonExistentString))
@@ -284,7 +284,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testUuidFilterInvalidChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(uuid: specialCharsTestString))
@@ -292,7 +292,7 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameFilterInvalidChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(name: specialCharsTestString))
@@ -300,16 +300,16 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterEdible() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm, specialCharsName: true)
 
         // Test
-        let results1 = testRealm.objects(Item.self).filter(Item.createFilter(edible: true))
+        let results1 = realm.objects(Item.self).filter(Item.createFilter(edible: true))
         XCTAssert(results1.count == 1)
         let resultObj1 = results1[0]
         XCTAssertTrue(resultObj1.edible)
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
 
-        let results2 = testRealm.objects(Item.self).filter(Item.createFilter(edible: false))
+        let results2 = realm.objects(Item.self).filter(Item.createFilter(edible: false))
         XCTAssert(results2.count == 1)
         let resultObj2 = results2[0]
         XCTAssertFalse(resultObj2.edible)
@@ -318,16 +318,16 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsAndEdible() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj", edible: true))
+        let results1 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj", edible: true))
         XCTAssert(results1.count == 1)
         let resultObj1 = results1[0]
         XCTAssertTrue(resultObj1.edible)
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
 
-        let results2 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj", edible: false))
+        let results2 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj", edible: false))
         XCTAssert(results2.count == 1)
         let resultObj2 = results2[0]
         XCTAssertFalse(resultObj2.edible)
@@ -336,16 +336,16 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsPerfectMatchAndEdible() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj1", edible: true))
+        let results1 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj1", edible: true))
         XCTAssert(results1.count == 1)
         let resultObj1 = results1[0]
         XCTAssertTrue(resultObj1.edible)
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
 
-        let results2 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj2", edible: false))
+        let results2 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible("obj2", edible: false))
         XCTAssert(results2.count == 1)
         let resultObj2 = results2[0]
         XCTAssertFalse(resultObj2.edible)
@@ -354,14 +354,14 @@ class ItemFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testFilterNameContainsAndEdibleEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Items(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Items(realm: realm)
 
         // Test
-        let results1 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible(nonExistentString, edible: true))
+        let results1 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible(nonExistentString, edible: true))
         XCTAssert(results1.count == 0)
         XCTAssert(results1.isEmpty)
 
-        let results2 = testRealm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible(nonExistentString, edible: false))
+        let results2 = realm.objects(Item.self).filter(Item.createFilterNameContainsAndEdible(nonExistentString, edible: false))
         XCTAssert(results2.count == 0)
         XCTAssert(results2.isEmpty)
     }

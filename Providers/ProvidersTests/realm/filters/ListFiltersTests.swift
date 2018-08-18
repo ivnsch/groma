@@ -16,7 +16,7 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testUuidFilter() {
         // Prepare
-        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Providers.List.createFilter(uuid: obj1.uuid)), obj2: obj1)
@@ -25,7 +25,7 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameFilter() {
         // Prepare
-        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Providers.List.createFilter(name: obj1.name)), obj2: obj1)
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Providers.List.createFilter(name: obj2.name)), obj2: obj2)
@@ -33,7 +33,7 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameInvalidCharsFilter() {
         // Prepare
-        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm, specialCharsName: true)
+        let (_, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm, specialCharsName: true)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Providers.List.createFilter(name: obj1.name)), obj2: obj1)
@@ -42,10 +42,10 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testInventoryFilter() {
         // Prepare
-        let (inventory, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (inventory, obj1, obj2) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
-        let results = testRealm.objects(List.self).filter(Providers.List.createInventoryFilter(inventory.uuid))
+        let results = realm.objects(List.self).filter(Providers.List.createInventoryFilter(inventory.uuid))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: resultObj1)
@@ -57,7 +57,7 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testUuidFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createInventoryFilter(nonExistentString))
@@ -65,7 +65,7 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testNameFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createInventoryFilter(nonExistentString))
@@ -73,31 +73,31 @@ class ListFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTest 
 
     func testInventoryFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createInventoryFilter(nonExistentString))
     }
 
-    func testUuidFilterInvalidChars() {
+    func testUuidFilterSpecialChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createFilter(uuid: specialCharsTestString))
     }
 
-    func testNameFilterInvalidChars() {
+    func testNameFilterSpecialChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createFilter(uuid: specialCharsTestString))
     }
 
-    func testInventoryFilterInvalidChars() {
+    func testInventoryFilterSpecialChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insertInventoryAnd2Lists(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Providers.List.createInventoryFilter(specialCharsTestString))

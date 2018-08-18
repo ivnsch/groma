@@ -15,7 +15,7 @@ class RealmTestCase: XCTestCase {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
     }
 
-    lazy var testRealm: Realm = self.createRealm()
+    lazy var realm: Realm = self.createRealm()
 
     fileprivate func createRealm() -> Realm {
         let documentsDirectory = documentsDirectoryUrl
@@ -39,9 +39,9 @@ class RealmTestCase: XCTestCase {
 
     // Ensure all db state is empty
     fileprivate func clearRealm() {
-        testRealm.beginWrite()
-        testRealm.deleteAll()
-        try! testRealm.commitWrite()
+        realm.beginWrite()
+        realm.deleteAll()
+        try! realm.commitWrite()
     }
 
     override func tearDown() {

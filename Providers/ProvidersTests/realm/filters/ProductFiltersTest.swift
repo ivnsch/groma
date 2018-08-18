@@ -14,7 +14,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testUuidFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Product.createFilter(obj1.uuid)), obj2: obj1)
@@ -23,7 +23,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Product.createFilterName(obj1.item.name)), obj2: obj1)
@@ -32,17 +32,17 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameUppercaseFilter() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterName(obj1.item.name.uppercased()))
+        let results = realm.objects(Product.self).filter(Product.createFilterName(obj1.item.name.uppercased()))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameInvalidCharsFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm, specialCharsName: true)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Product.createFilterName(obj1.item.name)), obj2: obj1)
@@ -51,10 +51,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameContainsFilterMultipleMatches() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains("ob"))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains("ob"))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -64,10 +64,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameContainsFilterSingleMatch() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains("obj1"))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains("obj1"))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -75,10 +75,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameContainsUppercaseFilter() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains(obj1.item.name.uppercased()))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains(obj1.item.name.uppercased()))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -86,38 +86,38 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameContainsFilterNoMatches() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains(nonExistentString))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains(nonExistentString))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameContainsFilterNoMatchesSpecialCharsQuery() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains(specialCharsTestString))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains(specialCharsTestString))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testNameContainsFilterNoMatchesSpecialChars() {
         // Prepare
-        testRealm.beginWrite()
+        realm.beginWrite()
 
         let category = ProductCategory(uuid: uuid(), name: "category", color: UIColor.red)
-        testRealm.add(category)
+        realm.add(category)
 
         let obj1 = Product(uuid: uuid(), name: specialCharsTestString, category: category, brand: "brand1", fav: 0, edible: true)
-        testRealm.add(obj1)
+        realm.add(obj1)
 
-        try! testRealm.commitWrite()
+        try! realm.commitWrite()
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterNameContains(specialCharsTestString))
+        let results = realm.objects(Product.self).filter(Product.createFilterNameContains(specialCharsTestString))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -125,10 +125,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testFilterUuids() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid, obj2.uuid]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid, obj2.uuid]))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -138,10 +138,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testFilterUuidsContainsOnlyOne() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -149,40 +149,40 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testFilterUuidsEmptyArray() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids([]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids([]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsContainsNone() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids(["foo", "bar"]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids(["foo", "bar"]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsSpecialCharactersQuery() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids([specialCharsTestString]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids([specialCharsTestString]))
         XCTAssert(results.count == 0)
         XCTAssert(results.isEmpty)
     }
 
     func testFilterUuidsRepeatedParameters() {
         // Prepare
-        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid, obj1.uuid]))
+        let results = realm.objects(Product.self).filter(Product.createFilterUuids([obj1.uuid, obj1.uuid]))
         XCTAssert(results.count == 1)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -190,7 +190,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testUuidFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(uuid: nonExistentString))
@@ -198,7 +198,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameFilterEmpty() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(name: nonExistentString))
@@ -206,7 +206,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testUuidFilterInvalidChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(uuid: specialCharsTestString))
@@ -214,7 +214,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameFilterInvalidChars() {
         // Prepare
-        let (_, _, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (_, _, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Item.createFilter(name: specialCharsTestString))
@@ -222,7 +222,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testBrandFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Product.createFilterBrand(obj1.brand)), obj2: obj1)
@@ -232,7 +232,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testUniqueFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         let obj1Unique = ProductUnique(name: "obj1", brand: "brand1")
@@ -244,7 +244,7 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testNameBrandFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Product.createFilterNameBrand(obj1.item.name, brand: obj1.brand)), obj2: obj1)
@@ -254,10 +254,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testBrandContainsFilterMultipleMatches() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterBrandContains("bran"))
+        let results = realm.objects(Product.self).filter(Product.createFilterBrandContains("bran"))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -268,10 +268,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testCategoryFilter() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterCategoryNameContains("categ"))
+        let results = realm.objects(Product.self).filter(Product.createFilterCategoryNameContains("categ"))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)
@@ -282,10 +282,10 @@ class ProductFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTe
 
     func testCategoryNameContainsFilterMultipleMatches() {
         // Prepare
-        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: testRealm)
+        let (obj1, obj2, _) = DummyTestObjects.insert2Products(realm: realm)
 
         // Test
-        let results = testRealm.objects(Product.self).filter(Product.createFilterCategoryNameContains("categ"))
+        let results = realm.objects(Product.self).filter(Product.createFilterCategoryNameContains("categ"))
         XCTAssert(results.count == 2)
         let resultObj1 = results[0]
         EqualityTests.equals(obj1: resultObj1, obj2: obj1)

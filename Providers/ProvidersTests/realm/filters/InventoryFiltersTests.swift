@@ -16,7 +16,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testUuidFilter() {
         // Prepare
-        let (inventory1, inventory2) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (inventory1, inventory2) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: DBInventory.createFilter(uuid: inventory1.uuid)), obj2: inventory1)
@@ -25,7 +25,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testNameFilter() {
         // Prepare
-        let (inventory1, inventory2) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (inventory1, inventory2) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: DBInventory.createFilter(name: inventory1.name)), obj2: inventory1)
@@ -34,7 +34,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testNameInvalidCharsFilter() {
         // Prepare
-        let (obj1, obj2) = DummyTestObjects.insert2Inventories(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2) = DummyTestObjects.insert2Inventories(realm: realm, specialCharsName: true)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: DBInventory.createFilter(name: obj1.name)), obj2: obj1)
@@ -45,7 +45,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testUuidFilterEmpty() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: DBInventory.createFilter(uuid: nonExistentString))
@@ -53,7 +53,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testNameFilterEmpty() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: DBInventory.createFilter(name: nonExistentString))
@@ -61,7 +61,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testUuidFilterInvalidChars() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: DBInventory.createFilter(uuid: specialCharsTestString))
@@ -69,7 +69,7 @@ class InventoryFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResults
 
     func testNameFilterInvalidChars() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Inventories(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Inventories(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: DBInventory.createFilter(name: specialCharsTestString))

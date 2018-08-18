@@ -16,7 +16,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testUuidFilter() {
         // Prepare
-        let (recipe1, recipe2) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (recipe1, recipe2) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Recipe.createFilter(recipe1.uuid)), obj2: recipe1)
@@ -25,7 +25,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testNameFilter() {
         // Prepare
-        let (recipe1, recipe2) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (recipe1, recipe2) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Recipe.createFilterName(recipe1.name)), obj2: recipe1)
@@ -34,7 +34,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testNameInvalidCharsFilter() {
         // Prepare
-        let (obj1, obj2) = DummyTestObjects.insert2Recipes(realm: testRealm, specialCharsName: true)
+        let (obj1, obj2) = DummyTestObjects.insert2Recipes(realm: realm, specialCharsName: true)
 
         // Test
         EqualityTests.equals(obj1: getTestResultWithOneObject(predicate: Recipe.createFilterName(obj1.name)), obj2: obj1)
@@ -45,7 +45,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testUuidFilterEmpty() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Recipe.createFilter(nonExistentString))
@@ -53,7 +53,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testNameFilterEmpty() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Recipe.createFilterName(nonExistentString))
@@ -61,7 +61,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testUuidFilterInvalidChars() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Recipe.createFilter(specialCharsTestString))
@@ -69,7 +69,7 @@ class RecipeFiltersTests: RealmTestCase, ResultMatches, EmptyOrInvalidResultsTes
 
     func testNameFilterInvalidChars() {
         // Prepare
-        let (_, _) = DummyTestObjects.insert2Recipes(realm: testRealm)
+        let (_, _) = DummyTestObjects.insert2Recipes(realm: realm)
 
         // Test
         testEmptyOrInvalidResults(filter: Recipe.createFilterName(specialCharsTestString))

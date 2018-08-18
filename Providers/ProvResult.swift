@@ -10,6 +10,7 @@ import Foundation
 
 public enum DatabaseError: Int {
     case unknown
+    case invalidInput
 }
 
 enum ProvResult<T, V> {

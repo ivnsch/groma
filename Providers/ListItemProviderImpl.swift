@@ -373,7 +373,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     // Retrieves section and product identified by semantic unique, if they don't exist creates new ones
     fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, realmData: RealmData?, _ handler: @escaping (ProviderResult<(Section, QuantifiableProduct)>) -> Void) {
-        Prov.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
+        Prov.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .todo, list: list) {result in
             
             if let section = result.sucessResult {
                 

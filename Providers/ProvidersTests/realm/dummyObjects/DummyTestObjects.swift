@@ -14,6 +14,53 @@ import RealmSwift
 */
 class DummyTestObjects {
 
+    static func insert2ListItems(realm: Realm, status: ListItemStatus, specialCharsName: Bool = false) -> Insert2ListItemsResult {
+        realm.beginWrite()
+
+        let inventory = DBInventory(uuid: uuid(), name: "inventory", users: [], bgColor: UIColor.black, order: 0)
+        realm.add(inventory)
+
+        let list = Providers.List(uuid: uuid(), name: "list", color: UIColor.red, order: 0, inventory: inventory, store: "store1")
+
+        let section1 = Section(name: "section1", color: UIColor.red, list: list, status: status)
+        let section2 = Section(name: "section2", color: UIColor.blue, list: list, status: status)
+
+        let category = ProductCategory(uuid: uuid(), name: "category", color: UIColor.red)
+        realm.add(category)
+
+        let item1 = Item(uuid: uuid(), name: "item1", category: category, fav: 0, edible: true)
+        realm.add(item1)
+        let item2 = Item(uuid: uuid(), name: "item2", category: category, fav: 0, edible: false)
+        realm.add(item2)
+
+        let product1 = Product(uuid: uuid(), item: item1, brand: "brand1", fav: 0)
+        realm.add(product1)
+        let product2 = Product(uuid: uuid(), item: item2, brand: "brand2", fav: 0)
+        realm.add(product2)
+
+        let unit1 = Providers.Unit(uuid: uuid(), name: "unit1", id: .can, buyable: true)
+        realm.add(unit1)
+        let unit2 = Providers.Unit(uuid: uuid(), name: "unit2", id: .clove, buyable: false)
+        realm.add(unit2)
+
+        let quantifiableProduct1 = QuantifiableProduct(uuid: uuid(), baseQuantity: 1, secondBaseQuantity: 1, unit: unit1, product: product1, fav: 0)
+        realm.add(quantifiableProduct1)
+        let quantifiableProduct2 = QuantifiableProduct(uuid: uuid(), baseQuantity: 2, secondBaseQuantity: 2, unit: unit2, product: product2, fav: 0)
+        realm.add(quantifiableProduct2)
+
+        let storeProduct1 = StoreProduct(uuid: uuid(), refPrice: 1, refQuantity: 1, product: quantifiableProduct1)
+        let storeProduct2 = StoreProduct(uuid: uuid(), refPrice: 2, refQuantity: 2, product: quantifiableProduct2)
+
+        let obj1 = ListItem(uuid: uuid(), product: storeProduct1, section: section1, list: list, note: nil, quantity: 1)
+        realm.add(obj1)
+        let obj2 = ListItem(uuid: uuid(), product: storeProduct2, section: section2, list: list, note: nil, quantity: 1)
+        realm.add(obj2)
+
+        try! realm.commitWrite()
+
+        return (obj1: obj1, obj2: obj2)
+    }
+
     static func insert2Products(realm: Realm, specialCharsName: Bool = false) -> Insert2ProductsResult {
         realm.beginWrite()
 
@@ -46,6 +93,19 @@ class DummyTestObjects {
         return (obj1: obj1, obj2: obj2, category: category)
     }
 
+    static func insert2Categories(realm: Realm, specialCharsName: Bool = false) -> Insert2CategoriesResult {
+        realm.beginWrite()
+
+        let obj1 = ProductCategory(uuid: uuid(), name: name(specialCharsName, 1), color: UIColor.red)
+        realm.add(obj1)
+        let obj2 = ProductCategory(uuid: uuid(), name: name(specialCharsName, 2), color: UIColor.blue)
+        realm.add(obj2)
+
+        try! realm.commitWrite()
+
+        return (obj1: obj1, obj2: obj2)
+    }
+    
     static func insert2Inventories(realm: Realm, specialCharsName: Bool = false) -> Insert2InventoriesResult {
         realm.beginWrite()
 
@@ -92,7 +152,7 @@ class DummyTestObjects {
         return (inventory: inventory, list1: list1, list2: list2)
     }
 
-    static func insert3HistoryItems(realm: Realm, specialCharsName: Bool = false) -> Insert3HistoryItemsResult {
+    static func insert3HistoryItems(realm: Realm) -> Insert3HistoryItemsResult {
         realm.beginWrite()
 
         let inventory = DBInventory(uuid: uuid(), name: "inventory", users: [], bgColor: UIColor.black, order: 0)
@@ -133,6 +193,30 @@ class DummyTestObjects {
         return (obj1: historyItem1, obj2: historyItem2, obj3: historyItem3)
     }
 
+    static func insert2Sections(realm: Realm, status: ListItemStatus, specialCharsName: Bool = false) -> Insert2SectionsResult {
+        realm.beginWrite()
+
+        let inventory = DBInventory(uuid: uuid(), name: "inventory", users: [], bgColor: UIColor.black, order: 0)
+        realm.add(inventory)
+
+        let list = List(uuid: uuid(), name: name(specialCharsName, 1), users: [], color: UIColor.red, order: 0, inventory: inventory, store: "store1")
+        realm.add(list)
+
+        let section1 = Section(name: name(specialCharsName, 1), color: UIColor.red, list: list, status: status)
+        realm.add(section1)
+        let section2 = Section(name: name(specialCharsName, 2), color: UIColor.black, list: list, status: status)
+        realm.add(section2)
+
+        if status == .todo {
+            list.todoSections.append(section1)
+            list.todoSections.append(section2)
+        }
+
+        try! realm.commitWrite()
+
+        return (obj1: section1, obj2: section2)
+    }
+
     /**
     * Non-special char name is "obj" + index, e.g. obj1, obj2, obj3
     * Special char is the specialCharsTestString global constant + index
@@ -141,6 +225,16 @@ class DummyTestObjects {
         return specialChars ? "\(specialCharsTestString)\(index)" : "obj\(index)"
     }
 }
+
+typealias Insert2SectionsResult = (
+    obj1: Section,
+    obj2: Section
+)
+
+typealias Insert2ListItemsResult = (
+    obj1: ListItem,
+    obj2: ListItem
+)
 
 typealias Insert3HistoryItemsResult = (
     obj1: HistoryItem,
@@ -152,6 +246,11 @@ typealias Insert2ItemsResult = (
     obj1: Item,
     obj2: Item,
     category: ProductCategory
+)
+
+typealias Insert2CategoriesResult = (
+    obj1: ProductCategory,
+    obj2: ProductCategory
 )
 
 typealias Insert2ProductsResult = (

@@ -181,8 +181,8 @@ class ProvidersTests: XCTestCase {
         }
 
         // Add some sections
-        let section1 = Section(name: "section1", color: UIColor.blue, list: list, order: ListItemStatusOrder(status: .todo, order: 0), status: .todo)
-        let section2 = Section(name: "section2", color: UIColor.red, list: list, order: ListItemStatusOrder(status: .done, order: 0), status: .done)
+        let section1 = Section(name: "section1", color: UIColor.blue, list: list, status: .todo)
+        let section2 = Section(name: "section2", color: UIColor.red, list: list, status: .done)
         let sections = [section1, section2]
         for section in sections {
             realm.add(section)

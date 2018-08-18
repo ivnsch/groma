@@ -119,17 +119,18 @@ class SectionProviderImpl: SectionProvider {
     }
 
     func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ()) {
-        DBProv.sectionProvider.loadSections(names, list: list) {sections in
-            if let sections = sections {
-                handler(ProviderResult(status: .success, sucessResult: sections.toArray()))
-            } else {
+        DBProv.sectionProvider.loadSections(names, list: list) { sections in
+            switch sections {
+            case .ok(let result):
+                handler(ProviderResult(status: .success, sucessResult: result.toArray()))
+            case .err(let error):
                 logger.e("Couldn't load items")
                 handler(ProviderResult(status: .unknown))
             }
         }
     }
     
-    func mergeOrCreateSection(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: @escaping (ProviderResult<Section>) -> Void) {
+    func mergeOrCreateSection(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<Section>) -> Void) {
         
         // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
         loadSection(sectionName, list: list) {result in
@@ -143,26 +144,19 @@ class SectionProviderImpl: SectionProvider {
                     handler(ProviderResult(status: .success, sucessResult: updatedSection))
                     
                 } else {
-                    if let order = possibleNewOrder {
-                        let section = Section(name: sectionName, color: sectionColor, list: list, order: order, status: status)
-                        handler(ProviderResult(status: .success, sucessResult: section))
-                        
-                    } else { // no order known in advance - fetch listItems to count how many sections, order at the end
-                        
-                        Prov.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.first) {result in
-                            
-                            if let listItems = result.sucessResult {
-                                let order = listItems.sectionCount(status)
-                                
-                                let section = Section(name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order), status: status)
-                                
-                                logger.v("Section: \(sectionName) doesn't exist, will create a new one. New unique: \(section.unique.toString()). List uuid: \(list.uuid)")
-                                handler(ProviderResult(status: .success, sucessResult: section))
-                                
-                            } else {
-                                print("Error: loading section: \(result.status)")
-                                handler(ProviderResult(status: .databaseUnknown))
-                            }
+                    Prov.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.first) {result in
+
+                        if let listItems = result.sucessResult {
+                            let order = listItems.sectionCount(status)
+
+                            let section = Section(name: sectionName, color: sectionColor, list: list, status: status)
+
+                            logger.v("Section: \(sectionName) doesn't exist, will create a new one. New unique: \(section.unique.toString()). List uuid: \(list.uuid)")
+                            handler(ProviderResult(status: .success, sucessResult: section))
+
+                        } else {
+                            print("Error: loading section: \(result.status)")
+                            handler(ProviderResult(status: .databaseUnknown))
                         }
                     }
                 }

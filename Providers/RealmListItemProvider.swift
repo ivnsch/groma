@@ -814,7 +814,7 @@ class RealmListItemProvider: RealmProvider {
         
         let listItemPrototypes = inputs.map {input -> ProvResult<ListItemPrototype, DatabaseError> in
             
-            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(input.section, sectionColor: input.sectionColor, status: status, possibleNewOrder: nil, list: list, realmData: nil)
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(input.section, sectionColor: input.sectionColor, status: status, list: list, realmData: nil)
             let quantifiableProductResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: input.toProductPrototype(), updateCategory: true, save: false)
             
             return sectionResult.join(result: quantifiableProductResult).map {(tuple, quantifiableProduct) in
@@ -958,7 +958,7 @@ class RealmListItemProvider: RealmProvider {
         // NOTE executing everything in the same transaction otherwise it ignores the notification token (i.e. it sends the notification) in some places, e.g. incrementSync!
         func transactionContent(realmData: RealmData?) -> AddListItemResult? {
 
-            switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false) {
+            switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, overwriteColorIfAlreadyExists: overwriteColorIfAlreadyExists, status: status, list: list, realmData: realmData, doTransaction: false) {
 
             case .ok(let sectionResult):
 
@@ -1171,7 +1171,7 @@ class RealmListItemProvider: RealmProvider {
             })
         }
 
-        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, status: .done, realmData: realmData) {
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, list: list, status: .done, realmData: realmData) {
             
         case .ok(let sectionResult):
             
@@ -1330,7 +1330,7 @@ class RealmListItemProvider: RealmProvider {
             let foundAndDeletedListItem = DBProv.listItemProvider.deletePossibleListItemWithUniqueSync(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list, realmData: realmData, doTransaction: false)
             
             // update or create section
-            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, status: status, realmData: realmData, doTransaction: false)
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, list: list, status: status, realmData: realmData, doTransaction: false)
             
             var changedSection = false
             var addedNewSectionIndex: Int?

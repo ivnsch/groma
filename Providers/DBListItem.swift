@@ -16,7 +16,7 @@ public enum ListItemStatus: Int {
 }
 
 public typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Float)
-public typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // TODO rename as this is used now for sections too
+public typealias ListItemStatusOrder = (status: ListItemStatus, order: Int)
 
 
 public class ListItem: DBSyncable, Identifiable, WithUuid {
