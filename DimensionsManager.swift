@@ -359,8 +359,27 @@ class DimensionsManager {
         case .large, .xLarge: return 60
         }
     }
-    
+
+    static var topConstraintLoginButton: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 31
+        case .small: return 31
+        case .middle: return 31
+        case .large, .xLarge: return 40
+        }
+    }
+
+    static var topConstraintRegisterButton: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 18
+        case .small: return 18
+        case .middle: return 18
+        case .large, .xLarge: return 25
+        }
+    }
+
     // MARK: Report
+
     
     static var pieChartRadius: CGFloat {
         switch heightDimension {

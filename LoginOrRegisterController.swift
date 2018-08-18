@@ -30,6 +30,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     @IBOutlet weak var fbButton: UIButton!
     @IBOutlet weak var registerButton: UIButton! // switch to other screen button - login when in .register mode
     @IBOutlet weak var eyeView: UIButton!
+    @IBOutlet weak var loginOrRegisterTopConstraint: NSLayoutConstraint!
 
     weak var delegate: LoginOrRegisterDelegate?
 
@@ -51,14 +52,22 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
                 forgotPWOrTermsButton.setTitle(trans("title_forgot_password"), for: .normal)
 
+                loginOrRegisterTopConstraint.constant = DimensionsManager.topConstraintLoginButton
+
             case .register:
                 title = trans("title_register")
                 loginButton.setTitle(trans("title_register"), for: .normal)
                 registerButton.setTitle(trans("title_login"), for: .normal)
 
-                let buttonTranslation = trans("register_accept_terms")
-                let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
-                forgotPWOrTermsButton.setAttributedTitle(attributedText, for: .normal)
+                // For now disabled as there are no terms and conditions
+//                let buttonTranslation = trans("register_accept_terms")
+//                let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
+//                forgotPWOrTermsButton.setAttributedTitle(attributedText, for: .normal)
+                
+                forgotPWOrTermsButton.setTitle("", for: .normal)
+                forgotPWOrTermsButton.isHidden = true
+
+                loginOrRegisterTopConstraint.constant = DimensionsManager.topConstraintRegisterButton
             }
         }
     }
@@ -95,6 +104,10 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         staticLayout()
         
         onUIReady?()
+
+        // Trigger didSet
+        let mode = self.mode
+        self.mode = mode
     }
 
     fileprivate func staticLayout() {

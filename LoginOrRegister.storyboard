@@ -265,23 +265,6 @@
                             <constraint firstItem="pYQ-Up-a4i" firstAttribute="leading" secondItem="nUK-Yj-LWy" secondAttribute="leading" constant="-10" id="2E8-xe-m19"/>
                             <constraint firstItem="hdX-n4-JQq" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nUK-Yj-LWy" secondAttribute="trailing" constant="40" id="6CY-UT-oJ5"/>
                             <constraint firstItem="eXu-Xy-HZG" firstAttribute="centerX" secondItem="sPT-0h-rdt" secondAttribute="centerX" id="85r-cb-XY8"/>
-                            <constraint firstItem="Ktj-23-cyZ" firstAttribute="top" secondItem="eXu-Xy-HZG" secondAttribute="bottom" constant="10" id="8rG-gK-Zrh" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <integer key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </constraint>
                             <constraint firstItem="tDw-9e-mZm" firstAttribute="centerY" secondItem="nUK-Yj-LWy" secondAttribute="centerY" id="Bx3-GT-ri1"/>
                             <constraint firstItem="sVW-c9-pTZ" firstAttribute="centerX" secondItem="sPT-0h-rdt" secondAttribute="centerX" id="EWo-01-xzv"/>
                             <constraint firstItem="bw0-j8-uAM" firstAttribute="leading" secondItem="nUK-Yj-LWy" secondAttribute="leading" id="FoG-AK-VcM"/>
@@ -325,6 +308,23 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="yKm-uq-lwo" firstAttribute="leading" secondItem="bw0-j8-uAM" secondAttribute="leading" id="NLr-fU-Ctc"/>
+                            <constraint firstItem="Ktj-23-cyZ" firstAttribute="top" secondItem="pYQ-Up-a4i" secondAttribute="bottom" constant="90" id="O20-aj-z9e" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <integer key="value" value="80"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <integer key="value" value="80"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <integer key="value" value="80"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <integer key="value" value="90"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstItem="6r8-Eq-vDW" firstAttribute="centerY" secondItem="bw0-j8-uAM" secondAttribute="centerY" id="Q3a-gJ-fhl"/>
                             <constraint firstItem="tDw-9e-mZm" firstAttribute="leading" secondItem="nUK-Yj-LWy" secondAttribute="leading" id="Sgp-Nv-s1g"/>
                             <constraint firstItem="pYQ-Up-a4i" firstAttribute="trailing" secondItem="nUK-Yj-LWy" secondAttribute="trailing" constant="10" id="WBB-x0-B2E"/>
@@ -332,23 +332,7 @@
                             <constraint firstItem="i2w-Ea-Xfq" firstAttribute="centerX" secondItem="sPT-0h-rdt" secondAttribute="centerX" id="bef-R1-J2B"/>
                             <constraint firstItem="pYQ-Up-a4i" firstAttribute="top" secondItem="bw0-j8-uAM" secondAttribute="bottom" constant="10" id="ea9-Fn-8bp"/>
                             <constraint firstItem="bw0-j8-uAM" firstAttribute="trailing" secondItem="nUK-Yj-LWy" secondAttribute="trailing" id="iEZ-8P-WSX"/>
-                            <constraint firstItem="eXu-Xy-HZG" firstAttribute="top" secondItem="evX-Gm-bbJ" secondAttribute="bottom" constant="10" id="r6b-23-5n4" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <integer key="value" value="-5"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="-5"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <integer key="value" value="-5"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </constraint>
+                            <constraint firstItem="eXu-Xy-HZG" firstAttribute="top" secondItem="pYQ-Up-a4i" secondAttribute="bottom" constant="50" id="lZv-BQ-nl4"/>
                             <constraint firstItem="evX-Gm-bbJ" firstAttribute="top" secondItem="pYQ-Up-a4i" secondAttribute="bottom" constant="10" id="rL8-EW-KFc"/>
                             <constraint firstItem="nUK-Yj-LWy" firstAttribute="top" secondItem="awZ-eE-jJR" secondAttribute="bottom" constant="10" id="swD-iI-TXy"/>
                             <constraint firstItem="yKm-uq-lwo" firstAttribute="centerY" secondItem="bw0-j8-uAM" secondAttribute="centerY" id="x0i-64-R8D"/>
@@ -379,6 +363,7 @@
                         <outlet property="fbButton" destination="i2w-Ea-Xfq" id="Cpe-Aa-fg4"/>
                         <outlet property="forgotPWOrTermsButton" destination="evX-Gm-bbJ" id="hwi-D6-z0O"/>
                         <outlet property="loginButton" destination="pYQ-Up-a4i" id="2lY-ug-EMO"/>
+                        <outlet property="loginOrRegisterTopConstraint" destination="lZv-BQ-nl4" id="GeO-t1-Ro3"/>
                         <outlet property="passwordField" destination="bw0-j8-uAM" id="KKP-kO-n2v"/>
                         <outlet property="registerButton" destination="eXu-Xy-HZG" id="FvX-aT-w9t"/>
                         <outlet property="userNameField" destination="nUK-Yj-LWy" id="bee-Qy-VZ8"/>
