@@ -77,8 +77,6 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate var maxLeftSideWidth: CGFloat = 0
     
-    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
-
     fileprivate var pullToAdd: PullToAddHelper?
 
     // To differenciate from add, etc. We need to disable the animation of top menu to bottom in this case

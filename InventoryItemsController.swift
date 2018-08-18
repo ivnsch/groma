@@ -242,8 +242,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         } else { // if there's no top controller open, open the quick add controller
             
             func open() {
-                topQuickAddControllerManager?.expand(true)
                 toggleButtonRotator.enabled = false
+                topQuickAddControllerManager?.expand(true)
                 topQuickAddControllerManager?.controller?.initContent()
                 
                 topBar.setLeftButtonIds([])

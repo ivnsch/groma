@@ -38,8 +38,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         super.init(coder: aDecoder)
     }
     
-    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
-    
+    fileprivate(set) var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+
     var tableView: UITableView {
         fatalError("override")
     }
@@ -234,8 +234,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     
     /// itemToEdit != nil -> Edit mode
     func openQuickAdd(rotateTopBarButton: Bool = true, itemToEdit: AddEditItem? = nil) {
-        topQuickAddControllerManager?.expand(true)
         toggleButtonRotator.enabled = false
+        topQuickAddControllerManager?.expand(true)
         topQuickAddControllerManager?.controller?.initContent()
         
         topBar.setLeftButtonIds([])
