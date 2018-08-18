@@ -15,8 +15,9 @@ public protocol HistoryProvider {
 
     /**
     * Get all history items with a date greater or equal than startDate, until today
+     // TODO - not used - remove?
     */
-    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
+//    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
 
     func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
     

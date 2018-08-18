@@ -117,7 +117,7 @@ public class HistoryItem: DBSyncable, Identifiable, WithUuid {
     
     static func createPredicate(_ productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "productOpt.name == %@", productName),
+            NSPredicate(format: "productOpt.productOpt.itemOpt.name == %@", productName),
             createFilterAddedSameDateOrLater(date: addedDate),
             createFilterWithInventory(inventoryUuid)
         ])
@@ -126,7 +126,7 @@ public class HistoryItem: DBSyncable, Identifiable, WithUuid {
     static func createPredicate(_ startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [
             createFilterAddedSameDateOrLater(date: startAddedDate),
-            createFilterAddedSameDateOrBefore(date: startAddedDate),
+            createFilterAddedSameDateOrBefore(date: endAddedDate),
             createFilterWithInventory(inventoryUuid)
         ])
     }

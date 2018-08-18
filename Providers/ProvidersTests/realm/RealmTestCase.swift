@@ -24,12 +24,15 @@ class RealmTestCase: XCTestCase {
         }
         let realmUrl = documentsDirectoryUrl.appendingPathComponent("testRealm.realm")
 
-        print("Realm path: \(realmUrl)")
+        print("Test Realm path: \(realmUrl)")
         return try! Realm(fileURL: realmUrl)
     }
 
     override func setUp() {
         super.setUp()
+
+        RealmConfig.setTestConfiguration()
+
         // Put setup code here. This method is called before the invocation of each test method in the class.
         clearRealm()
     }

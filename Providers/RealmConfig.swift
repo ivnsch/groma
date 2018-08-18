@@ -33,6 +33,10 @@ public struct RealmConfig {
         return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.co.groma")
     }
 
+    fileprivate static var testRealmDirectory: URL? {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
+    }
+
     fileprivate static var localRealmUrlPreV2_1: URL? {
         return localRealmDirectoryPreV2_1.flatMap { localRealmUrlFor(directory: $0) }
     }
@@ -41,8 +45,16 @@ public struct RealmConfig {
         return localRealmDirectory.flatMap { localRealmUrlFor(directory: $0) }
     }
 
+    fileprivate static var testRealmUrl: URL? {
+        return testRealmDirectory.flatMap { testRealmUrlFor(directory: $0) }
+    }
+
     fileprivate static func localRealmUrlFor(directory: URL) -> URL? {
         return directory.appendingPathComponent("default.realm")
+    }
+
+    fileprivate static func testRealmUrlFor(directory: URL) -> URL? {
+        return directory.appendingPathComponent("testRealm.realm")
     }
 
     fileprivate static let schemaVersion: UInt64 = 2
@@ -73,7 +85,13 @@ public struct RealmConfig {
 
         logger.i("Realm path: \(String(describing: Realm.Configuration.defaultConfiguration.fileURL))", .db)
     }
-    
+
+    public static func setTestConfiguration() {
+        Realm.Configuration.defaultConfiguration = RealmConfig.testRealmConfig
+        logger.i("did sest test Realm path: \(String(describing: Realm.Configuration.defaultConfiguration.fileURL))", .db)
+
+    }
+
     /**
      * For app versions pre-2.1 Realm has to be moved to share folder.
      * Shared folder is necessary to share Realm with SiriKit extension.
@@ -127,6 +145,12 @@ public struct RealmConfig {
     public static var localRealmConfig: Realm.Configuration {
         var config = RealmConfig.config
         config.fileURL = localRealmUrl
+        return config
+    }
+
+    public static var testRealmConfig: Realm.Configuration {
+        var config = RealmConfig.config
+        config.fileURL = testRealmUrl
         return config
     }
 

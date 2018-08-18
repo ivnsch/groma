@@ -79,7 +79,7 @@ public extension Date {
             to: today,
             options: NSCalendar.Options(rawValue: 0))!
     }
-    
+
     public func inMonths(_ months: Int) -> Date {
         return (Calendar.current as NSCalendar).date(
             byAdding: .month,
@@ -111,6 +111,10 @@ public extension Date {
     
     public func toMillis() -> Int64 {
         return Int64(self.timeIntervalSince1970 * 1000)
+    }
+
+    public static func from(millis: Int64) -> Date {
+        return Date(timeIntervalSince1970: Double(millis) / 1000)
     }
 }
 
