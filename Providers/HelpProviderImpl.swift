@@ -114,45 +114,45 @@ class HelpProviderImpl: HelpProvider {
 
 //        HelpItem(title: "Kann ich die Abteilungen einer Shopping-Liste umsortieren?", text: "Ja, du kannst eine zoom-out Geste machen über die Listeneinträge um in Abteilungen-Modus zu wechseln, wo du umsortieren kannst."),
 
-        HelpItem(title: "Was ist der Unterschied zwischen Abteilungen und Kategorien?", text: "Kategorien ist wie du generell etwas einordnen willst. Die Abteilung ist der Ort im Laden, wo sich das Produkt befindet. Z.B. für Thunfisch könnte die Kategorie 'Fisch' lauten, und die Abteilung 'Dosenprodukte'."),
+        HelpItem(title: "Worin besteht der Unterschied zwischen Abteilungen und Kategorien?", text: "Eine  „Kategorie“ bezeichnet den Oberbegriff verschiedener Produkte. Äpfel findest du dementsprechend unter dem Oberbegriff Obst. Eine Abteilung ist der Bereich, in dem du das exakte Produkt findest. Kategorie und Abteilung müssen dabei nicht immer identisch sein! Thunfisch kannst du z. B. sowohl in der Kategorie \"Fisch\" als auch in der Abteilung \"Konserven\" finden."),
 
         HelpItem(title: "Was sind Basismengen", text: "", type: .basesPopup),
 
-        HelpItem(title: "Muss ich Preis, Einheit, Basis-Menge usw. benutzen?", text: "Nein! Das ist alles optional. Du kannst Groma als eine einfache Einkauflisten-App benutzen, wo du nur Eigenschaften wie Name oder Menge benutzt. Du bestimmst wie weit du gehen willst! Du kanns auch gerne mit diesen Werten experimentieren. Mit Zeit findest du was für dich Sinn macht."),
+        HelpItem(title: "Muss ich die vorgegebenen Mengeneinheiten benutzen?", text: "Nein! Alle Angaben sind optional. Du kannst Groma auch als reine Einkauflisten-App nutzen und mit Produkten und Mengen herumexperimentieren. Nur du bestimmst, wie weit du gehen willst!"),
 
 //        HelpItem(title: "Was ist das Zwischenlager?", text: "Das Zwischenlager dient zur Ablage von einzelnen Listeneinträgen, falls du nur ein Teil der Liste kaufst. Sobald alle Einträge gekauft sind, werden sie automatisch zurückgesetzt (in die Todo-Liste verschoben). Du kannst auch jederzeit die Einträge manuell zurücksetzen."),
 //
 //        HelpItem(title: "Was sind Gruppen? Etwa Rezepte?", text: "Gruppen erleichtern das Hinzufügen zusammenhängender Einträge. Damit kannst du u.A. die Zutaten speichern, die du für Rezepte kaufen musst."),
 
-        HelpItem(title: "Kann ich Einträge global editieren? Was sind Produkte?", text: "Produkte sind die zugrundeliegende Einheit aller Einträge in dieser App. Um global Eigenschaften zu editieren, also so dass es auch in den Listen, Gruppen, Inventare, Verlauf und Statistiken gemacht wird, musst du es nur einmal in der 'Produktverwaltung' Ansicht machen. Ebenso, wenn du Produkte global löschen willst, musst du es nur einmal in dieser Ansicht machen."),
+        HelpItem(title: "Kann ich die Einträge bearbeiten und was sind Produkte?", text: "Produkte umfassen generell alle Artikel dieser App. Solltest du den Produktnamen für alle Bereiche (Listen, Gruppen, Statistiken u.v.m.) abändern wollen, so kannst diese Änderungen in der Produktverwaltung vornehmen. Gleiches gilt, wenn du einzelne Produkte aus dem Menü löschen möchtest."),
 
-        HelpItem(title: "Wie kann ich Produktvorschläge aus dem Top-Menü entfernen?", text: "Du kannst sie in der Ansicht 'Produktverwaltung' (im ... Tab) entfernen."),
+        HelpItem(title: "Wie kann ich Produktvorschläge aus dem Menü entfernen?", text: "Produktvorschläge kannst du in der 'Produktverwaltung' entfernen."),
         
 //        HelpItem(title: "Wird der Bericht geändert wenn ich Preise editiere?", text: "Nein, die Preise werden natürlich 'eingefroren' im Moment wo du sie kaufst. Sollte es allerdings dazu kommen, dass du Preise für bereits gekaufte Produkte korrigieren möchtest, kannst du die jeweiligen Einträge aus dem Verlauf löschen, und sie nochmal mit den korrigierten Preisen kaufen."),
         // x
-//        HelpItem(title: "Was passiert wenn ich Produkte lösche?", text: "Das Produkt und alle damit verbundene Listen/Gruppen/Inventar Einträge werden gelöscht. Z.B. Wenn du 'Äpfel' mit der Marke 'X' löscht, alle Listen/Gruppen/Inventar Einträge mit dem Namen \"Äpfel\" und die Marke \"X\" werden auch gelöscht."),
+        //        HelpItem(title: "Was passiert wenn ich Produkte lösche?", text: "Das Produkt und alle damit verknüpften Listen- / Gruppen- / Inventar- / Verlaufs- und Menüelemente werden entfernt."),
         
         // x
-        HelpItem(title: "Was passiert wenn ich Verlaufseinträge entferne?", text: "Die entsprechende Einträge verschwinden auch aus dem Bericht. Wenn du deinen Bericht nicht ändern willst, solltest du den Verlauf auch nicht ändern!"),
+        HelpItem(title: "Was passiert, wenn ich Produkte aus meinem Verlauf lösche?", text: "Wenn du Produkte aus deinem Verlauf löscht, werden diese auch in deinen Berichten gelöscht. Bitte bedenke dies, bevor du mit dem Löschen beginnst. "),
         
         //        HelpItem(title: "How can I use custom quantity units, e.g. pounds?", text: ""),
         
-        HelpItem(title: "Wie ist der Bericht zu verstehen?", text: "Das Säulendiagramm zeigt dir deine monatlichen Ausgaben seitdem du angefangen hast, die App zu benutzen. 'Monatlicher Durchschnitt' ist der Durchschnitt von deinen Ausgaben in den Monaten wo du die App benutzt hast. 'Monatstagesdurchschnitt' ist der täglicher Durchschnitt von dem was du in diesem Monat ausgegeben hast. 'Gesch. Gesamtausgaben akt. Monat' ist die Schätzung von dem, was du in diesem Monat ausgeben wirst, anhand dessen was du bislang in diesem Monat ausgegeben hast. Wenn du eine Säule antippst kommst du zur Detail-Ansicht für den jeweiligen Monat. Da findest du ein Tortendiagramm mit den Kategorien wofür du am meisten ausgegeben hast und darunter ein Aggregat von den gekauften Produkten."),
+        HelpItem(title: "Welche Angaben kann ich dem Bericht entnehmen?", text: "Den Berichten bzw. dem Balkendiagramm kannst du deine Ausgaben des letzten Jahres entnehmen. Darüber hinaus hast du die Wahl, dir deine monatlichen Ausgaben des letzten Jahres anzeigen zu lassen oder aber die Ausgaben des laufenden Monats. Das Tortendiagramm zeigt dir zudem die Top-Kategorien an, die eine Zusammenfassung deiner gekauften Produkte beinhalten."),
         
         
 //        HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
 
-        HelpItem(title: "Was ist der Laden einer Liste? Wie funktionieren Preise?", text: "Jede Einkaufsliste hat kann mit einem Laden verknüpft werden. Die Preise, die du Waren in einer Liste zuweist, beziehen sich nur auf diesen Laden. Dies bedeutet, dass, wenn du z.B. eine Liste mit \"Tolles Kaufhaus\" als Laden hast, alle Listen die \"Tolles Kaufhaus\" als Laden haben die Preise Teilen werden. Listen mit einem anderen Laden bekommen von diesen Preisen nichts mit. Alle Listen haben einen Laden: Wenn er keinen Namen hat, benutzt du den anonymen Laden."),
+        HelpItem(title: "Was bedeutet Listenladen und wie funktioniert das mit den Preisen?", text: "Jede einzelne Einkaufsliste kann einem speziellen Geschäft zugeordnet werden, sodass du verschiedenen Produkten auch verschiedene Preise zuweisen kannst. Dies bedeutet, dass jede Liste auf einen Speicher zugreift. Sollte kein Listenname existieren, wird ein anonymer Speicher verwendet."),
 
-        HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
+        HelpItem(title: "Kann ich ein verlinktes Geschäft meiner Liste ändern?", text: "Nein, nachdem eine Liste gespeichert wurde, kann das dazugehörige Geschäft nicht mehr abgeändert werden. Solltest du die Zuordnung trotzdem löschen wollen, so musst du die alte Liste löschen und eine neue mit dem neuen Geschäft erstellen."),
 
-        HelpItem(title: "Was sind kaufbare Messeinheiten?", text: "Einheiten, die gekauft werden können! Zum Beispiel: Ein Liter oder eine Packung sind kaufbar, da Produkte in diesen Einheiten verkauft werden. Ein Teelöffel oder ein Schuss sind nicht direkt kaufbar. Diese Eigenschaft kann editiert werden."),
+        HelpItem(title: "Was sind kaufbare Einheiten?", text: "Einheiten sind Mengenangaben, die du kaufen kannst. Zum Beispiel 1 Liter Milch, 1 Packung Süßigkeiten oder 1 Kilo Obst. Ein einzelner Teelöffel Zucker oder eine Prise Salz kann nicht einzeln erworben werden. Allerdings kannst du deine Angaben editieren."),
 //
 //        HelpItem(title: "Was sind verzehbare Produkte?", text: "Wie die Bezeichnung sagt, Produkte die verzehrt werden können! Dies hat den Zweck nicht verzehrbare Produkte von der Zutaten-Auswahl in den Rezepten rauszufiltern (es ist z.B. nicht möglich Putzmittel in ein Rezept einzufügen). Diese Eingenschaft kann editiert werden."),
 
-        HelpItem(title: "Ich kann nicht die Information finden, die ich suche", text: "Sende uns eine Feedback Email! Wir beantworten gerne deine Fragen."),
+//        HelpItem(title: "Ich kann nicht die Information finden, die ich suche", text: "Sende uns eine Feedback Email! Wir beantworten gerne deine Fragen."),
 
-        HelpItem(title: "Die app funktioniert nicht!", text: "Du kannst den Support via \"Feedback\" im \"Mehr\" Screen kontaktieren. Wenn nichts geht, kann es sein dass Datensätze beschädigt sind (was normalerweise, ahem, nie passieren sollte). Wenn du nicht auf den Support warten willst, kannst du in den Einstellungen alle deine Daten löschen. Danach kannst du die Produkte wiederherstellen (auch in den Einstellungen) um denselben Stand einer Neuinstallation zu haben. Dies wird das Problem sehr wahrscheinlich beheben aber selbstverständlich musst du danach deine Listen, Rezepte usw. erneut hinzufügen."),
+        HelpItem(title: "Die App funktioniert nicht!", text: "Bitte kontaktiere den Support via \"Feedback\" im \"Mehr\" Bereich"),
 
 //        HelpItem(title: "Brauche ich einen Benutzerkonto?", text: "Wenn du listen oder Inventare mit anderen nicht teilen willst, oder mit anderen Geräten synchronisieren willst, ist ein Benutzerkonto unnötig. Die Funktionalität von dieser App mit und ohne Benutzerkonto, außer diesen Eigenschaften ist gleich."),
 //        
