@@ -203,7 +203,12 @@ public struct RealmConfig {
     }
 
     public static func realm() throws -> Realm {
-        return try Realm()
+        if let user = SyncUser.current {
+            logger.i("Realm user exists: \(String(describing: user.identity)), initializing synced realm.", .db)
+            return try Realm(configuration: RealmConfig.syncedRealmConfigutation(user: user))
+        } else {
+            return try Realm(configuration: localRealmConfig)
+        }
     }
 
 }
