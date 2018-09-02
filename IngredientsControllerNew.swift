@@ -27,6 +27,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                     // the app will crash with out of bounds when trying to apply the range of the spans to this text
                     // so either ensure they are manager as a unit such that these inconsistencies can't happen or decouple in some way
                     self.recipeText = NSAttributedString(string: recipe.text)
+                    self.updateTextView()
                     self.spans = recipe.textAttributeSpans.map {
                         TextSpan(start: $0.start, length: $0.length, attribute: TextAttribute(rawValue: $0.attribute)!)
                     }
@@ -297,12 +298,47 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 }
             }
         })
-        
-        //                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
-        
 
+        observeRecipes()
+
+        //                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
     }
-    
+
+    fileprivate var recipeNotificationToken: NotificationToken?
+    /**
+    * Observe recipe remote notifications, to update the recipe text
+    * TODO: Update name too, also for lists/inventories etc.
+    */
+    fileprivate func observeRecipes() {
+        Prov.recipeProvider.recipes(sortBy: .order, successHandler{ [weak self] recipes in guard let weakSelf = self else { return }
+
+            weakSelf.recipeNotificationToken = recipes.observe { changes in
+                switch changes {
+                case .initial: break
+
+                case .update(_, let deletions, let insertions, let modifications):
+                    logger.d("Recipe in ingredints notification. Deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.itemsResult?.count))")
+
+                    guard let currentRecipe = weakSelf.recipe else { return }
+
+                    if !modifications.isEmpty {
+                        for modification in modifications {
+                            let recipe = recipes[modification]
+                            if recipe.same(currentRecipe) {
+                                // TODO improve logic to manage recipe text? why does this has to be set twice?
+                                weakSelf.recipeText = NSAttributedString(string: currentRecipe.text)
+                                weakSelf.updateTextView()
+                            }
+                        }
+                    }
+
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            }
+        })
+    }
     
     override func closeTopControllers(rotateTopBarButton: Bool) {
 
@@ -341,7 +377,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         guard let itemsResult = itemsResult else {logger.e("No result"); return}
         guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         guard let recipe = recipe else {logger.e("No recipe"); return}
-        
+
         func onHasUnit(_ unit: Providers.Unit) {
             let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
             
@@ -803,9 +839,16 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     func updateTextView() {
         recipeText = buildAttributedString()
 
-        if let itemsResult = itemsResult {
-            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? RecipeEditableTextCell {
+        if let _ = itemsResult {
+            let cellMaybe = tableView.cellForRow(at: IndexPath(row: 0, section: 1))
+            if let cell = cellMaybe as? RecipeEditableTextCell {
                 cell.recipeTextView.attributedText = recipeText
+                // Autogrow textview / cell
+                tableView.updateWithoutReloadData()
+            } else if let cell = cellMaybe as? RecipeTextCell {
+                cell.config(recipeText: recipeText)
+                // Autogrow textview / cell
+                tableView.updateWithoutReloadData()
             } else {
                 logger.e("Invalid state: editable cell not found!", .ui)
             }
