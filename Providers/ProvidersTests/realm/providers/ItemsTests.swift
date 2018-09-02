@@ -1,38 +1,33 @@
 //
-//  ProvidersTests.swift
+//  ItemsTests.swift
 //  ProvidersTests
 //
-//  Created by Ivan Schuetz on 07.01.18.
+//  Created by Ivan Schuetz on 02.09.18.
 //
 
 import XCTest
 import RealmSwift
 @testable import Providers
 
-class ListItemsTests: RealmTestCase {
+class ItemsTests: RealmTestCase {
 
-    func testDeleteListItem() {
+    func testCascadeDeleteItemAfterInsertListItems() {
         // Prepare
         let (obj1, obj2) = DummyTestObjects.insert2ListItems(realm: realm, status: .todo)
 
         // Get dependency from object before it's invalidated, otherwise we get object invalidated error
-        let obj1Product = obj1.product
+        let obj1Unit = obj1.product.product.unit
 
         // Test
-        let deleteResult = DBProv.listItemProvider.deleteSync(indexPath: IndexPath(row: 0, section: 0),
-                                           status: .todo,
-                                           list: obj1.list,
-                                           realmData: RealmData(realm: realm, tokens: [])
-        )
+        let deleteItemSuccess = DBProv.itemProvider.deleteSync(uuid: obj1.product.product.product.item.uuid, realmData: RealmData(realm: realm, tokens: []))
 
-        XCTAssertNotNil(deleteResult)
-        XCTAssertTrue(deleteResult!.deletedSection)
+        XCTAssertTrue(deleteItemSuccess)
 
         let resultObjects = realm.objects(ListItem.self)
         XCTAssertEqual(resultObjects.count, 1)
         EqualityTests.equals(obj1: resultObjects[0], obj2: obj2, compareLists: true)
 
-        // Check that section of first item was deleted, since it's not empty
+        // Check that section of first list item was deleted, since it's not empty
         let resultSections = realm.objects(Section.self)
         XCTAssertEqual(resultSections.count, 1)
         EqualityTests.equals(obj1: resultSections[0], obj2: obj2.section)
@@ -48,35 +43,30 @@ class ListItemsTests: RealmTestCase {
         XCTAssertEqual(resultList[0].doneListItems.count, 0)
         XCTAssertEqual(resultList[0].stashListItems.count, 0)
 
-        // Check that all the dependencies are still there
         let resultStoreProducts = realm.objects(StoreProduct.self)
-        XCTAssert(resultStoreProducts.count == 2)
-        EqualityTests.equals(obj1: resultStoreProducts[0], obj2: obj1Product)
-        EqualityTests.equals(obj1: resultStoreProducts[1], obj2: obj2.product)
+        XCTAssert(resultStoreProducts.count == 1)
+        EqualityTests.equals(obj1: resultStoreProducts[0], obj2: obj2.product)
 
         let resultQuantifiableProducts = realm.objects(QuantifiableProduct.self)
-        XCTAssert(resultQuantifiableProducts.count == 2)
-        EqualityTests.equals(obj1: resultQuantifiableProducts[0], obj2: obj1Product.product)
-        EqualityTests.equals(obj1: resultQuantifiableProducts[1], obj2: obj2.product.product)
+        XCTAssert(resultQuantifiableProducts.count == 1)
+        EqualityTests.equals(obj1: resultQuantifiableProducts[0], obj2: obj2.product.product)
 
         let resultProducts = realm.objects(Product.self)
-        XCTAssert(resultProducts.count == 2)
-        EqualityTests.equals(obj1: resultProducts[0], obj2: obj1Product.product.product)
-        EqualityTests.equals(obj1: resultProducts[1], obj2: obj2.product.product.product)
+        XCTAssert(resultProducts.count == 1)
+        EqualityTests.equals(obj1: resultProducts[0], obj2: obj2.product.product.product)
 
         let resultItems = realm.objects(Item.self)
-        XCTAssert(resultItems.count == 2)
-        EqualityTests.equals(obj1: resultItems[0], obj2: obj1Product.product.product.item)
-        EqualityTests.equals(obj1: resultItems[1], obj2: obj2.product.product.product.item)
+        XCTAssert(resultItems.count == 1)
+        EqualityTests.equals(obj1: resultItems[0], obj2: obj2.product.product.product.item)
 
         let resultCategories = realm.objects(ProductCategory.self)
         XCTAssert(resultCategories.count == 1)
-        EqualityTests.equals(obj1: resultCategories[0], obj2: obj1Product.product.product.item.category)
         EqualityTests.equals(obj1: resultCategories[0], obj2: obj2.product.product.product.item.category)
 
+        // Unit don't reference items, so not affected by cascade delete
         let resultUnits = realm.objects(Unit.self)
         XCTAssert(resultUnits.count == 2)
-        EqualityTests.equals(obj1: resultUnits[0], obj2: obj1Product.product.unit)
+        EqualityTests.equals(obj1: resultUnits[0], obj2: obj1Unit)
         EqualityTests.equals(obj1: resultUnits[1], obj2: obj2.product.product.unit)
 
         // TODO base quantities?

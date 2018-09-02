@@ -21,9 +21,13 @@ class DummyTestObjectsTests: RealmTestCase {
         testInsert2ListItems(status: .done)
     }
 
+    func testInsert2StashListItems() {
+        testInsert2ListItems(status: .stash)
+    }
+
     private func testInsert2ListItems(status: ListItemStatus) {
         // Prepare
-        let (obj1, obj2) = DummyTestObjects.insert2ListItems(realm: realm, status: .todo)
+        let (obj1, obj2) = DummyTestObjects.insert2ListItems(realm: realm, status: status)
 
         // Test
         let resultObjects = realm.objects(ListItem.self)
@@ -65,10 +69,31 @@ class DummyTestObjectsTests: RealmTestCase {
         XCTAssertEqual(resultSections.count, 2)
         EqualityTests.equals(obj1: resultSections[0], obj2: obj1.section)
         EqualityTests.equals(obj1: resultSections[1], obj2: obj2.section)
+        XCTAssertEqual(resultSections[0].listItems.count, 1)
+        XCTAssertEqual(resultSections[1].listItems.count, 1)
+        EqualityTests.equals(obj1: resultSections[0].listItems[0], obj2: obj1, compareLists: true)
+        EqualityTests.equals(obj1: resultSections[1].listItems[0], obj2: obj2, compareLists: true)
 
         let resultLists = realm.objects(List.self)
         XCTAssertEqual(resultLists.count, 1)
         EqualityTests.equals(obj1: resultLists[0], obj2: obj1.list)
+
+        switch status {
+        case .todo:
+            XCTAssertEqual(resultLists[0].todoSections.count, 2)
+            EqualityTests.equals(obj1: resultLists[0].todoSections[0], obj2: obj1.section)
+            EqualityTests.equals(obj1: resultLists[0].todoSections[1], obj2: obj2.section)
+            EqualityTests.equals(obj1: resultLists[0].todoSections[0].listItems[0], obj2: obj1, compareLists: true)
+            EqualityTests.equals(obj1: resultLists[0].todoSections[1].listItems[0], obj2: obj2, compareLists: true)
+        case .done:
+            XCTAssertEqual(resultLists[0].doneListItems.count, 2)
+            EqualityTests.equals(obj1: resultLists[0].doneListItems[0], obj2: obj1, compareLists: true)
+            EqualityTests.equals(obj1: resultLists[0].doneListItems[1], obj2: obj2, compareLists: true)
+        case .stash:
+            XCTAssertEqual(resultLists[0].stashListItems.count, 2)
+            EqualityTests.equals(obj1: resultLists[0].stashListItems[0], obj2: obj1, compareLists: true)
+            EqualityTests.equals(obj1: resultLists[0].stashListItems[1], obj2: obj2, compareLists: true)
+        }
 
         let resultInventories = realm.objects(DBInventory.self)
         XCTAssertEqual(resultInventories.count, 1)

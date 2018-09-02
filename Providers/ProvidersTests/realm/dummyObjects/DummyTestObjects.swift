@@ -24,6 +24,10 @@ class DummyTestObjects {
 
         let section1 = Section(name: "section1", color: UIColor.red, list: list, status: status)
         let section2 = Section(name: "section2", color: UIColor.blue, list: list, status: status)
+        if status == .todo {
+            list.todoSections.append(section1)
+            list.todoSections.append(section2)
+        }
 
         let category = ProductCategory(uuid: uuid(), name: "category", color: UIColor.red)
         realm.add(category)
@@ -53,8 +57,18 @@ class DummyTestObjects {
 
         let obj1 = ListItem(uuid: uuid(), product: storeProduct1, section: section1, list: list, note: nil, quantity: 1)
         realm.add(obj1)
+        section1.listItems.add([obj1])
         let obj2 = ListItem(uuid: uuid(), product: storeProduct2, section: section2, list: list, note: nil, quantity: 1)
         realm.add(obj2)
+        section2.listItems.add([obj2])
+
+        if status == .done {
+            list.doneListItems.append(obj1)
+            list.doneListItems.append(obj2)
+        } else if status == .stash {
+            list.stashListItems.append(obj1)
+            list.stashListItems.append(obj2)
+        }
 
         try! realm.commitWrite()
 
