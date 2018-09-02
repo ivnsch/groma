@@ -41,7 +41,7 @@ class RegisterViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.fillTestInput()
+//        self.fillTestInput()
     }
     
     private func fillTestInput() {

@@ -47,8 +47,8 @@ class LoginViewController: NSViewController, RegisterDelegate, PhFacebookDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.fillTestInput()
-        
+//        self.fillTestInput()
+
         initFacebook()
     }
     
