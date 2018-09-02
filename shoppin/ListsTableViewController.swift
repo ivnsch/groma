@@ -159,6 +159,11 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                     
                 case .update(_, let deletions, let insertions, let modifications):
                     logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.listsResult?.count))")
+
+                    // If remote device deleted list, ensure we are not in its list items - otherwise invalid object crash
+                    if !deletions.isEmpty {
+                        weakSelf.closeListItemsController()
+                    }
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
