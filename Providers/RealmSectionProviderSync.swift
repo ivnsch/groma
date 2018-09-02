@@ -9,14 +9,19 @@
 import Foundation
 import RealmSwift
 
-public struct AddSectionResult {
+protocol AddSectionGeneralResult {
+    var section: Section {get }
+    var isNew: Bool { get }
+}
+
+public struct AddSectionResult: AddSectionGeneralResult {
     public let section: Section
     public let isNew: Bool
     public let index: Int
 }
 
 // Sections added only to realm but not ordered RealmSwift.List
-public struct AddSectionPlainResult {
+public struct AddSectionPlainResult: AddSectionGeneralResult {
     public let section: Section
     public let isNew: Bool
 }

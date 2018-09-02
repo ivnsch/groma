@@ -1330,13 +1330,23 @@ class RealmListItemProvider: RealmProvider {
             let foundAndDeletedListItem = DBProv.listItemProvider.deletePossibleListItemWithUniqueSync(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list, realmData: realmData, doTransaction: false)
             
             // update or create section
-            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, list: list, status: status, realmData: realmData, doTransaction: false)
-            
+            let sectionResult: ProvResult<AddSectionGeneralResult, DatabaseError> = {
+                if status == .todo {
+                    // TODO improve name of mergeOrCreateSectionSync (or logic) to differentiate between todo and done/stash methods
+                    let result = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, status: status, list: list, realmData: realmData, doTransaction: false)
+                    return result.flatMap { .ok($0) }
+
+                } else {
+                    let result = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, list: list, status: status, realmData: realmData, doTransaction: false)
+                    return result.flatMap { .ok($0) }
+                }
+            } ()
+
             var changedSection = false
             var addedNewSectionIndex: Int?
             var deletedSectionIndex: Int?
             
-            sectionResult.onOk {res in
+            sectionResult.onOk { res in
                 
                 let listItemSection = updatingListItem.section // current section ("old", in case the section changes)
                 
@@ -1372,7 +1382,7 @@ class RealmListItemProvider: RealmProvider {
             // update or create quantifiable product and dependencies
             let productResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: false)
             
-            func onHasSectionAndProduct(sectionResult: AddSectionPlainResult, product: QuantifiableProduct) -> UpdateListItemResult {
+            func onHasSectionAndProduct(sectionResult: AddSectionGeneralResult, product: QuantifiableProduct) -> UpdateListItemResult {
                 
                 // update list item
                 updatingListItem.product.refPrice.value = listItemInput.storeProductInput.refPrice
@@ -1385,7 +1395,7 @@ class RealmListItemProvider: RealmProvider {
                 return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem, changedSection: changedSection, addedSectionIndex: addedNewSectionIndex, deletedSectionIndex: deletedSectionIndex)
             }
             
-            let joinResult = sectionResult.join(result: productResult).map{sectionResult, product in
+            let joinResult = sectionResult.join(result: productResult).map{ sectionResult, product in
                 onHasSectionAndProduct(sectionResult: sectionResult, product: product.0)
             }
             
