@@ -72,11 +72,11 @@ class TutorialView: UIView, UIGestureRecognizerDelegate {
 
         // Add label with explanation - for now here since we use tutorial only for this
         let label = UILabel()
-        label.text = trans("Tap to go back")
+        label.text = trans("tutorial_tap_to_go_back")
         label.textColor = UIColor.white
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.sizeToFit()
-        label.center = CGPoint(x: center.x, y: 90)
+        label.center = CGPoint(x: center.x, y: DimensionsManager.tapToGoBackLabelY)
         addSubview(label)
     }
 }

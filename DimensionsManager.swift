@@ -422,4 +422,15 @@ class DimensionsManager {
     static var pickerRowHeight: CGFloat {
         return 25
     }
+
+    // MARK: Other
+
+    static var tapToGoBackLabelY: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 90
+        case .small: return 90
+        case .middle: return 90
+        case .large, .xLarge: return 105
+        }
+    }
 }
