@@ -7,28 +7,26 @@
 //
 
 import UIKit
-
+import Providers
 
 class CountryHelper {
     
-//    private static let serverSupportedCountries = ["de"]
-    fileprivate static let serverSupportedCountries: [String] = []
-    
+    private static let serverSupportedCountries = ["de", "us", "uk", "au", "ca", "es", "mx" ]
+
     static func currentDeviceCountry() -> String? {
         return (Locale.current as NSLocale).object(forKey: NSLocale.Key.countryCode) as? String
     }
     
     static func isInServerSupportedCountry() -> Bool {
-        return true // Activate everywhere...
+//        return true // Activate everywhere...
 
         // we will release only to countries where the server is also supported
 
-//        let countryCodeMaybe = currentDeviceCountry()?.lowercased()
-//        let isSupported = countryCodeMaybe.map{serverSupportedCountries.contains($0)} ?? false
-//        
-//        logger.v("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")
-//        
-//        return isSupported
-////        return true
+        let countryCodeMaybe = currentDeviceCountry()?.lowercased()
+        let isSupported = countryCodeMaybe.map{serverSupportedCountries.contains($0)} ?? false
+
+        logger.v("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")
+
+        return isSupported
     }
 }
