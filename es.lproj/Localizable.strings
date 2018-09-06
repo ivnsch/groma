@@ -222,6 +222,7 @@ popup_title_bundled_products_restored = "Productos restaurados";
 popup_title_bundled_unit_restored = "Unidades de medida restauradas";
 popup_title_size_limit = "Límite";
 popup_title_psst = "Psst!";
+popup_title_did_you_know = "Sabías que...";
 
 
 popup_please_login_for_participants = "Necesitas una sesión activa para editar los participantes.";
@@ -272,6 +273,7 @@ popups_password_email_sent = "Recibirás próximamente un e-mail para restaurar 
 popup_remove_list_warning = "Esto removerá la lista \"%@\" para todos los participantes.\nSi sólo deseas removerte como participante hazlo en la lista de participantes.";
 popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección %@?\nEsto también removerá los ítems que están en esta sección.";
 popup_remove_inventory_warning = "Las listas, ítems de historial y estadística asociados con este inventario también serán removidos.";
+popup_long_press_to_edit = "Puedes presionar y sostener para editar ítems individuales";
 
 
 popups_size_limit_lists = "No puedes tener mas de %@ listas";
@@ -376,7 +378,7 @@ empty_group_line2 = "Pulsa para agregar ítems";
 empty_recipe_line1 = "Tu receta no tiene ingredientes";
 empty_recipe_line2 = "Pulsa para agregar";
 
-generic_login = "Sesión";
+generic_login = "Conectarse";
 generic_color = "Color";
 generic_undo = "Deshacer";
 
@@ -453,7 +455,8 @@ more_intro = "Ver intro de nuevo";
 more_about = "Sobre Groma";
 more_community = "Comunidad";
 
-about_company_information = "Información legal";
+about_app_version = "Versión:";
+about_company_information = "Información legal:";
 about_vat_id = "No. id. fiscal: %@";
 about_follow_twitter = "Sigue Groma en Twitter";
 

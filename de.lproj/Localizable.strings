@@ -221,7 +221,7 @@ popup_title_bundled_products_restored = "Produkte wiederhergestellt";
 popup_title_bundled_unit_restored = "Messeinheiten wiederhergestellt";
 popup_title_size_limit = "Maximale Anzahl überschritten";
 popup_title_psst = "Psst!";
-
+popup_title_did_you_know = "Wusstest du, dass...";
 
 popup_please_login_for_participants = "Bitte anmelden, um Teilnehmer zu verwalten";
 popup_products_updated_to_match_user = "Deine Produkte wurden aktualisiert.\nSie sind jetzt mit den Produkten von %@ gleich.";
@@ -270,6 +270,7 @@ popups_password_email_sent = "Eine E-Mail zur Passwortwiederherstellung wurde zu
 popup_remove_list_warning = "Dies wird die Liste \%@\ auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste.";
 popup_remove_section_confirm = "Bist du sicher dass du die Abteilung %@ entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen.";
 popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Verlaufs- und Berichtsdaten werden ebenfalls gelöscht.";
+popup_long_press_to_edit = "Drücken und halten, um in Bearbeitungsmodus zu wechseln.";
 
 
 popups_size_limit_lists = "Maximale Listenanzahl überschritten: %@";
@@ -418,8 +419,8 @@ example_group_fruits_salad = "Obstsalat";
 
 
 intro_button_start = "Start";
-intro_slide_lists = "Einkaufslisten verwalten";
-intro_slide_recipes = "Lieblingsrezepte hinzufügen";
+intro_slide_lists = "Verwalte deine Einkaufslisten";
+intro_slide_recipes = "Füge deine Lieblingsrezepte hinzu";
 intro_slide_inventories = "Behalte den Überblick über deine Lebensmittel";
 intro_slide_real_time = "Mit anderen Benutzer in Echtzeit teilen";
 intro_slide_stats = "Analysiere dein Kaufverhalten";
@@ -454,7 +455,8 @@ more_intro = "Einführung nochmals ansehen";
 more_about = "Über uns";
 more_community = "Community";
 
-about_company_information = "Impressum";
+about_app_version = "App Version:";
+about_company_information = "Impressum:";
 about_vat_id = "MwSt.: %@";
 about_follow_twitter = "Folge Groma auf Twitter";
 

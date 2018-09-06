@@ -92,12 +92,9 @@
 		6A4F45E32115BF67000548AD /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */; };
 		6A4F45E52115CD1A000548AD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		6A501D69202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */; };
-		6A633751201DFBCC001E4969 /* LoginOrRegister.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */; };
 		6A633753201E0120001E4969 /* LoginOrRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633752201E0120001E4969 /* LoginOrRegisterController.swift */; };
 		6A633755201E06AE001E4969 /* DesignableUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633754201E06AE001E4969 /* DesignableUITextField.swift */; };
 		6A633757201E2841001E4969 /* MyGoogleLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633756201E2841001E4969 /* MyGoogleLoginButton.swift */; };
-		6A633759201E285B001E4969 /* MyGoogleLoginButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A633758201E285B001E4969 /* MyGoogleLoginButton.xib */; };
-		6A63375B201E35EF001E4969 /* MyFacebookButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A63375A201E35EF001E4969 /* MyFacebookButton.xib */; };
 		6A63375D201E36FB001E4969 /* MyFacebookButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A63375C201E36FB001E4969 /* MyFacebookButton.swift */; };
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
 		6A6FD92A201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FD928201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift */; };
@@ -131,6 +128,9 @@
 		6A8556C920CDB3D0009F8F90 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A8556C720CDB3D0009F8F90 /* NoteViewController.xib */; };
 		6A8B9E5121272A3300CE9CF8 /* TwitterShareHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8B9E5021272A3300CE9CF8 /* TwitterShareHelper.swift */; };
 		6A92A86720667378000975E7 /* SubmitButtonHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A92A86620667378000975E7 /* SubmitButtonHeightConstraint.swift */; };
+		6AA7FF49213DC7E900EDA289 /* LoginOrRegister.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AA7FF4B213DC7E900EDA289 /* LoginOrRegister.storyboard */; };
+		6AA7FF52213DC9A600EDA289 /* MyGoogleLoginButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AA7FF54213DC9A600EDA289 /* MyGoogleLoginButton.xib */; };
+		6AA7FF5B213DCA3600EDA289 /* MyFacebookButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AA7FF5D213DCA3600EDA289 /* MyFacebookButton.xib */; };
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
@@ -686,12 +686,9 @@
 		6A4F45E42115C846000548AD /* Siri.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Siri.entitlements; sourceTree = "<group>"; };
 		6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitBaseHelpCellExplanationHighlighter.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
-		6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginOrRegister.storyboard; sourceTree = "<group>"; };
 		6A633752201E0120001E4969 /* LoginOrRegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOrRegisterController.swift; sourceTree = "<group>"; };
 		6A633754201E06AE001E4969 /* DesignableUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableUITextField.swift; sourceTree = "<group>"; };
 		6A633756201E2841001E4969 /* MyGoogleLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGoogleLoginButton.swift; sourceTree = "<group>"; };
-		6A633758201E285B001E4969 /* MyGoogleLoginButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyGoogleLoginButton.xib; sourceTree = "<group>"; };
-		6A63375A201E35EF001E4969 /* MyFacebookButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyFacebookButton.xib; sourceTree = "<group>"; };
 		6A63375C201E36FB001E4969 /* MyFacebookButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFacebookButton.swift; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A6FD928201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUnitHelpExplanationCell.swift; sourceTree = "<group>"; };
@@ -725,6 +722,18 @@
 		6A8556C720CDB3D0009F8F90 /* NoteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		6A8B9E5021272A3300CE9CF8 /* TwitterShareHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterShareHelper.swift; sourceTree = "<group>"; };
 		6A92A86620667378000975E7 /* SubmitButtonHeightConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButtonHeightConstraint.swift; sourceTree = "<group>"; };
+		6AA7FF4A213DC7E900EDA289 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LoginOrRegister.storyboard; sourceTree = "<group>"; };
+		6AA7FF4D213DC7F000EDA289 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LoginOrRegister.strings; sourceTree = "<group>"; };
+		6AA7FF4F213DC7F400EDA289 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LoginOrRegister.strings; sourceTree = "<group>"; };
+		6AA7FF51213DC7F700EDA289 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoginOrRegister.strings; sourceTree = "<group>"; };
+		6AA7FF53213DC9A600EDA289 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MyGoogleLoginButton.xib; sourceTree = "<group>"; };
+		6AA7FF56213DC9A800EDA289 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MyGoogleLoginButton.strings; sourceTree = "<group>"; };
+		6AA7FF58213DC9AA00EDA289 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MyGoogleLoginButton.strings; sourceTree = "<group>"; };
+		6AA7FF5A213DC9AB00EDA289 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MyGoogleLoginButton.strings; sourceTree = "<group>"; };
+		6AA7FF5C213DCA3600EDA289 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MyFacebookButton.xib; sourceTree = "<group>"; };
+		6AA7FF5F213DCA3800EDA289 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MyFacebookButton.strings; sourceTree = "<group>"; };
+		6AA7FF61213DCA3C00EDA289 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MyFacebookButton.strings; sourceTree = "<group>"; };
+		6AA7FF63213DCA3F00EDA289 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MyFacebookButton.strings; sourceTree = "<group>"; };
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
@@ -1709,12 +1718,12 @@
 			children = (
 				EB0C1B861B3DA37100F24C85 /* LoginViewController.swift */,
 				EB4B39DB1CED428B00B41063 /* Login.storyboard */,
-				6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */,
+				6AA7FF4B213DC7E900EDA289 /* LoginOrRegister.storyboard */,
 				6A633752201E0120001E4969 /* LoginOrRegisterController.swift */,
 				6A633756201E2841001E4969 /* MyGoogleLoginButton.swift */,
-				6A633758201E285B001E4969 /* MyGoogleLoginButton.xib */,
+				6AA7FF54213DC9A600EDA289 /* MyGoogleLoginButton.xib */,
 				6A63375C201E36FB001E4969 /* MyFacebookButton.swift */,
-				6A63375A201E35EF001E4969 /* MyFacebookButton.xib */,
+				6AA7FF5D213DCA3600EDA289 /* MyFacebookButton.xib */,
 			);
 			name = login;
 			sourceTree = "<group>";
@@ -3056,7 +3065,7 @@
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				6AE5DA892017C0C1003E4C7B /* UnitBaseHelpCell.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
-				6A63375B201E35EF001E4969 /* MyFacebookButton.xib in Resources */,
+				6AA7FF5B213DCA3600EDA289 /* MyFacebookButton.xib in Resources */,
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
 				6A3A67DE1E59D50C00B5354F /* UnitEditableCell.xib in Resources */,
 				6A287E971E54792F00868244 /* ManageItemsSectionView.xib in Resources */,
@@ -3140,13 +3149,13 @@
 				6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */,
 				6A7E64871FEAAD1E00F75DFD /* AddNewItemInputCell.xib in Resources */,
 				6A10276D1E5E11D8003D2972 /* BaseQuantityCell.xib in Resources */,
-				6A633751201DFBCC001E4969 /* LoginOrRegister.storyboard in Resources */,
+				6AA7FF49213DC7E900EDA289 /* LoginOrRegister.storyboard in Resources */,
 				6AF0C2731E622A4100FE14FD /* SelectIngredientFractionController.xib in Resources */,
 				6A71887A201693A800DD3958 /* BaseUnitHelpViewController.xib in Resources */,
 				6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */,
 				6A8556C920CDB3D0009F8F90 /* NoteViewController.xib in Resources */,
 				6A17C4E01FF02FB200372DDB /* TooltipPickerCell.xib in Resources */,
-				6A633759201E285B001E4969 /* MyGoogleLoginButton.xib in Resources */,
+				6AA7FF52213DC9A600EDA289 /* MyGoogleLoginButton.xib in Resources */,
 				6A6FD92B201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6AF6F75A204DF28900D4C0FB /* EmptyView.xib in Resources */,
@@ -3912,6 +3921,39 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6AA7FF4B213DC7E900EDA289 /* LoginOrRegister.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6AA7FF4A213DC7E900EDA289 /* Base */,
+				6AA7FF4D213DC7F000EDA289 /* en */,
+				6AA7FF4F213DC7F400EDA289 /* de */,
+				6AA7FF51213DC7F700EDA289 /* es */,
+			);
+			name = LoginOrRegister.storyboard;
+			sourceTree = "<group>";
+		};
+		6AA7FF54213DC9A600EDA289 /* MyGoogleLoginButton.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6AA7FF53213DC9A600EDA289 /* Base */,
+				6AA7FF56213DC9A800EDA289 /* en */,
+				6AA7FF58213DC9AA00EDA289 /* de */,
+				6AA7FF5A213DC9AB00EDA289 /* es */,
+			);
+			name = MyGoogleLoginButton.xib;
+			sourceTree = "<group>";
+		};
+		6AA7FF5D213DCA3600EDA289 /* MyFacebookButton.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6AA7FF5C213DCA3600EDA289 /* Base */,
+				6AA7FF5F213DCA3800EDA289 /* en */,
+				6AA7FF61213DCA3C00EDA289 /* de */,
+				6AA7FF63213DCA3F00EDA289 /* es */,
+			);
+			name = MyFacebookButton.xib;
+			sourceTree = "<group>";
+		};
 		6AD91237210E1AA500E177EB /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

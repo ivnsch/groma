@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Log in enables you to sync with the cloud and share lists with other people"; ObjectID = "Ktj-23-cyZ"; */
+"Ktj-23-cyZ.text" = "Die Anmeldung ermöglicht dir, deine Daten zu synchronisieren und mit Freunden zu teilen.";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "eXu-Xy-HZG"; */
+"eXu-Xy-HZG.normalTitle" = "Register";
+
+/* Class = "UIButton"; normalTitle = "Forgot password?"; ObjectID = "evX-Gm-bbJ"; */
+"evX-Gm-bbJ.normalTitle" = "Forgot password?";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "pYQ-Up-a4i"; */
+"pYQ-Up-a4i.normalTitle" = "Login";

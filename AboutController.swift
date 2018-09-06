@@ -11,6 +11,8 @@ import Providers
 
 class AboutController: UIViewController {
 
+    @IBOutlet weak var appVersionLabelLabel: UILabel!
+    @IBOutlet weak var legalInformationLabel: UILabel!
     @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var vatinLabel: UILabel!
     @IBOutlet weak var followTwitterLabel: UILabel!
@@ -18,6 +20,9 @@ class AboutController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Theme.mainBGColor
+
+        appVersionLabelLabel.text = trans("about_app_version")
+        legalInformationLabel.text = trans("about_company_information")
 
         if let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
             appVersionLabel.text = versionNumber

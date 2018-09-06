@@ -221,6 +221,7 @@ popup_title_bundled_products_restored = "Products restored";
 popup_title_bundled_unit_restored = "Units restored";
 popup_title_size_limit = "Size limit";
 popup_title_psst = "Psst!";
+popup_title_did_you_know = "Did you know?";
 
 
 popup_please_login_for_participants = "Please login to manage participants";
@@ -270,6 +271,7 @@ popups_password_email_sent = "And email to reset your password was sent";
 popup_remove_list_warning = "This will remove the list \"%@\" also for the other participants.\nIf you wish to only remove yourself as a participant please edit the list participants instead.";
 popup_remove_section_confirm = "Are you sure you want to remove the section %@?\nThis will also remove all the list items contained in this section";
 popup_remove_inventory_warning = "This will remove also the history items, stats and lists associated with this inventory.";
+popup_long_press_to_edit = "You can press and hold\nto set individual items in edit mode";
 
 
 popups_size_limit_lists = "You can't have more than %@ lists";
@@ -455,6 +457,7 @@ more_intro = "Watch intro again";
 more_about = "About";
 more_community = "Community";
 
+about_app_version = "App version:";
 about_company_information = "Legal information";
 about_vat_id = "VATIN: %@";
 about_follow_twitter = "Follow Groma on Twitter";
