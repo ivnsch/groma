@@ -59,7 +59,7 @@ class IngredientUnitCollectionViewManager {
         self.onSelectUnit = onSelectUnit
 
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(20, 30, 20, 30)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: 20, left: 30, bottom: 20, right: 30)
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = rowsSpacing
 

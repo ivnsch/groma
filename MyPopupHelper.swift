@@ -31,7 +31,7 @@ class MyPopupHelper {
         let popup = createPopup(parent: parent)
 
         func onOkOrCancelLocal() {
-            contentController.removeFromParentViewController()
+            contentController.removeFromParent()
             popup.hideFall()
             onOkOrCancel?()
         }
@@ -80,7 +80,7 @@ class MyPopupHelper {
             popup.contentView?.frame = contentFrame
         }
 
-        parent.addChildViewController(contentController)
+        parent.addChild(contentController)
         contentController.viewWillAppear(false)
 
         // After this totalDelta (up or down) the popup is dimissed
@@ -100,7 +100,7 @@ class MyPopupHelper {
             }, onEnded: { totalDelta in
                 if abs(totalDelta) > totalDeltaToDismiss { // Past limit -> dismiss
                     popup.hideFullFall(direction: totalDelta > 0 ? .down : .up, onFinish: {
-                        contentController.removeFromParentViewController()
+                        contentController.removeFromParent()
                         onDismissWithSwipe?()
                     })
                 } else { // Gesture stopped before limit -> return to original position

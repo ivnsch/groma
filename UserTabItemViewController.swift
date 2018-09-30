@@ -83,7 +83,7 @@ class UserTabItemViewController: UIViewController, LoginOrRegisterDelegate, User
     
     fileprivate func replaceController(_ newController: UIViewController) {
 
-        let currentChildControllers = childViewControllers // normally this should be only 1 - the login controller or user details view
+        let currentChildControllers = children // normally this should be only 1 - the login controller or user details view
 
         // add new controller with 0 alpha
         newController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +108,7 @@ class UserTabItemViewController: UIViewController, LoginOrRegisterDelegate, User
     // MARK: - Notification
     
     @objc func onLogoutNotification(_ note: Foundation.Notification) {
-        if !(childViewControllers.first is LoginViewController) {
+        if !(children.first is LoginViewController) {
             showLoginController()
         }
     }

@@ -180,7 +180,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if isEditing {
             return .delete
         } else {
@@ -188,7 +188,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             delegate?.remove(models[indexPath.row], index: indexPath.row, onSuccess: {}, onError: {_ in })
         }
@@ -451,7 +451,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let sortByOption = sortByOptions[row]
         sortBy = sortByOption.value
-        sortByButton.setTitle(sortByOption.key, for: UIControlState())
+        sortByButton.setTitle(sortByOption.key, for: UIControl.State())
         
         load()
     }

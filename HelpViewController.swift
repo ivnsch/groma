@@ -41,7 +41,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.addTarget(self, action: #selector(HelpViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+        searchBar.addTarget(self, action: #selector(HelpViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(HelpViewController.handleTap(_:)))
@@ -130,7 +130,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self?.tableView.insertRows(at: [sectionIndexPath], with: .top)
                 sectionModel.expanded = true
             }
-            tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableViewScrollPosition.top, animated: true)
+            tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableView.ScrollPosition.top, animated: true)
         }
     }
     

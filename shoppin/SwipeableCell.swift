@@ -136,7 +136,7 @@ class SwipeableCell: UITableViewCell {
         }
         let delay:TimeInterval = 0
         
-        UIView.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseOut, animations: {() -> Void in
+        UIView.animate(withDuration: duration, delay: delay, options: UIView.AnimationOptions.curveEaseOut, animations: {() -> Void in
             self.layoutIfNeeded()
             if let alpha = alpha {
                 self.myContentView.alpha = alpha

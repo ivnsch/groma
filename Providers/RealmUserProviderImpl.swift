@@ -251,7 +251,7 @@ class RealmUserProviderImpl: UserProvider {
     func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
         let container = CKContainer.default()
-        container.fetchUserRecordID(completionHandler: {(recordID: CKRecordID?, error: Error?) in
+        container.fetchUserRecordID(completionHandler: {(recordID: CKRecord.ID?, error: Error?) in
             if let error = error {
                 logger.e("Couldn't fetch iCloud user record, error: \(error)")
                 handler(ProviderResult(status: .iCloudLoginError))

@@ -329,7 +329,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 //        return configuration
 //    }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let model = itemForRow(row: indexPath.row) else{logger.e("Illegal state: no model for index path: \(indexPath)"); return}
             

@@ -89,7 +89,7 @@ class ListTopBarView: UIView {
     
     var fgColor: UIColor = UIColor.black {
         didSet {
-            backButton?.setTitleColor(fgColor, for: UIControlState())
+            backButton?.setTitleColor(fgColor, for: UIControl.State())
             for button in leftButtons {
                 button.imageView?.tintColor = fgColor
             }
@@ -183,7 +183,7 @@ class ListTopBarView: UIView {
         didSet {
             titleLabel.text = title
             titleLabel.accessibilityLabel = title
-            titleLabel.accessibilityTraits = UIAccessibilityTraitHeader
+            titleLabel.accessibilityTraits = UIAccessibilityTraits.header
 
             titleLabel.sizeToFit()
         }
@@ -279,7 +279,7 @@ class ListTopBarView: UIView {
         button.addTarget(self, action: #selector(ListTopBarView.onTitleTap(_:)), for: .touchUpInside)
 
         button.accessibilityLabel = trans("accessibility_general_button_navigation_bar_title") // TODO label "back" when it's possible to go bar (items screens) - and otherwise nothing (title already on the label).
-        button.accessibilityTraits = UIAccessibilityTraitButton
+        button.accessibilityTraits = UIAccessibilityTraits.button
     }
     
     /**
@@ -291,15 +291,15 @@ class ListTopBarView: UIView {
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
                 button.imageView?.tintColor = fgColor
-                button.setImage(UIImage(named: "tb_back"), for: UIControlState())
+                button.setImage(UIImage(named: "tb_back"), for: UIControl.State())
                 backButton = button
                 addSubview(button)
                 
                 let backLabel = UIButton()
                 backLabel.translatesAutoresizingMaskIntoConstraints = false
-                backLabel.setTitle(backButtonText ?? "", for: UIControlState())
+                backLabel.setTitle(backButtonText ?? "", for: UIControl.State())
                 backLabel.titleLabel?.font = Fonts.fontForSizeCategory(50)
-                backLabel.setTitleColor(fgColor, for: UIControlState())
+                backLabel.setTitleColor(fgColor, for: UIControl.State())
                 addSubview(backLabel)
 
                 let viewDictionary = ["back": button, "backLabel": backLabel]
@@ -358,7 +358,7 @@ class ListTopBarView: UIView {
                 } else {
                     button = UIButton()
                     button.imageView?.tintColor = tintColor
-                    button.setImage(UIImage(named: imgName), for: UIControlState())
+                    button.setImage(UIImage(named: imgName), for: UIControl.State())
                 }
 
                 button.translatesAutoresizingMaskIntoConstraints = false
@@ -371,7 +371,7 @@ class ListTopBarView: UIView {
 //                logger.v("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
                 tapView.accessibilityIdentifier = model.buttonId.name
-                tapView.accessibilityTraits = UIAccessibilityTraitButton
+                tapView.accessibilityTraits = UIAccessibilityTraits.button
                 tapView.accessibilityLabel = model.buttonId.accessibilityLabel
 
                 if left {

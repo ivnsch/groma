@@ -55,7 +55,7 @@ class MoreViewController: UITableViewController {
     }
 
     fileprivate func introItemOrNone() -> MoreItem? {
-        if !UIAccessibilityIsVoiceOverRunning() {
+        if !UIAccessibility.isVoiceOverRunning {
             return MoreItem(type: .watchIntro, text: trans("more_intro"), image: #imageLiteral(resourceName: "more_intro"))
         } else {
             return nil

@@ -39,7 +39,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     var sortBy: IngredientsSortOption? {
         didSet {
             if let sortBy = sortBy {
-                sortByButton.setTitle(sortBy.key, for: UIControlState())
+                sortByButton.setTitle(sortBy.key, for: UIControl.State())
             } else {
                 logger.w("sortBy is nil")
             }
@@ -204,7 +204,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     fileprivate func initExplanationManager() {
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         let contents = ExplanationContents(title: trans("popup_title_did_you_know"), text: trans("popup_long_press_to_edit"), imageName: "longpressedit", buttonTitle: trans("popup_button_got_it"), frameCount: 210)
         let checker = SwipeToIncrementAlertHelperNew()
@@ -555,7 +555,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     override func onAddedIngredientsSubviews() {
         super.onAddedIngredientsSubviews()
-        view.bringSubview(toFront: topBar)
+        view.bringSubviewToFront(topBar)
     }
 
     override var ingredientCellAnimationNameLabelTargetX: CGFloat {
@@ -1055,7 +1055,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
         if false && indexPath.row == explanationManager.row { // Explanation cell
             return explanationManager.rowHeight
         } else if indexPath.section == 1 {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         } else {
             return DimensionsManager.ingredientsCellHeight
         }
@@ -1065,11 +1065,11 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
         return isEditing && indexPath.section != 1 // Don't allow to delete recipe text cell
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             remove(indexPath, onSuccess: {}, onError: {_ in })
         }

@@ -112,14 +112,14 @@ class FloatingViews: UIView {
         super.init(frame: frame)
 //        xibSetup()
         
-        autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+        autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 //        xibSetup()
         
-        autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+        autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
     }
     
 //    // TODO find a way to not have extra view here (add subview) since this is used in tableview cells.
@@ -194,7 +194,7 @@ class FloatingViews: UIView {
         button.clipsToBounds = true
         
         if let imgName = model.imgName {
-            button.setImage(UIImage(named: imgName), for: UIControlState())
+            button.setImage(UIImage(named: imgName), for: UIControl.State())
         }
         
         // Add the sublayers (empty). The paths are added during animation.
@@ -203,8 +203,8 @@ class FloatingViews: UIView {
                 let sublayer = CAShapeLayer()
                 sublayer.fillColor     = UIColor.clear.cgColor
                 sublayer.anchorPoint   = CGPoint(x: 0, y: 0)
-                sublayer.lineJoin      = kCALineJoinRound
-                sublayer.lineCap       = kCALineCapRound
+                sublayer.lineJoin      = CAShapeLayerLineJoin.round
+                sublayer.lineCap       = CAShapeLayerLineCap.round
                 sublayer.contentsScale = layer.contentsScale
                 sublayer.lineWidth     = 1
                 sublayer.strokeColor   = model.pathColor?.cgColor ?? UIColor.black.cgColor
@@ -258,9 +258,9 @@ class FloatingViews: UIView {
         
         let hConstraintStr = "H:[v0]-(\(xFromRight))-|"
         
-        let vConstraits = namedViews.flatMap {NSLayoutConstraint.constraints(withVisualFormat: "V:|-(\(top))-[\($0.0)]", options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)}
+        let vConstraits = namedViews.flatMap {NSLayoutConstraint.constraints(withVisualFormat: "V:|-(\(top))-[\($0.0)]", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDict)}
         
-        let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: hConstraintStr, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)
+        let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: hConstraintStr, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDict)
         
         view.right = hConstraints.first!
 
@@ -281,8 +281,8 @@ class FloatingViews: UIView {
         guard #available(iOS 9, *) else {
             let basic = CABasicAnimation(keyPath: keyPath)
             basic.duration = 0.3
-            basic.fillMode = kCAFillModeForwards
-            basic.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+            basic.fillMode = CAMediaTimingFillMode.forwards
+            basic.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.default)
             return basic
         }
         
@@ -291,8 +291,8 @@ class FloatingViews: UIView {
         spring.damping = damping
         spring.initialVelocity = initialVelocity
         spring.stiffness = stiffness
-        spring.fillMode = kCAFillModeForwards
-        spring.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        spring.fillMode = CAMediaTimingFillMode.forwards
+        spring.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.default)
         
         return spring
     }
@@ -384,7 +384,7 @@ class FloatingViews: UIView {
         for button in toAdd {
             let position = calculateModelPosition(0, modelsCount: newModels.count)
             addSubview(button)
-            sendSubview(toBack: button)
+            sendSubviewToBack(button)
             buttons.append(button)
             positionView(button, xFromRight: position.x, top: position.y) // TODO behind existing buttons
             // set size

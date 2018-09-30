@@ -397,9 +397,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         let controller = createPriceInputsControler()
         let popup = MyTipPopup(customView: controller.view)
         popup.presentPointing(at: priceView, in: view, animated: true)
-        addChildViewController(controller)
+        addChild(controller)
         popup.onDismiss = { [weak self, weak controller] in
-            controller?.removeFromParentViewController()
+            controller?.removeFromParent()
             self?.priceInputPopup = nil
             self?.priceInputsPopupController = controller
         }
@@ -461,7 +461,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         productQuantityController.view.translatesAutoresizingMaskIntoConstraints = false
         productQuantityController.view.backgroundColor = UIColor.clear
-        addChildViewController(productQuantityController)
+        addChild(productQuantityController)
         quantitiesContainer.addSubview(productQuantityController.view)
         productQuantityController.view.fillSuperview()
         
@@ -531,7 +531,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             self?.addButtonHelper?.addObserverSafe() // Restore save keyboard button
         }
 
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
 
         controller.view.frame = popup.bounds
         popup.contentView = controller.view
@@ -667,9 +667,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
 
     fileprivate func initTextFieldPlaceholders() {
-        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         
         edibleButton.setTitle(trans("edible_button_title"), for: .normal)
     }

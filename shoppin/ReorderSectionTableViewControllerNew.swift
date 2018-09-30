@@ -138,7 +138,7 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
         return true
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         guard let sections = sections else {logger.e("No sections"); return}
         guard let notificationToken = notificationToken else {logger.e("No notificationToken"); return}

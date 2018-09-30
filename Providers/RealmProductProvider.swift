@@ -1253,7 +1253,7 @@ class RealmProductProvider: RealmProvider {
     
     func allBaseQuantities(_ handler: @escaping ([Float]?) -> Void) {
         withRealm({(realm) -> [Float] in
-            let baseQuanties = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
+            let baseQuanties = realm.objects(QuantifiableProduct.self).compactMap{quantifiableProduct in
                 quantifiableProduct.baseQuantity
             }
             return Array(baseQuanties).distinct()

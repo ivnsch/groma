@@ -50,7 +50,7 @@ open class ChartAreasView: UIView {
         }
         
         let shape = CAShapeLayer()
-        shape.frame = self.bounds
+        shape.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: path.bounds.width, height: bounds.height)
         
         shape.path = path.cgPath
         shape.strokeColor = firstColor.cgColor
@@ -58,7 +58,7 @@ open class ChartAreasView: UIView {
         shape.fillColor = nil
         
         let gradient = CAGradientLayer()
-        gradient.frame = self.bounds
+        gradient.frame = shape.bounds
         gradient.colors = gradientColors.map{$0.cgColor}
         
         let mask = CAShapeLayer()
@@ -99,7 +99,7 @@ open class ChartAreasView: UIView {
             revealAnimation.duration = CFTimeInterval(animDuration)
             
             revealAnimation.isRemovedOnCompletion = false
-            revealAnimation.fillMode = kCAFillModeForwards
+            revealAnimation.fillMode = CAMediaTimingFillMode.forwards
             
             revealAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(animDelay)
             layer.mask?.add(revealAnimation, forKey: "revealAnimation")

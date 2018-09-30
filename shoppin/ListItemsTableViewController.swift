@@ -116,7 +116,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func tableViewShiftDown(_ offset: CGFloat) { // offset/inset to start at given offset but scroll behind it
-        self.tableView.inset = UIEdgeInsetsMake(offset, 0, 0, 0)
+        self.tableView.inset = UIEdgeInsets.init(top: offset, left: 0, bottom: 0, right: 0)
         self.tableView.topOffset = -self.tableView.inset.top
     }
     
@@ -385,24 +385,24 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO return bool
-    func removeListItem(_ listItem: ListItem, animation: UITableViewRowAnimation = .bottom) {
+    func removeListItem(_ listItem: ListItem, animation: UITableView.RowAnimation = .bottom) {
         if let indexPath = self.getIndexPath(listItem) {
             self.removeListItem(listItem, indexPath: indexPath, animation: animation)
         }
     }
     
-    func removeListItem(uuid: String, animation: UITableViewRowAnimation = .bottom) {
+    func removeListItem(uuid: String, animation: UITableView.RowAnimation = .bottom) {
         if let indexPath = self.getIndexPath(listItemUuid: uuid) {
             self.removeListItem(uuid, indexPath: indexPath, animation: animation)
         }
     }
 
-    fileprivate func removeListItem(_ listItem: ListItem, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
+    fileprivate func removeListItem(_ listItem: ListItem, indexPath: IndexPath, animation: UITableView.RowAnimation = .bottom) {
         removeListItem(uuid: listItem.uuid, animation: animation)
     }
     
     // Special entry point for reactive delete (Realm) - since after the item has been deleted from db it's marked as "invalid" attempting to access it (e.g. to get the uuid) causes a crash. So we have to work with index only. An alternative solution would be to store the uuid of item being deleted somewhere and use it when we get the notification. We try first with index and see how it goes.
-    func removeListItem(index: Int, animation: UITableViewRowAnimation = .bottom) {
+    func removeListItem(index: Int, animation: UITableView.RowAnimation = .bottom) {
         
         func findIndexPath(index: Int) -> IndexPath? {
             var count = 0
@@ -426,7 +426,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO return bool
-    fileprivate func removeListItem(_ listItemUuid: String, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
+    fileprivate func removeListItem(_ listItemUuid: String, indexPath: IndexPath, animation: UITableView.RowAnimation = .bottom) {
         // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
         // also is it thread safe to pass indexpath like this
         // paramater indexPath and listitem?
@@ -441,7 +441,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         removeListItem(index: indexMaybe, indexPath: indexPath, animation: animation)
     }
     
-    fileprivate func removeListItem(index: Int?, indexPath: IndexPath, animation: UITableViewRowAnimation) {
+    fileprivate func removeListItem(index: Int?, indexPath: IndexPath, animation: UITableView.RowAnimation) {
         if let index = index {
             // remove from model
             self.items.remove(at: index)
@@ -488,7 +488,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?
-    fileprivate func removeSection(_ unique: SectionUnique, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
+    fileprivate func removeSection(_ unique: SectionUnique, indexPath: IndexPath, animation: UITableView.RowAnimation = .bottom) {
         tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
             // remove table view section
             weakSelf.tableViewSections.remove(at: (indexPath as NSIndexPath).section)
@@ -772,14 +772,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.listItemsTableViewDelegate?.onListItemSelected(tableViewListItem, indexPath: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
             
             self.tableView.beginUpdates()
 
             // remove from tableview and model
             let listItem = self.tableViewSections[(indexPath as NSIndexPath).section].tableViewListItems[(indexPath as NSIndexPath).row]
-            self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableViewRowAnimation.bottom)
+            self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableView.RowAnimation.bottom)
 
             // remove from content provider
             self.listItemsEditTableViewDelegate?.onListItemDeleted(listItem)

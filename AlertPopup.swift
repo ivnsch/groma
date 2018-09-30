@@ -13,8 +13,8 @@ import Providers
 class AlertPopup: NSObject {
     
     static func create(title: String? = nil, message: String, okMsg: String = trans("popup_button_ok"), onDismiss: VoidFunction? = nil) -> UIViewController {
-        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: okMsg, style: UIAlertActionStyle.default, handler: { alertAction in
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: okMsg, style: UIAlertAction.Style.default, handler: { alertAction in
             onDismiss?()
         }))
         return alert
@@ -63,7 +63,7 @@ class AlertPopup: NSObject {
         setBGVisible(true)
         
         controller.view.addSubview(myAlert)
-        controller.view.bringSubview(toFront: myAlert)
+        controller.view.bringSubviewToFront(myAlert)
         myAlert.tag = ViewTags.NotePopup
         
         myAlert.confirmText = confirmMsg

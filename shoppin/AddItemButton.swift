@@ -44,7 +44,7 @@ class AddItemButton: UIButton {
         backgroundColor = Theme.lighterGreen
         setTitleColor(UIColor.white, for: .normal)
         
-        setTitle(trans("add_button_title"), for: UIControlState())
+        setTitle(trans("add_button_title"), for: UIControl.State())
         
         layer.cornerRadius = 18
         

@@ -270,7 +270,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             deleteListItem(indexPath: indexPath)
         }
@@ -291,7 +291,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         return isEditing
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if isEditing {
             return .delete
         } else {

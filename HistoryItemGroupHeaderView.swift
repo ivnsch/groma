@@ -82,7 +82,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         cellUncoverer?.allowOpen = true
         cellUncoverer?.delegate = self
         
-        deleteGroupButton.addTarget(self, action: #selector(HistoryItemGroupHeaderView.onDeleteButtonTap(_:)), for: UIControlEvents.touchUpInside)
+        deleteGroupButton.addTarget(self, action: #selector(HistoryItemGroupHeaderView.onDeleteButtonTap(_:)), for: UIControl.Event.touchUpInside)
         
     }
 

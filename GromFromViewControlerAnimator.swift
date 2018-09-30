@@ -66,7 +66,7 @@ class GromFromViewControlerAnimator {
 
         backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         backgroundView.frame = targetFrame
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
         parent.view.addSubview(backgroundView)
         
         
@@ -120,7 +120,7 @@ class GromFromViewControlerAnimator {
         
         backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         backgroundView.frame = targetFrame
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
         parent.view.addSubview(backgroundView)
         
         
@@ -186,7 +186,7 @@ class GromFromViewControlerAnimator {
         controller.view.frame = frame ?? CGRect(x: 0 + inset.left, y: inset.top, width: backgroundView.width - inset.left - inset.right, height: controllerViewHeight)
         
         backgroundView.addSubview(controller.view)
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
         parent.view.addSubview(backgroundView)
 
         
@@ -242,7 +242,7 @@ class GromFromViewControlerAnimator {
   
         controller.view.frame = frame ?? CGRect(x: 0 + inset.left, y: inset.top, width: controller.view.width - inset.left - inset.right, height: controllerViewHeight)
         
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
         parent.view.addSubview(controller.view)
 
         let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y - scrollOffset - topBarHeight), from: currentController.view)
@@ -280,7 +280,7 @@ class GromFromViewControlerAnimator {
             
         }, completion: {finished in
             self.controller = nil
-            controller.removeFromParentViewController()
+            controller.removeFromParent()
             controller.view.removeFromSuperview()
             self.backgroundView?.removeFromSuperview()
             

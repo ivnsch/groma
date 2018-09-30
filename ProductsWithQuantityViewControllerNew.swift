@@ -50,7 +50,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     var sortBy: InventoryItemsSortOption? {
         didSet {
             if let sortBy = sortBy {
-                sortByButton.setTitle(sortBy.key, for: UIControlState())
+                sortByButton.setTitle(sortBy.key, for: UIControl.State())
             } else {
                 logger.w("sortBy is nil")
             }
@@ -165,7 +165,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     }
 
     fileprivate func initExplanationManager() {
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         let contents = ExplanationContents(title: trans("popup_title_did_you_know"), text: trans("popup_long_press_to_edit"), imageName: "longpressedit", buttonTitle: trans("popup_button_got_it"), frameCount: 210)
         let checker = SwipeToIncrementAlertHelperNew()
@@ -260,7 +260,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if isEditing {
             return .delete
         } else {
@@ -268,7 +268,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let model = delegate?.itemForRow(row: indexPath.row) else {logger.e("Illegal state: no model"); return}
             
@@ -485,9 +485,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         let picker = createPicker()
         let popup = MyTipPopup(customView: picker.view)
         popup.presentPointing(at: sortByButton, in: view, animated: true)
-        addChildViewController(picker)
+        addChild(picker)
         popup.onDismiss = { [weak picker] in
-            picker?.removeFromParentViewController()
+            picker?.removeFromParent()
         }
     }
 

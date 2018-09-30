@@ -112,7 +112,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
     }
     
     fileprivate func initTextFieldPlaceholders() {
-        colorView.attributedPlaceholder = NSAttributedString(string: colorView.placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        colorView.attributedPlaceholder = NSAttributedString(string: colorView.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -137,7 +137,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         nameTextField.text = prefillData.name
         colorView.textColor = prefillData.color
         
-        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
 
         switch mode {

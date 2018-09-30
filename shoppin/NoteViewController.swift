@@ -41,7 +41,7 @@ class NoteViewController: UIViewController {
         let popup = MyPopupHelper.showCustomPopupFrom(parent: parent, centerYOffset: 0, contentController: controller, swipeEnabled: true, useDefaultFrame: false, from: from)
 
         controller.closeTapHandler = {
-            controller.removeFromParentViewController()
+            controller.removeFromParent()
             popup.hide()
         }
 

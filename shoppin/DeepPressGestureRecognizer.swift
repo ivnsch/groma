@@ -52,7 +52,7 @@ class DeepPressGestureRecognizer: UIGestureRecognizer {
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesEnded(touches, with: event)
-        state = deepPressed ? UIGestureRecognizerState.ended : UIGestureRecognizerState.failed
+        state = deepPressed ? UIGestureRecognizer.State.ended : UIGestureRecognizer.State.failed
         deepPressed = false
     }
 
@@ -65,7 +65,7 @@ class DeepPressGestureRecognizer: UIGestureRecognizer {
         let currentTime = Date.timeIntervalSinceReferenceDate
 
         if !deepPressed && forcePercentage >= threshold {
-            state = UIGestureRecognizerState.began
+            state = UIGestureRecognizer.State.began
 
             if vibrateOnDeepPress {
                 AudioServicesPlaySystemSound(k_PeakSoundID)
@@ -92,7 +92,7 @@ class DeepPressGestureRecognizer: UIGestureRecognizer {
     }
 
     func endGesture() {
-        state = UIGestureRecognizerState.ended
+        state = UIGestureRecognizer.State.ended
         deepPressed = false
     }
 }

@@ -22,7 +22,7 @@ class ModalLoginController: UINavigationController, LoginDelegate, ExpiredLoginD
         viewControllers = [loginController]
         
         loginController.navigationItem.title = trans("generic_login")
-        loginController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(ModalLoginController.onCancelTap(_:)))
+        loginController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: self, action: #selector(ModalLoginController.onCancelTap(_:)))
     }
     
     @objc func onCancelTap(_ sender: UIBarButtonItem) {

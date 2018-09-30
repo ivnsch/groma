@@ -135,10 +135,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+        searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
 
         searchBar.accessibilityLabel = trans("accessibility_general_search_input")
-        searchBar.accessibilityTraits = UIAccessibilityTraitSearchField
+        searchBar.accessibilityTraits = UIAccessibilityTraits.searchField
 
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
@@ -568,7 +568,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func addObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(AddButtonHelper.keyboardWillChangeFrame(_:)),
-                                               name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+                                               name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     func removeObserver() {
@@ -577,7 +577,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
-            if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if let frame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 //                logger.v("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {

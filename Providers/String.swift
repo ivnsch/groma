@@ -55,17 +55,17 @@ public extension String {
     }
 
     public func makeAttributed(_ range: NSRange?, normalFont: UIFont, font: UIFont, textColor: UIColor = UIColor.darkText) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: normalFont, NSAttributedStringKey.foregroundColor: textColor])
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedString.Key.font: normalFont, NSAttributedString.Key.foregroundColor: textColor])
         if let range = range {
-            attributedString.setAttributes([NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: textColor], range: range)
+            attributedString.setAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: textColor], range: range)
         }
         return attributedString
     }
 
     public func applyColor(ranges: [NSRange] = [], font: UIFont, color: UIColor) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedString.Key.font: font])
         for range in ranges {
-            attributedString.setAttributes([NSAttributedStringKey.foregroundColor: color], range: range)
+            attributedString.setAttributes([NSAttributedString.Key.foregroundColor: color], range: range)
         }
         return attributedString
     }
@@ -79,9 +79,9 @@ public extension String {
     }
 
     public func applyBold(ranges: [NSRange] = [], font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedString.Key.font: font])
         for range in ranges {
-            attributedString.setAttributes([NSAttributedStringKey.font: font.bold ?? {
+            attributedString.setAttributes([NSAttributedString.Key.font: font.bold ?? {
                 logger.e("Couldn't make font bold - using default font", .ui)
                 return font
             } ()], range: range)
@@ -90,12 +90,12 @@ public extension String {
     }
 
     public func applyBoldColor(ranges: [NSRange] = [], font: UIFont, color: UIColor) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedString.Key.font: font])
         for range in ranges {
-            attributedString.setAttributes([NSAttributedStringKey.font: font.bold ?? {
+            attributedString.setAttributes([NSAttributedString.Key.font: font.bold ?? {
                 logger.e("Couldn't make font bold - using default font", .ui)
                 return font
-            } (), NSAttributedStringKey.foregroundColor: color], range: range)
+            } (), NSAttributedString.Key.foregroundColor: color], range: range)
         }
         return attributedString
     }
@@ -109,7 +109,7 @@ public extension String {
 
     public func underline(_ range: NSRange) -> NSMutableAttributedString {
         let attributedText = NSMutableAttributedString(string: self)
-        attributedText.addAttribute(NSAttributedStringKey.underlineStyle, value:NSUnderlineStyle.styleSingle.rawValue, range: range)
+        attributedText.addAttribute(NSAttributedString.Key.underlineStyle, value:NSUnderlineStyle.single.rawValue, range: range)
         return attributedText
     }
 
@@ -181,12 +181,12 @@ public extension String {
     // NOTE: FIXME: that returned height a bit short at least in HelpViewController (see comment there). Maybe related with missing NSParagraphStyleAttributeName attribute, wrapping etc?
     public func heightWithConstrainedWidth(_ width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
         return boundingBox.height
     }
     
     public func size(_ font: UIFont) -> CGSize {
-        return (self as NSString).size(withAttributes: [NSAttributedStringKey.font: font])
+        return (self as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
     }
     
 //    func startsWith(str:String) -> Bool {

@@ -83,7 +83,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonItem.SystemItem]) {
         navigationItem.title = "Brands"
         
         var buttons: [UIBarButtonItem] = []
@@ -134,7 +134,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         return true
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let brand = filteredBrands[(indexPath as NSIndexPath).row]
             Prov.brandProvider.removeProductsWithBrand(brand.item, remote: true, successHandler {[weak self] in

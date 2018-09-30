@@ -180,7 +180,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         let listItemsController = UIStoryboard.inventoryItemsViewController()
         
         listItemsController.view.frame = view.frame
-        addChildViewController(listItemsController)
+        addChild(listItemsController)
         listItemsController.expandDelegate = self
         listItemsController.view.clipsToBounds = true
         
@@ -316,7 +316,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         initModels()
         
         // If the user quickly after adding the inventory opened its inventory items controller, close it.
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let inventoryItemsController = childViewController as? InventoryItemsController {
                 if (inventoryItemsController.inventory.map{$0.same(inventory)}) ?? false {
                     inventoryItemsController.back()
@@ -326,7 +326,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
 
     fileprivate func closeInventoryItemsController() {
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let todoListItemController = childViewController as? InventoryItemsController {
                 todoListItemController.back()
             }

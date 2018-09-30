@@ -137,7 +137,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.groupItemsController()
         listItemsController.view.frame = view.frame
-        addChildViewController(listItemsController)
+        addChild(listItemsController)
         listItemsController.expandDelegate = self
         listItemsController.view.clipsToBounds = true
         
@@ -234,7 +234,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     fileprivate func onGroupAddOrUpdateError(_ group: ProductGroup) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let groupItemsController = childViewController as? GroupItemsController {
                 if (groupItemsController.group.map{$0.same(group)}) ?? false {
                     groupItemsController.back()

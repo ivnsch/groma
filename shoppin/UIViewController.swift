@@ -24,26 +24,26 @@ extension UIViewController {
     }
 
     func addChildViewControllerAndView(_ viewController: UIViewController, viewIndex:Int) {
-        self.addChildViewController(viewController)
+        self.addChild(viewController)
         
         self.view.insertSubview(viewController.view, at: viewIndex)
         
-        viewController.didMove(toParentViewController: self)
+        viewController.didMove(toParent: self)
     }
 
     func addChildViewControllerAndMove(_ viewController: UIViewController) {
-        addChildViewController(viewController)
-        viewController.didMove(toParentViewController: self)
+        addChild(viewController)
+        viewController.didMove(toParent: self)
     }
     
     func removeFromParentViewControllerWithView() {
-        removeFromParentViewController()
+        removeFromParent()
         view.removeFromSuperview()
     }
     
     func removeChildViewControllers() {
-        for childViewController in self.childViewControllers {
-            childViewController.removeFromParentViewController()
+        for childViewController in self.children {
+            childViewController.removeFromParent()
         }
     }
     

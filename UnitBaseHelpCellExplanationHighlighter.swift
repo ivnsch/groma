@@ -11,10 +11,10 @@ import Providers
 struct UnitBaseHelpCellExplanationHighlighter {
 
     func generateAttributedString(colorDict: [BaseUnitHelpItemType: UIColor], text: String, font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedStringKey.font: font])
+        let attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: font])
         for placeholder in [1, 2, 3, 4, 5] {
             if let (range, color) = highlight(placeholderNumber: placeholder, text: text, colors: colorDict) {
-                attributedString.setAttributes([NSAttributedStringKey.foregroundColor: color], range: range)
+                attributedString.setAttributes([NSAttributedString.Key.foregroundColor: color], range: range)
             }
         }
         attributedString.mutableString.replaceOccurrences(of: "%%\\d+", with: "", options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: attributedString.length))

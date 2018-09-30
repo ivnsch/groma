@@ -2949,6 +2949,7 @@
 					6AD91227210E1AA500E177EB = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = 37QAPDY2PR;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -2959,12 +2960,13 @@
 					6AD91230210E1AA500E177EB = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = 37QAPDY2PR;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					EB1DDEA41A3334EC00D778DE = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -2987,7 +2989,7 @@
 					EB33D5691CE010400097AD58 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 37QAPDY2PR;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = EB1DDEA41A3334EC00D778DE;
 					};
@@ -4211,7 +4213,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4238,7 +4240,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.SiriUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4267,7 +4269,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4296,7 +4298,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma.Siri;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4446,8 +4448,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Groma development created 2018_07_29";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -4479,8 +4480,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Groma AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -4504,7 +4504,7 @@
 				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
 				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = groma;
 				USES_XCTRUNNER = YES;
 			};
@@ -4530,7 +4530,7 @@
 				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
 				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = groma;
 				USES_XCTRUNNER = YES;
 			};

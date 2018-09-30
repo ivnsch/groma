@@ -78,7 +78,7 @@ class MyPopupDefaultContentViewController: UIViewController {
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = NSTextAlignment.center
                 if let mutableAttributedString = attributedText.mutableCopy() as? NSMutableAttributedString {
-                    mutableAttributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value: paragraphStyle, range: mutableAttributedString.string.fullRange)
+                    mutableAttributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: mutableAttributedString.string.fullRange)
                     attributedText = mutableAttributedString
                 }
                 messageTextView.attributedText = attributedText
@@ -113,7 +113,12 @@ class MyPopupDefaultContentViewController: UIViewController {
         // Several attempts to calculate the labels height correctly (including sizeToFit, DispatchQueue.main.async, using only height or the default (that is, without passing the precalculated width) estimatedHeight, etc. failed, either it shows incorrectly when msg is one liner or when message is long. So we calculate the width manually and pass this to estimatedHeight - this seems to be working. Note in didAppear probably this works but that seems too late to set the frame.
         let labelsWidth = view.width - leftConstraint.constant - rightConstraint.constant
 
-        let contentHeight = topConstraint.constant + imageHeightConstraint.constant + imageBottomConstraint.constant + titleBottomConstraint.constant + messageBottomConstraint.constant + okButtonHeightConstraint.constant + okButtonBottomConstraint.constant + cancelButtonHeightConstraint.constant + cancelButtonBottomConstraint.constant + titleTextView.estimatedHeight(overrideWidth: labelsWidth) + messageTextView.estimatedHeight(overrideWidth: labelsWidth)
+        let constraintsHeight: CGFloat = topConstraint.constant + imageHeightConstraint.constant + imageBottomConstraint.constant
+            + titleBottomConstraint.constant + messageBottomConstraint.constant + okButtonHeightConstraint.constant
+        // Helping the compiler ("expression too large")
+        let constraintsHeight2: CGFloat = constraintsHeight + okButtonBottomConstraint.constant + cancelButtonHeightConstraint.constant + cancelButtonBottomConstraint.constant
+//
+        let contentHeight = constraintsHeight2 + titleTextView.estimatedHeight(overrideWidth: labelsWidth) + messageTextView.estimatedHeight(overrideWidth: labelsWidth)
         self.view.frame = self.view.frame.copy(height: contentHeight)
     }
 

@@ -43,7 +43,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     fileprivate var selectedInventory: DBInventory? {
         didSet {
             let title = selectedInventory?.name ?? ""
-            inventoriesButton.setTitle(title, for: UIControlState())
+            inventoriesButton.setTitle(title, for: UIControl.State())
         }
     }
     fileprivate var inventoriesPopup: CMPopTipView?
@@ -66,7 +66,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                         return trans("participants_count_plural", "\(users.count)")
                     }
                 }()
-                sharedUsersButton.setTitle(title, for: UIControlState())
+                sharedUsersButton.setTitle(title, for: UIControl.State())
             }
         }
     }
@@ -116,7 +116,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         }()
         setSharedButtonVisibile(sharedButtonVisible)
 
-        inventoriesButton.setTitle(list.inventory.name, for: UIControlState())
+        inventoriesButton.setTitle(list.inventory.name, for: UIControl.State())
         
         storeInputField.text = list.store ?? ""
         setBackgroundColor(list.color)
@@ -233,9 +233,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             popup.delegate = self
             popup.presentPointing(at: inventoriesButton, in: view, animated: true)
-            addChildViewController(picker)
+            addChild(picker)
             popup.onDismiss = { [weak picker] in
-                picker?.removeFromParentViewController()
+                picker?.removeFromParent()
             }
 
             if let view = view as? AddEditListControllerView {
@@ -366,7 +366,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         let popup = MyPopup(parent: parent.view, frame: CGRect(x: 0, y: topBarHeight, width: parent.view.bounds.width, height: parent.view.bounds.height - topBarHeight))
         let controller = UIStoryboard.listColorPicker()
         controller.delegate = self
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
 
         controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
         popup.contentView = controller.view

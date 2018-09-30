@@ -17,7 +17,7 @@ class PlainTableViewController: UITableViewController {
     let reuseIdentifier = "reuseIdentifier"
     
     init(options:[String], onSelectOption:@escaping (Int, String) -> ()) {
-        super.init(style: UITableViewStyle.plain)
+        super.init(style: UITableView.Style.plain)
 
         self.options = options
         self.onSelectOption = onSelectOption

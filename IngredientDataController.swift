@@ -283,7 +283,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         _ = setAnchorWithoutMovingWithBottomConstraint(view: submitView, anchor: CGPoint(x: submitView.layer.anchorPoint.x, y: 1))
         submitView.transform = CGAffineTransform.identity.scaledBy(x: 1, y: 0.00001)
         delay(0.5) {
-            parent.bringSubview(toFront: submitView)
+            parent.bringSubviewToFront(submitView)
             UIView.animate(withDuration: Theme.defaultAnimDuration) {
                 submitView.transform = CGAffineTransform.identity
             }

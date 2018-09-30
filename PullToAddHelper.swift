@@ -20,7 +20,7 @@ class PullToAddHelper {
 
     init(tableView: UITableView, onPull: @escaping () -> Void) {
         // Pull to add isn't necessary for blind people and it confuses voice over so disable
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         self.onPull = onPull
 
@@ -35,7 +35,7 @@ class PullToAddHelper {
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
         // Pull to add isn't necessary for blind people and it confuses voice over so disable
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         let offset = scrollView.contentOffset.y
         pullToRefresh?.updateForScrollOffset(offset: offset)
@@ -47,7 +47,7 @@ class PullToAddHelper {
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         // Pull to add isn't necessary for blind people and it confuses voice over so disable
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         // TODO sometimes (about 1 in 20) the + icon isn't resetted - because scrollViewDidEndDecelerating isn't called?
         // This means when the user drags down again they see a + instead of the expected arrow.
@@ -62,7 +62,7 @@ class PullToAddHelper {
 
     func setHidden(_ hidden: Bool) {
         // Pull to add isn't necessary for blind people and it confuses voice over so disable
-        guard !UIAccessibilityIsVoiceOverRunning() else { return }
+        guard !UIAccessibility.isVoiceOverRunning else { return }
 
         pullToRefresh?.isHidden = hidden
     }

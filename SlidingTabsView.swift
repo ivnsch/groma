@@ -100,7 +100,7 @@ class SlidingTabsView: UIView {
         func createButton() -> HandlingButton {
             let button = HandlingButton()
             button.titleLabel?.font = DimensionsManager.font(.small, fontType: .regular)
-            button.setTitleColor(unselectedButtonColor, for: UIControlState())
+            button.setTitleColor(unselectedButtonColor, for: UIControl.State())
             return button
         }
         
@@ -109,7 +109,7 @@ class SlidingTabsView: UIView {
         let centerXButton1 = availableWidthForCenterOffset
         
         let button1 = createButton()
-        button1.setTitle(trans("quick_add_slider_tab_products"), for: UIControlState())
+        button1.setTitle(trans("quick_add_slider_tab_products"), for: UIControl.State())
         button1.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(0, button: button1)
         }
@@ -121,7 +121,7 @@ class SlidingTabsView: UIView {
         let centerXButton2 = bounds.width - availableWidthForCenterOffset
         
         let button2 = createButton()
-        button2.setTitle(trans("quick_add_slider_tab_recipes"), for: UIControlState())
+        button2.setTitle(trans("quick_add_slider_tab_recipes"), for: UIControl.State())
         button2.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(1, button: button2)
         }
@@ -134,9 +134,9 @@ class SlidingTabsView: UIView {
     func setSelected(_ buttonIndex: Int) {
         if let button = buttons[safe: buttonIndex] {
             for b in buttons {
-                b.setTitleColor(unselectedButtonColor, for: UIControlState())
+                b.setTitleColor(unselectedButtonColor, for: UIControl.State())
             }
-            button.setTitleColor(selectedButtonColor, for: UIControlState())
+            button.setTitleColor(selectedButtonColor, for: UIControl.State())
         } else {
             logger.w("Button not found: \(buttonIndex)")
         }

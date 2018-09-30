@@ -38,7 +38,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         didSet {
             if sortBy != oldValue {
                 if let option = sortByOption(sortBy) {
-                    sortByButton.setTitle(option.key, for: UIControlState())
+                    sortByButton.setTitle(option.key, for: UIControl.State())
                 } else {
                     logger.w("No option for \(sortBy)")
                 }
@@ -80,7 +80,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
         initNavBar([.edit])
         
-        searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+        searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
 
         navigationItem.backBarButtonItem?.title = ""
         
@@ -114,7 +114,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonItem.SystemItem]) {
         navigationItem.title = trans("title_products")
         
         var buttons: [UIBarButtonItem] = []
@@ -172,7 +172,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         return true
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let product = products?[(indexPath as NSIndexPath).row] else {logger.e("No product"); return}
             Prov.productProvider.deleteQuantifiableProduct(uuid: product.uuid, remote: true, successHandler{

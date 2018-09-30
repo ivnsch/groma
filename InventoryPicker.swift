@@ -25,7 +25,7 @@ class InventoryPicker: NSObject {
         didSet {
             if let inventory = selectedInventory {
                 onInventorySelected?(inventory)
-                button.setTitle(inventory.name, for: UIControlState())
+                button.setTitle(inventory.name, for: UIControl.State())
             }
         }
     }
@@ -67,9 +67,9 @@ class InventoryPicker: NSObject {
             let picker = createPicker(options: options, selectedOption: selectedInventory?.name)
             let popup = MyTipPopup(customView: picker.view)
             popup.presentPointing(at: sender, in: controller.view, animated: true)
-            controller?.addChildViewController(picker)
+            controller?.addChild(picker)
             popup.onDismiss = { [weak picker] in
-                picker?.removeFromParentViewController()
+                picker?.removeFromParent()
             }
             inventoriesPopup = popup
         }

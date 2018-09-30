@@ -63,7 +63,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         super.viewDidLoad()
         
         productsWithQuantityController = UIStoryboard.productsWithQuantityViewControllerNew()
-        addChildViewController(productsWithQuantityController)
+        addChild(productsWithQuantityController)
         productsWithQuantityController.delegate = self // NOTE: set before of triggering view load (call viewDidLoad - since this accesses delegate)
         _ = productsWithQuantityController.view // trigger view/outlets load - otherwise `var tableView` here crahes
 

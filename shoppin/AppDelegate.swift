@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         super.init()
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         configRealm()
 
@@ -149,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
         if let tabBarItems = controller.tabBar.items {
             for item in tabBarItems {
-                item.accessibilityTraits = UIAccessibilityTraitButton
+                item.accessibilityTraits = UIAccessibilityTraits.button
                 item.isAccessibilityElement = true
             }
         }
@@ -168,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             let launchMaybe = Bundle.main.loadNibNamed("LaunchScreen", owner: nil, options: nil)?.first as? UIView
             if let launch = launchMaybe {
                 launch.frame = controller.view.bounds
-                launch.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+                launch.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
                 window?.addSubview(launch)
             }
 
@@ -183,7 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 listController?.allowedToLoadModelsOnWillAppear = true
 
                 // Intro isn't needed for blind people, so exit as soon as db finishes initializing
-                if UIAccessibilityIsVoiceOverRunning() {
+                if UIAccessibility.isVoiceOverRunning {
                     introController.exit()
                 }
             }
@@ -243,8 +243,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }()
         
 //        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.font: regularFont, NSAttributedStringKey.foregroundColor: Theme.tabBarTextColor]
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: regularFont, NSAttributedStringKey.foregroundColor: Theme.navigationBarTextColor], for: UIControlState())
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: regularFont, NSAttributedString.Key.foregroundColor: Theme.tabBarTextColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: regularFont, NSAttributedString.Key.foregroundColor: Theme.navigationBarTextColor], for: UIControl.State())
 //        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
         
         UITabBar.appearance().tintColor = Theme.tabBarSelectedColor

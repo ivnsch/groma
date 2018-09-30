@@ -19,7 +19,7 @@ class SwipeToIncrementAlertHelperNew {
     func showPopup() -> Bool {
         
         guard let preference = preference else { logger.e("No preference, exit."); return false }
-        guard !UIAccessibilityIsVoiceOverRunning() else { return false }
+        guard !UIAccessibility.isVoiceOverRunning else { return false }
 
         let showedCanSwipeToIncrementCountNumber: NSNumber = PreferencesManager.loadPreference(preference) ?? 0
         let showedCanSwipeToIncrementCount = showedCanSwipeToIncrementCountNumber.intValue

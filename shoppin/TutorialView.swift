@@ -57,7 +57,7 @@ class TutorialView: UIView, UIGestureRecognizerDelegate {
 
         let fillLayer = CAShapeLayer()
         fillLayer.path = originalPath.cgPath
-        fillLayer.fillRule = kCAFillRuleEvenOdd
+        fillLayer.fillRule = CAShapeLayerFillRule.evenOdd
         fillLayer.fillColor = UIColor.black.cgColor
         fillLayer.opacity = 0.6
         layer.addSublayer(fillLayer)

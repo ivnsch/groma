@@ -125,7 +125,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         onViewDidLoad?()
         
         if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flow.sectionInset = UIEdgeInsetsMake(0, 20, 10, 20)
+            flow.sectionInset = UIEdgeInsets.init(top: 0, left: 20, bottom: 10, right: 20)
         } else {
             logger.e("Invalid collection view layout - can't set insets")
         }
@@ -375,7 +375,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
                 let popup = MyPopup(parent: parent.view)
                 let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
-                parent.addChildViewController(selectQuantifiableProductController)
+                parent.addChild(selectQuantifiableProductController)
 
                 selectQuantifiableProductController.onSelected = { [weak self, weak popup] tuple in
                     let quantifiableProduct = tuple.0

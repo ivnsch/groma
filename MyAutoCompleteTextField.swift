@@ -137,7 +137,7 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
             self.borderLayer = borderLayer
 
             superview?.addSubview(v)
-            superview?.bringSubview(toFront: v)
+            superview?.bringSubviewToFront(v)
             
             self.v = v
         }

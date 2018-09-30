@@ -149,7 +149,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             nameLabel.superview?.addSubview(line)
         }
 
-        nameLabel.superview?.bringSubview(toFront: line)
+        nameLabel.superview?.bringSubviewToFront(line)
         
         line.layer.anchorPoint = CGPoint(x: 0, y: line.layer.anchorPoint.y)
         line.frame.origin.x = line.frame.origin.x - line.width / 2 // back to original position
@@ -264,7 +264,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         
 //        undoLabel2.text = trans("generic_undo")
         
-        selectionStyle = UITableViewCellSelectionStyle.none
+        selectionStyle = UITableViewCell.SelectionStyle.none
 
         
         //        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake

@@ -37,8 +37,8 @@ class AddButtonHelper: NSObject {
     
     func addObserver() {
         isObserving = true
-        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func removeObserver() {
@@ -54,7 +54,7 @@ class AddButtonHelper: NSObject {
 
     @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
-            if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if let frame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 //                logger.v("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {
@@ -146,7 +146,7 @@ class AddButtonHelper: NSObject {
             addButton.layoutIfNeeded()
             
 //            animateVisible(true)
-            parentView.bringSubview(toFront: addButton)
+            parentView.bringSubviewToFront(addButton)
 
         } else {
             logger.w("No parent view: \(String(describing: parentView)) or window: \(String(describing: parentView?.window)) for add button")

@@ -161,7 +161,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         
         let listItemsController = UIStoryboard.ingredientsController()
         listItemsController.view.frame = view.frame
-        addChildViewController(listItemsController)
+        addChild(listItemsController)
         listItemsController.expandDelegate = self
         listItemsController.view.clipsToBounds = true
         
@@ -302,7 +302,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     fileprivate func onGroupAddOrUpdateError(_ recipe: Recipe) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let ingredientsController = childViewController as? IngredientsControllerNew {
                 if (ingredientsController.recipe.map{$0.same(recipe)}) ?? false {
                     ingredientsController.back()
@@ -312,7 +312,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
 
     fileprivate func closeIngredientsController() {
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let todoListItemController = childViewController as? IngredientsControllerNew {
                 todoListItemController.back()
             }

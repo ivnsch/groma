@@ -81,7 +81,7 @@ class FillShapeView: UIView {
         
         newcontentLayer.mask = mynewmask
         
-        bringSubview(toFront: imageView)
+        bringSubviewToFront(imageView)
         
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan(sender:)))
         addGestureRecognizer(panRecognizer)

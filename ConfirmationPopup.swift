@@ -13,11 +13,11 @@ import Providers
 class ConfirmationPopup {
     
     static func create(title: String? = nil, message: String, okTitle: String, cancelTitle: String, onOk: VoidFunction? = nil, onCancel: VoidFunction? = nil) -> UIViewController {
-        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: okTitle, style: UIAlertActionStyle.default, handler: { alertAction in
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: okTitle, style: UIAlertAction.Style.default, handler: { alertAction in
             onOk?()
         }))
-        alert.addAction(UIAlertAction(title: cancelTitle, style: UIAlertActionStyle.cancel, handler: { alertAction in
+        alert.addAction(UIAlertAction(title: cancelTitle, style: UIAlertAction.Style.cancel, handler: { alertAction in
             onCancel?()
         }))
         return alert

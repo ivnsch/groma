@@ -17,13 +17,13 @@ extension UIView {
     }
     
     public func centerYInView(_ view: UIView, constant: Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: CGFloat(constant))
         view.addConstraint(c)
         return c
     }
 
     public func centerXInView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: CGFloat(constant))
         view.addConstraint(c)
         return c
     }
@@ -37,37 +37,37 @@ extension UIView {
     }
     
     public func positionBelowView(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
     public func positionAboveView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
     public func alignTop(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
 
     public func alignLeft(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
     public func alignRight(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.right, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
     public func alignBottom(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: CGFloat(constant))
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
@@ -154,7 +154,7 @@ extension UIView {
                 view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
                 view.tag = ViewTags.GlobalActivityIndicator
                 
-                let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+                let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
                 let size: CGFloat = 50
                 let sizeH: CGFloat = size/2
                 activityIndicator.frame = CGRect(x: self.frame.width / 2 - sizeH, y: self.frame.height / 2 - sizeH, width: size, height: size)
@@ -162,7 +162,7 @@ extension UIView {
                 
                 view.addSubview(activityIndicator)
                 self.addSubview(view)
-                self.bringSubview(toFront: view)
+                self.bringSubviewToFront(view)
             }
         } else {
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()

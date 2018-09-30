@@ -110,7 +110,7 @@ class SharedUsersViewController: UIViewController {
         return true
     }
     
-    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCell.EditingStyle, forRowAtIndexPath indexPath: IndexPath) {
         if editingStyle == .delete {
             self.usersTableView.wrapUpdates {[weak self] in
                 if let weakSelf = self {

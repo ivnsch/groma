@@ -92,8 +92,8 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func registerKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillHide(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float, secondSelectedBaseQuantity: Float?) {
@@ -368,7 +368,7 @@ class SelectUnitAndBaseController: UIViewController {
         helpButtonImage.layer.borderWidth = 3
 
         if !(PreferencesManager.loadPreference(.hasTappedOnUnitBaseHelp) ?? false) {
-            UIView.animateKeyframes(withDuration: 2, delay: 1, options: [.`repeat`],
+            UIView.animateKeyframes(withDuration: 2, delay: 1, options: [.repeat],
                                     animations: {
                                         UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.3, animations: { [weak self] in
                                             self?.helpButtonImage.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
@@ -389,7 +389,7 @@ class SelectUnitAndBaseController: UIViewController {
     // MARK: Keyboard Notifications
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
             self.tableView.bottomInset = keyboardHeight
         }
     }

@@ -214,7 +214,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     // Override to support editing the table view.
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             func delete() {
@@ -312,7 +312,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self?.tableView.insertRows(at: sectionIndexPaths, with: .top)
                 sectionModel.expanded = true
             }, onComplete: {[weak self] in
-                self?.tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableViewScrollPosition.top, animated: true)
+                self?.tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableView.ScrollPosition.top, animated: true)
             })
         }
     }

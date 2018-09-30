@@ -80,7 +80,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             // height now calculated yet so we pass the position of border
             addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
             
-            selectionStyle = UITableViewCellSelectionStyle.none
+            selectionStyle = UITableViewCell.SelectionStyle.none
         }
     }
     var indexPath: IndexPath?

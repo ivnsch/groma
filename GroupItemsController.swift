@@ -52,7 +52,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         super.viewDidLoad()
         
         productsWithQuantityController = UIStoryboard.productsWithQuantityViewController()
-        addChildViewController(productsWithQuantityController)
+        addChild(productsWithQuantityController)
         productsWithQuantityController.delegate = self
         
         initTitleLabel()

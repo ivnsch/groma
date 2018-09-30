@@ -20,7 +20,7 @@ extension UIFont {
 
 
     public var bold: UIFont? {
-        return fontDescriptor.withSymbolicTraits(UIFontDescriptorSymbolicTraits.traitBold).map {descriptor in
+        return fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits.traitBold).map {descriptor in
             UIFont(descriptor: descriptor, size: pointSize)
         }
     }

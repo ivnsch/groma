@@ -75,8 +75,8 @@ public struct Theme {
     
     public static let defaultAnimDuration: Double = 0.2
     
-    public static let defaultRowAnimation = UITableViewRowAnimation.top
-    public static let defaultRowPosition = UITableViewScrollPosition.top
+    public static let defaultRowAnimation = UITableView.RowAnimation.top
+    public static let defaultRowPosition = UITableView.ScrollPosition.top
 
     public static let submitViewHeight: CGFloat = 60
     

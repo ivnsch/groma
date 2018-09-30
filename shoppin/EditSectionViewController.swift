@@ -54,7 +54,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameTextField.attributedPlaceholder = NSAttributedString(string: trans("placeholder_section_name"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: trans("placeholder_section_name"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         
         initValidator()
         

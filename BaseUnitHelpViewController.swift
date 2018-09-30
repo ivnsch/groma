@@ -59,7 +59,7 @@ class BaseUnitHelpViewController: UIViewController {
         let popup = MyPopupHelper.showCustomPopupFrom(parent: parent, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: from)
 
         helpController.closeTapHandler = {
-            helpController.removeFromParentViewController()
+            helpController.removeFromParent()
             if from == nil {
                 popup.hideFall()
             } else {

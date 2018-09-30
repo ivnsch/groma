@@ -38,7 +38,7 @@ protocol AddItemViewDelegate: class {
 
         view.frame = bounds
         // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+        view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         
         self.addSubview(view)
     }
@@ -63,7 +63,7 @@ protocol AddItemViewDelegate: class {
     }
     
     func setButtonText(_ text: String) {
-        addButton.setTitle(text, for: UIControlState())
+        addButton.setTitle(text, for: UIControl.State())
     }
     
     func setButtonColor(_ color: UIColor) {

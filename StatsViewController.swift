@@ -279,7 +279,7 @@ class StatsViewController: UIViewController
             monthEstimateLabelLabel.alpha = 0
             dailyAverageLabel.text = dailyAvgSpendingsThisMonth.toLocalCurrencyString()
             monthEstimateLabel.text = projectedTotalSpendingsThisMonth.toLocalCurrencyString()
-            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIViewAnimationOptions.curveLinear, animations: {[weak self] in
+            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIView.AnimationOptions.curveLinear, animations: {[weak self] in
                 self?.dailyAverageLabel.alpha = 1
                 self?.monthEstimateLabel.alpha = 1
                 self?.dailyAverageLabelLabel.alpha = 1
@@ -535,7 +535,7 @@ class StatsViewController: UIViewController
             averageLabel.alpha = 0
             averageLabelLabel.alpha = 0
             averageLabel.text = monthlyAverage.toLocalCurrencyString()
-            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIViewAnimationOptions.curveLinear, animations: {[weak self] in
+            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIView.AnimationOptions.curveLinear, animations: {[weak self] in
                 self?.averageLabel.alpha = 1
                 self?.averageLabelLabel.alpha = 1
                 }, completion: nil)

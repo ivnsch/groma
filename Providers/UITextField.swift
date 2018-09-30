@@ -38,7 +38,7 @@ extension UITextField {
         }
         set {
             maxLengthDictionary[self] = newValue
-            addTarget(self, action: #selector(UITextField.checkMaxLength(_:)), for: UIControlEvents.editingChanged)
+            addTarget(self, action: #selector(UITextField.checkMaxLength(_:)), for: UIControl.Event.editingChanged)
         }
     }
     
@@ -53,7 +53,7 @@ extension UITextField {
     }
     
     public func setPlaceholderWithColor(_ placeholder: String, color: UIColor) {
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: color])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: color])
     }
 
     public var cursorPosition: Int? {

@@ -117,7 +117,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             productsController.topParentController = topParentController
 
             currentSwipeController = productsController
-            addChildViewController(productsController)
+            addChild(productsController)
             
             addProductController = productsController
 
@@ -134,7 +134,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
                 productsController.contentData = (.recipe, .fav)
             }
             currentSwipeController = productsController
-            addChildViewController(productsController)
+            addChild(productsController)
 
             addGroupController = productsController
             

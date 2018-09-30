@@ -49,8 +49,8 @@ class PathButton: UIButton {
             let sublayer = CAShapeLayer()
             sublayer.fillColor     = UIColor.clear.cgColor
             sublayer.anchorPoint   = CGPoint(x: 0, y: 0)
-            sublayer.lineJoin      = kCALineJoinRound
-            sublayer.lineCap       = kCALineCapRound
+            sublayer.lineJoin      = CAShapeLayerLineJoin.round
+            sublayer.lineCap       = CAShapeLayerLineCap.round
             sublayer.contentsScale = layer.contentsScale
             sublayer.lineWidth     = lineWidth
             layer.addSublayer(sublayer)
@@ -71,8 +71,8 @@ class PathButton: UIButton {
         guard #available(iOS 9, *) else {
             let basic = CABasicAnimation(keyPath: keyPath)
             basic.duration = 0.3
-            basic.fillMode = kCAFillModeForwards
-            basic.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+            basic.fillMode = CAMediaTimingFillMode.forwards
+            basic.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.default)
             return basic
         }
         
@@ -81,8 +81,8 @@ class PathButton: UIButton {
         spring.damping = damping
         spring.initialVelocity = initialVelocity
         spring.stiffness = stiffness
-        spring.fillMode = kCAFillModeForwards
-        spring.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        spring.fillMode = CAMediaTimingFillMode.forwards
+        spring.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.default)
         
         return spring
     }

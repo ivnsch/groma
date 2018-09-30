@@ -39,7 +39,7 @@ class ReferenceQuantityPriceHelpCell: UITableViewCell {
         popup.dismissTapAnywhere = false
         popup.sidePadding = 50
         popup.presentPointing(at: priceView, in: contentView, animated: false)
-        contentView.bringSubview(toFront: touchBlocker)
+        contentView.bringSubviewToFront(touchBlocker)
     }
 
     fileprivate func createPriceInputsControler() -> PriceInputsController {

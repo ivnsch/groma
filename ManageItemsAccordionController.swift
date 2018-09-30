@@ -98,7 +98,7 @@ class ManageItemsAccordionController: UIViewController {
     // MARK: - Editing
     
     fileprivate func addEditButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "tb_edit"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(onEditTap(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "tb_edit"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(onEditTap(_:)))
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -322,11 +322,11 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let items = items else {logger.e("No items"); return}
             let item = items[indexPath.section]

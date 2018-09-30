@@ -50,8 +50,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
                     progressIndicator.isHidden = false
                     progressIndicator.startAnimating()
                 }
-                skipButton.setTitle(trans("intro_button_start"), for: UIControlState())
-                skipButton.setTitleColor(Theme.black, for: UIControlState())
+                skipButton.setTitle(trans("intro_button_start"), for: UIControl.State())
+                skipButton.setTitleColor(Theme.black, for: UIControl.State())
             }
         }
     }

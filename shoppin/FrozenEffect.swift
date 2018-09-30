@@ -18,15 +18,15 @@ class FrozenEffect {
         let views:Dictionary = ["blurView": blurView]
         
         view.insertSubview(blurView, at: 0)
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[blurView]|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[blurView]|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
     }
     
     fileprivate class func createBlurView(forView view:UIView) -> UIView {
         var blurView:UIView
         
         if NSClassFromString("UIBlurEffect") != nil {
-            let blurEffect:UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
+            let blurEffect:UIBlurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
             blurView = UIVisualEffectView(effect: blurEffect)
             blurView.frame = view.frame //view.frame ?? (controller's)
         } else {

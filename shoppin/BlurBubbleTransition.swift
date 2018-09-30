@@ -38,7 +38,7 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
     */
 //    var bubbleColor: UIColor = .whiteColor() // ivan - disable color since we will not use it
     
-    var bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light)) // ivan - change UIView with UIVisualEffectView
+    var bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffect.Style.light)) // ivan - change UIView with UIVisualEffectView
     
     // MARK: - UIViewControllerAnimatedTransitioning
     
@@ -71,7 +71,7 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
             let originalCenter = presentedControllerView.center
             let originalSize = presentedControllerView.frame.size
             
-            bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light)) // ivan - change UIView with UIVisualEffectView
+            bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffect.Style.light)) // ivan - change UIView with UIVisualEffectView
             bubble.frame = frameForBubble(originalCenter, size: originalSize, start: startingPoint)
             bubble.layer.cornerRadius = bubble.frame.size.height / 2
             bubble.clipsToBounds = true // ivan - without this the visual effect view will not show rounded corners

@@ -59,7 +59,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                         return trans("participants_count_plural", "\(users.count)")
                     }
                 }()
-                sharedUsersButton.setTitle(title, for: UIControlState())
+                sharedUsersButton.setTitle(title, for: UIControl.State())
             }
         }
     }

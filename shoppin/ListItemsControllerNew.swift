@@ -977,7 +977,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                         //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
                         //        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
                         let bottomInset: CGFloat = 0
-                        sectionsTableViewController?.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+                        sectionsTableViewController?.tableView.inset = UIEdgeInsets.init(top: topInset, left: 0, bottom: bottomInset, right: 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
                         //                sectionsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
                         
                         sectionsTableViewController?.view.backgroundColor = weakSelf.listItemsTableViewController.view.backgroundColor
@@ -1012,7 +1012,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     
                     sectionsTableViewController.setCellHeight(DimensionsManager.listItemsHeaderHeight, animated: true)
                     sectionsTableViewController.setEdit(false, animated: true) {[weak self] in guard let weakSelf = self else {return}
-                        sectionsTableViewController.removeFromParentViewController()
+                        sectionsTableViewController.removeFromParent()
                         sectionsTableViewController.view.removeFromSuperview()
                         weakSelf.sectionsTableViewController = nil
                         weakSelf.listItemsTableViewController.setAllSectionsExpanded(true, animated: true)

@@ -65,7 +65,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var buttonText: String = "" {
         didSet {
             if let okButton = okButton {
-                okButton.setTitle(buttonText, for: UIControlState())
+                okButton.setTitle(buttonText, for: UIControl.State())
             } else {
                 logger.w("Outlets not initialised, can't set text")
             }
@@ -79,7 +79,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var confirmText: String = "Confirm" {
         didSet {
             if let confirmButton = confirmButton {
-                confirmButton.setTitle(confirmText, for: UIControlState())
+                confirmButton.setTitle(confirmText, for: UIControl.State())
             } else {
                 logger.w("Outlets not initialised")
             }
@@ -89,7 +89,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var cancelText: String = "Cancel" {
         didSet {
             if let cancelButton = cancelButton {
-                cancelButton.setTitle(cancelText, for: UIControlState())
+                cancelButton.setTitle(cancelText, for: UIControl.State())
             } else {
                 logger.w("Outlets not initialised")
             }
@@ -125,9 +125,9 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        okButton.setTitle(buttonText, for: UIControlState())
-        confirmButton.setTitle(confirmText, for: UIControlState())
-        cancelButton.setTitle(cancelText, for: UIControlState())
+        okButton.setTitle(buttonText, for: UIControl.State())
+        confirmButton.setTitle(confirmText, for: UIControl.State())
+        cancelButton.setTitle(cancelText, for: UIControl.State())
 
         background.touchHandler = {[weak self] in
             self?.onTapAnywhere?()

@@ -100,14 +100,14 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         
         let topInset: CGFloat = 0
         let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
-        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
+        listItemsTableViewController.tableView.inset = UIEdgeInsets.init(top: topInset, left: 0, bottom: bottomInset, right: 0)
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
 
         listItemsTableViewController.enablePullToAdd()
 
         listItemsTableViewController.view.backgroundColor = Theme.defaultTableViewBGColor
         
-        view.sendSubview(toBack: listItemsTableViewController.view)
+        view.sendSubviewToBack(listItemsTableViewController.view)
         
         // TODO!!!!!!!!!!!!!!!!! still necessary?
 //        listItemsTableViewController.cellSwipeDirection = {
@@ -891,7 +891,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
             deleteListItem(indexPath: indexPath)

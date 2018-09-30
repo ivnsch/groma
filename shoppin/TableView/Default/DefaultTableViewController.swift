@@ -35,7 +35,7 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
             "H:|[tableView]|",
             "V:|[tableView]|"
             ] {
-                self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+                self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
         }
     }
     
@@ -44,14 +44,14 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     fileprivate func generateTableView() -> UITableView {
-        let tableView = UITableView(frame: CGRect.null, style: UITableViewStyle.grouped)
+        let tableView = UITableView(frame: CGRect.null, style: UITableView.Style.grouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        tableView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         tableView.sectionHeaderHeight = 0.0
         tableView.sectionFooterHeight = 0.0
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         
         for (cellClass, cellIdentifier): (UITableViewCell.Type, String) in self.cellsToRegister() {
             tableView.register(cellClass, forCellReuseIdentifier:cellIdentifier)

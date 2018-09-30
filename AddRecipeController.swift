@@ -77,8 +77,8 @@ class AddRecipeController: UIViewController {
     }
 
     fileprivate func registerKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillHide(notification:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     fileprivate func retrieveData(recipe: Recipe) {
@@ -165,7 +165,7 @@ class AddRecipeController: UIViewController {
     // MARK: Keyboard Notifications
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
             self.tableView.bottomInset = keyboardHeight
         }
     }
@@ -482,7 +482,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
             self?.unitBasePopup?.hide(onFinish: { [weak self] in
                 self?.unitBasePopup = nil
-                self?.unitBaseViewController?.removeFromParentViewController()
+                self?.unitBaseViewController?.removeFromParent()
                 self?.unitBaseViewController = nil
                 UIView.performWithoutAnimation { [weak self] in
                     self?.tableView.reloadRows(at: [indexPath], with: .none)
@@ -498,7 +498,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
             return self?.baseQuantities.map { AnyRealmCollection($0) }
         }
 
-        parent.addChildViewController(controller)
+        parent.addChild(controller)
 
         controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
         popup.contentView = controller.view

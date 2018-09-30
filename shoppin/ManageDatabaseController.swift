@@ -78,7 +78,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     // MARK: -
     
     fileprivate func load(option: ManageDatabaseControllerOption) {
-        selectOptionButton.setTitle(option.key, for: UIControlState())
+        selectOptionButton.setTitle(option.key, for: UIControl.State())
         
         (selectedOptionController as? UIViewController)?.removeFromParentViewControllerWithView()
         
@@ -110,7 +110,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         
         let controller = searchableTextController as! UIViewController // Swift doesn't allow yet to declare as subclass & conforming to protocol so for now this
         
-        addChildViewController(controller)
+        addChild(controller)
         containerView.addSubview(controller.view)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         controller.view.fillSuperview()
@@ -150,9 +150,9 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         let picker = createPicker()
         let popup = MyTipPopup(customView: picker.view)
         popup.presentPointing(at: selectOptionButton, in: view, animated: true)
-        addChildViewController(picker)
+        addChild(picker)
         popup.onDismiss = { [weak picker] in
-            picker?.removeFromParentViewController()
+            picker?.removeFromParent()
         }
     }
     

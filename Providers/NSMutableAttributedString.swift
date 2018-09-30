@@ -11,6 +11,6 @@ import UIKit
 public extension NSMutableAttributedString {
 
     public func setTextColor(_ color: UIColor) {
-        addAttributes([NSAttributedStringKey.foregroundColor: UIColor.black], range: string.fullRange)
+        addAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], range: string.fullRange)
     }
 }

@@ -101,7 +101,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 tabBarItem.title = ""
                 // Center images (otherwise space for text stays), src http://stackoverflow.com/questions/26494130/remove-tab-bar-item-text-show-only-image
                 // TODO calculate inset dynamically if possible, can we get dynamically the height of the images?
-                tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
+                tabBarItem.imageInsets = UIEdgeInsets.init(top: 6, left: 0, bottom: -6, right: 0)
             }
         } else {
             logger.e("Couldn't set tabitems appearance, tabBar is nil")
@@ -204,7 +204,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.todoItemsViewControllerNew()
         listItemsController.view.frame = view.frame
-        addChildViewController(listItemsController)
+        addChild(listItemsController)
         listItemsController.expandDelegate = self
         listItemsController.view.clipsToBounds = true
 
@@ -331,7 +331,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     fileprivate func onListAddOrUpdateError(_ list: Providers.List) {
         initModels()
         // If the user quickly after adding the list opened its list items controller, close it.
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let todoListItemController = childViewController as? TodoListItemsControllerNew {
                 if (todoListItemController.currentList.map{$0.same(list)}) ?? false {
                     todoListItemController.back()
@@ -341,7 +341,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
 
     fileprivate func closeListItemsController() {
-        for childViewController in childViewControllers {
+        for childViewController in children {
             if let todoListItemController = childViewController as? TodoListItemsControllerNew {
                 todoListItemController.back()
             }

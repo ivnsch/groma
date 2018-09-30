@@ -80,7 +80,7 @@ class EditNameButtonController: UIViewController, UITextFieldDelegate {
     }
     
     fileprivate func initTextFieldPlaceholders() {
-        nameTextField.attributedPlaceholder = NSAttributedString(string: nameTextField.placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: nameTextField.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -106,7 +106,7 @@ class EditNameButtonController: UIViewController, UITextFieldDelegate {
         button.setTitle(settings.buttonTitle, for: .normal)
         buttonSelected = prefillData.buttonSelected
 
-        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
         
         self.editingObj = editingObj

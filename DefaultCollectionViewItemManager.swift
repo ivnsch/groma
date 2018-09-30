@@ -89,7 +89,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     init() {
 //        let flowLayout = UICollectionViewFlowLayout()
         let flowLayout = LeftAlignedCollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(topCollectionViewPadding, leftRightCollectionViewPadding, bottomCollectionViewPadding, leftRightCollectionViewPadding)
+        flowLayout.sectionInset = UIEdgeInsets.init(top: topCollectionViewPadding, left: leftRightCollectionViewPadding, bottom: bottomCollectionViewPadding, right: leftRightCollectionViewPadding)
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = rowsSpacing
 

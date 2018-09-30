@@ -22,12 +22,12 @@ extension String {
         let start = index(startIndex, offsetBy: r.lowerBound)
 //        let end = <#T##String.CharacterView corresponding to `start`##String.CharacterView#>.index(start, offsetBy: r.upperBound - r.lowerBound)
         let end = index(start, offsetBy: r.upperBound - r.lowerBound)
-        return String(self[Range(start..<end)])
+        return String(self[start..<end])
     }
 
     func size(_ font: UIFont) -> CGSize {
         #if swift(>=4)
-        return NSAttributedString(string: self, attributes: [NSAttributedStringKey.font: font]).size()
+        return NSAttributedString(string: self, attributes: [NSAttributedString.Key.font: font]).size()
         #else
         return NSAttributedString(string: self, attributes: [NSFontAttributeName: font]).size()
         #endif
