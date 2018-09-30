@@ -158,7 +158,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
                     
                     self.progressVisible()
-                    Prov.userProvider.register(user, controller: self, successHandler{[weak self] in
+                    Prov.userProvider.register(user, successHandler{[weak self] in
                         self?.delegate?.onRegisterSuccess(email)
                     })
                     
@@ -202,7 +202,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
             logger.v("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
-                Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                Prov.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
             } else {
                 logger.e("Facebook: No token")
             }
@@ -219,7 +219,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         if (error == nil) {
             logger.v("Google login success, calling our server...")
             progressVisible()
-            Prov.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
+            Prov.userProvider.authenticateWithGoogle(user.authentication.accessToken, socialSignInResultHandler())
         } else {
             logger.e("Google login error: \(error.localizedDescription)")
         }

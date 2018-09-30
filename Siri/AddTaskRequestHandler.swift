@@ -19,8 +19,29 @@ class AddTaskRequestHandler: NSObject, INAddTasksIntentHandling {
             return
         }
 
-        getPossibleLists(for: title) { [weak self] possibleLists in
-            self?.completeResolveTaskList(with: possibleLists, for: title, with: completion)
+        initRealm { [weak self] success in
+            if success {
+                logger.i("Login success: \(success)", .db)
+                self?.getPossibleLists(for: title) { [weak self] possibleLists in
+                    self?.completeResolveTaskList(with: possibleLists, for: title, with: completion)
+                }
+            } else {
+                // this is an unknown error... .unsupported isn't corrct but there's no status for an error!
+                completion(.unsupported())
+            }
+        }
+    }
+
+    func initRealm(onComplete: @escaping (Bool) -> Void) {
+        Prov.userProvider.loginIfStoredData { result in
+            switch result.status {
+            case .success, .notFound:
+                RealmConfig.setDefaultConfiguration() // Realm inits here to cloud or local shared folder, depending whether its logged in
+                onComplete(true)
+            default:
+                logger.e("Error logging in to Realm: \(result)", .db)
+                onComplete(false)
+            }
         }
     }
 

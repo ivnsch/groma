@@ -8,25 +8,25 @@
 
 import Foundation
 
-
+// NOTE: incomplete("not supported" methods) TODO complete/refactor/remove
 class UserProviderImpl: UserProvider {
-   
+
     fileprivate let remoteProvider = RemoteUserProvider()
 
     fileprivate var webSocket: MyWebSocket? // arc
     
-    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func login(_ loginData: LoginData, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
 
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
-                self?.handleLoginSuccess(loginData.email, controller: controller, handler)
+                self?.handleLoginSuccess(loginData.email, handler)
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
 
-    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         self.remoteProvider.register(user) {result in
             if result.success {
                 PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
@@ -180,7 +180,7 @@ class UserProviderImpl: UserProvider {
     
     
     // If we have login success with a different user than the one that is currently stored in the device, clear local db before doing sync. Otherwise we will upload the data from the old user to the account of the new one (which even if we wanted doesn't work because the uuids have to be unique).
-    fileprivate func wrapCheckDifferentUser(_ loggedInUserEmail: String, controller: UIViewController, handler: @escaping (ProviderResult<Any>) -> Void) {
+    fileprivate func wrapCheckDifferentUser(_ loggedInUserEmail: String, handler: @escaping (ProviderResult<Any>) -> Void) {
         // we now put this code in a different project and there are no popups here. Since this is not used, commented.
         logger.e("Outdated")
         handler(ProviderResult(status: .unknown))
@@ -218,7 +218,7 @@ class UserProviderImpl: UserProvider {
     }
     
     
-    fileprivate func handleLoginSuccess(_ userEmail: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    fileprivate func handleLoginSuccess(_ userEmail: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         // we now put this code in a different project and there are no popups here. Since this is not used, commented.
         logger.e("Outdated")
         handler(ProviderResult(status: .unknown))
@@ -284,12 +284,12 @@ class UserProviderImpl: UserProvider {
     
     // MARK: - Social login
     
-    fileprivate func handleSocialSignUpResult(_ controller: UIViewController, result: RemoteResult<RemoteSocialLoginResult>, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    fileprivate func handleSocialSignUpResult(result: RemoteResult<RemoteSocialLoginResult>, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         if let authResult = result.successResult {
             if authResult.isRegister {
                 // If register, send a normal sync. This is equivalent with a login with the credentials provider as the user is verified already and don't need to confirm. Except that here we know it's register, so we can just send a plain sync - without checks for possible accounts on other device.
                 // We of course also clear data from a possible previous user on this device first.
-                wrapCheckDifferentUser(authResult.email, controller: controller) {[weak self] result in
+                wrapCheckDifferentUser(authResult.email) {[weak self] result in
                     if result.success {
                         self?.storeEmail(authResult.email)
                         self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
@@ -299,7 +299,7 @@ class UserProviderImpl: UserProvider {
                 }
                 
             } else {
-                handleLoginSuccess(authResult.email, controller: controller, handler)
+                handleLoginSuccess(authResult.email, handler)
             }
         } else {
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
@@ -307,20 +307,20 @@ class UserProviderImpl: UserProvider {
     }
 
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithFacebook(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         remoteProvider.authenticateWithFacebook(token) {[weak self] result in
-            self?.handleSocialSignUpResult(controller, result: result, handler: handler)
+            self?.handleSocialSignUpResult(result: result, handler: handler)
         }
     }
 
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithGoogle(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         remoteProvider.authenticateWithGoogle(token) {[weak self] result in
-            self?.handleSocialSignUpResult(controller, result: result, handler: handler)
+            self?.handleSocialSignUpResult(result: result, handler: handler)
         }
     }
 
-    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    func authenticateWithICloud(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         logger.e("Not supported")
         handler(ProviderResult(status: .unknown))
     }
@@ -330,4 +330,9 @@ class UserProviderImpl: UserProvider {
     fileprivate func storeEmail(_ email: String) {
         PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
     }
+
+    func loginIfStoredData(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        logger.e("Not supported")
+    }
+
 }

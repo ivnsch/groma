@@ -29,7 +29,7 @@ class UserProviderMock: UserProvider {
         return self.email.map{$0 != email} ?? false
     }
     
-    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func login(_ loginData: LoginData, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = loginData.email
@@ -37,7 +37,7 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = user.email
@@ -111,7 +111,7 @@ class UserProviderMock: UserProvider {
     
     // MARK: - Social login
     
-    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithFacebook(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .success, sucessResult: syncResult))
@@ -119,17 +119,21 @@ class UserProviderMock: UserProvider {
     }
     
     
-    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithGoogle(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .success, sucessResult: syncResult))
         }
     }
     
-    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    func authenticateWithICloud(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .success, sucessResult: syncResult))
         }
+    }
+    
+    func loginIfStoredData(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        logger.e("Not supported")
     }
 }

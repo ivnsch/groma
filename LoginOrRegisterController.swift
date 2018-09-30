@@ -170,7 +170,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
                 switch mode {
                 case .login:
                     let loginData = LoginData(email: email, password: password)
-                    Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: { [weak self] syncResult in
+                    Prov.userProvider.login(loginData, rootController.resultHandler(onSuccess: { [weak self] syncResult in
                         self?.onLoginSuccess()
 
                     }, onError: {[weak self] result in guard let weakSelf = self else {return}
@@ -190,7 +190,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
                 case .register:
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
-                    Prov.userProvider.register(user, controller: self, successHandler{ [weak self] in
+                    Prov.userProvider.register(user, successHandler{ [weak self] in
                         self?.onRegisterSuccess()
                     })
                 }
@@ -297,7 +297,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
                 logger.v("Facebook login success, calling our server...")
                 progressVisible()
                 if let tokenString = result.token.tokenString {
-                    Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                    Prov.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
                 } else {
                     logger.e("Facebook no token")
                 }
@@ -320,7 +320,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         if (error == nil) {
             logger.v("Google login success, calling our server...")
             progressVisible()
-            Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
+            Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, socialSignInResultHandler())
         } else {
             logger.e("Google login error: \(error.localizedDescription)")
         }

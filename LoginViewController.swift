@@ -194,7 +194,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
                 let loginData = LoginData(email: email, password: password)
                 
-                Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
+                Prov.userProvider.login(loginData, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
                     
                     weakSelf.onLoginSuccess()
                     
@@ -306,7 +306,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             logger.v("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
-                Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                Prov.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
             } else {
                 logger.e("Facebook no token")
             }
@@ -323,7 +323,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         if (error == nil) {
             logger.v("Google login success, calling our server...")
             progressVisible()
-            Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
+            Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, socialSignInResultHandler())
         } else {
             logger.e("Google login error: \(error.localizedDescription)")
         }

@@ -34,23 +34,22 @@ public protocol UserProvider {
     var mySharedUser: DBSharedUser? {get}
 
     func isDifferentUser(_ email: String) -> Bool
+
+    func loginIfStoredData(_ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+
+    func login(_ loginData: LoginData, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
     
-    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
-    
-    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func logout(_ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    func authenticateWithFacebook(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
     
-    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    func authenticateWithGoogle(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
-    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    func authenticateWithICloud(_ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

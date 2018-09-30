@@ -13,4 +13,7 @@ public struct KeychainKeys {
     public static let ValetIdentifier = "lisa"
     
     public static let token = "token"
+
+    public static let userEmail = "email"
+    public static let userPassword = "password"
 }

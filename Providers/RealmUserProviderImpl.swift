@@ -10,16 +10,22 @@ import Foundation
 import RealmSwift
 import CloudKit
 import Alamofire
+import Valet
 
 class RealmUserProviderImpl: UserProvider {
 
     fileprivate var notificationToken: NotificationToken?
 
-    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
-        login(loginData, register: false, controller: controller, handler)
+    func login(_ loginData: LoginData, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        login(loginData, register: false) { [weak self] result in
+            if result.success {
+                self?.storeLoginData(loginData: loginData)
+            }
+            handler(result)
+        }
     }
 
-    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         let loginData = LoginData(email: user.email, password: user.password)
         let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: true)
 
@@ -37,13 +43,49 @@ class RealmUserProviderImpl: UserProvider {
         }
     }
     
-    private func login(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    private func login(_ loginData: LoginData, register: Bool, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: register)
-        login(credentials, userName: loginData.email, controller: controller, handler)
+        login(credentials, userName: loginData.email, handler)
+    }
+
+    func loginIfStoredData(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
+        let userEmail = valet?.string(forKey: KeychainKeys.userEmail)
+        let userPassword = valet?.string(forKey: KeychainKeys.userPassword)
+
+        if let userEmail = userEmail, let userPassword = userPassword {
+            login(LoginData(email: userEmail, password: userPassword), register: false, handler)
+        } else {
+            if ((userEmail == nil && userPassword != nil) || (userEmail != nil && userPassword == nil)) {
+                logger.e("Invalid state - there should be always user name and password stored or none of them.")
+            }
+
+            logger.i("No user email / password stored")
+            handler(ProviderResult(status: ProviderStatusCode.notFound))
+        }
+    }
+
+    fileprivate func storeLoginData(loginData: LoginData) {
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
+        if let valet = valet {
+            if valet.setString(loginData.email, forKey: KeychainKeys.userEmail) {
+                logger.i("Success storing user email")
+                if valet.setString(loginData.email, forKey: KeychainKeys.userPassword) {
+                    logger.i("Success storing user password")
+                } else {
+                    logger.e("Couldn't user email. Can access key chain: \(valet.canAccessKeychain())")
+                }
+            } else {
+                // See https://github.com/square/Valet/issues/75 supposedly this happens only during debug. canAccessKeychain returns false with no apparent reason (device).
+                logger.e("Couldn't user email. Can access key chain: \(valet.canAccessKeychain())")
+            }
+        } else {
+            logger.e("Valet not set, couldn't store token")
+        }
     }
     
     // We pass userName separately because it's not safely retrievable from SyncCredentials
-    private func login(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    private func login(_ credentials: SyncCredentials, userName: String? = nil, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
 
         logger.v("Logging in with credentials: \(credentials)")
 
@@ -237,18 +279,18 @@ class RealmUserProviderImpl: UserProvider {
     
     
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
-    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithFacebook(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         let credentials = SyncCredentials.facebook(token: token)
-        login(credentials, controller: controller, handler)
+        login(credentials, handler)
     }
     
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
-    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    func authenticateWithGoogle(_ token: String, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         let credentials = SyncCredentials.google(token: token)
-        login(credentials, controller: controller, handler)
+        login(credentials, handler)
     }
     
-    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    func authenticateWithICloud(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
         let container = CKContainer.default()
         container.fetchUserRecordID(completionHandler: {(recordID: CKRecord.ID?, error: Error?) in
@@ -260,7 +302,7 @@ class RealmUserProviderImpl: UserProvider {
                 logger.d("Retrieved cloudKit token: \(userAccessToken), logging in...")
                 
                 let credentials = SyncCredentials.cloudKit(token: userAccessToken)
-                self.login(credentials, controller: controller, handler)
+                self.login(credentials, handler)
                 
             } else{
                 logger.e("Invalid state: No error, but also no user record")
