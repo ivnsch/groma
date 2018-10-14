@@ -8,7 +8,6 @@
 
 import Nimble
 import Alamofire
-import Valet
 
 class TestUtils {
 
@@ -67,8 +66,7 @@ class TestUtils {
     
     class func withClearDatabaseAndNewLoggedInAccount(user user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
         // ensure empty keychain
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        valet?.removeAllObjects()
+        KeyChain().removeAll()
         
         TestUtils.withClearedDatabase {
             self.withNewLoggedInAccount(user: user, onLoggedIn: onLoggedIn)

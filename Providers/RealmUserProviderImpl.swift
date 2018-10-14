@@ -10,11 +10,11 @@ import Foundation
 import RealmSwift
 import CloudKit
 import Alamofire
-import Valet
 
 class RealmUserProviderImpl: UserProvider {
 
     fileprivate var notificationToken: NotificationToken?
+    fileprivate let keychain = Keychain()
 
     func login(_ loginData: LoginData, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         login(loginData, register: false) { [weak self] result in
@@ -49,9 +49,8 @@ class RealmUserProviderImpl: UserProvider {
     }
 
     func loginIfStoredData(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        let userEmail = valet?.string(forKey: KeychainKeys.userEmail)
-        let userPassword = valet?.string(forKey: KeychainKeys.userPassword)
+        let userEmail = keychain.string(.userEmail)
+        let userPassword = keychain.string(.userPassword)
 
         if let userEmail = userEmail, let userPassword = userPassword {
             login(LoginData(email: userEmail, password: userPassword), register: false, handler)
@@ -66,21 +65,11 @@ class RealmUserProviderImpl: UserProvider {
     }
 
     fileprivate func storeLoginData(loginData: LoginData) {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        if let valet = valet {
-            if valet.setString(loginData.email, forKey: KeychainKeys.userEmail) {
-                logger.i("Success storing user email")
-                if valet.setString(loginData.email, forKey: KeychainKeys.userPassword) {
-                    logger.i("Success storing user password")
-                } else {
-                    logger.e("Couldn't user email. Can access key chain: \(valet.canAccessKeychain())")
-                }
-            } else {
-                // See https://github.com/square/Valet/issues/75 supposedly this happens only during debug. canAccessKeychain returns false with no apparent reason (device).
-                logger.e("Couldn't user email. Can access key chain: \(valet.canAccessKeychain())")
+        if keychain.storeString(key: .userEmail, value: loginData.email) {
+            logger.i("Success storing user email")
+            if keychain.storeString(key: .userPassword, value: loginData.email) {
+                logger.i("Success storing user password")
             }
-        } else {
-            logger.e("Valet not set, couldn't store token")
         }
     }
     

@@ -7,96 +7,91 @@
 //
 
 import Foundation
-import Valet
 
-
+// For now everything commented as not using this and don't want to check/test if keychain wrapper works correctly here.
+// But at last with valet and the last time this code was used, it was working!
 public struct AccessTokenHelper {
-    
+
+//    fileprivate static let keychain = Keychain()
+
     public static func loadToken() -> String? {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        let maybeToken = valet?.string(forKey: KeychainKeys.token)
-        logger.v("Valet has token: \(maybeToken != nil)")
-        
-        return maybeToken ?? loadPrefsToken()
+        return nil
+
+
+//        let maybeToken = keychain.string(KeychainKeys.token)
+//        logger.v("Valet has token: \(maybeToken != nil)")
+//
+//        return maybeToken ?? loadPrefsToken()
     }
     
     public static func hasToken() -> Bool {
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        let valetHasTokenMaybe = valet?.containsObject(forKey: KeychainKeys.token)
-        
-        func onValetIsNilOrCantAccess() -> Bool {
-            let isInPrefs = loadPrefsToken() != nil
-            logger.d("No valet token, is it in prefs?: \(isInPrefs)")
-            return isInPrefs
-        }
-        
-        if let valet = valet {
-            if valet.canAccessKeychain() {
-                return valet.containsObject(forKey: KeychainKeys.token)
-            } else {
-                logger.e("Valet can't access keychain")
-                return onValetIsNilOrCantAccess()
-            }
-        } else {
-            logger.e("Valet is nil")
-            return onValetIsNilOrCantAccess()
-        }
+        return false
+
+
+//        let valetHasTokenMaybe = keychain.contains(KeychainKeys.token)
+//
+//        func onValetIsNilOrCantAccess() -> Bool {
+//            let isInPrefs = loadPrefsToken() != nil
+//            logger.d("No valet token, is it in prefs?: \(isInPrefs)")
+//            return isInPrefs
+//        }
+//
+//        if keychain.isAvailable() {
+//            return keychain.contains(KeychainKeys.token)
+//        } else {
+//            logger.e("Valet can't access keychain")
+//            return onValetIsNilOrCantAccess()
+//        }
     }
     
     public static func storeToken(_ token: String) {
-        
-        func afterStoredToken() {
-            logger.v("Stored token")
-            PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: Date())
-        }
-        
-        func onValetFailed() {
-            PreferencesManager.savePreference(PreferencesManagerKey.loginTokenFallback, value: NSString(string: token))
-            afterStoredToken()
-        }
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        if let valet = valet {
-            if valet.setString(token, forKey: KeychainKeys.token) {
-                afterStoredToken()
-            } else {
-                // See https://github.com/square/Valet/issues/75 supposedly this happens only during debug. canAccessKeychain returns false with no apparent reason (device).
-                logger.e("Couldn't store token using valet. Can access key chain: \(valet.canAccessKeychain()). Fall back to prefs.")
-                onValetFailed()
-            }
-        } else {
-            logger.e("Valet not set, couldn't store token")
-            onValetFailed()
-        }
+
+
+//        func afterStoredToken() {
+//            logger.v("Stored token")
+//            PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: Date())
+//        }
+//
+//        func onKeychainFailed() {
+//            PreferencesManager.savePreference(PreferencesManagerKey.loginTokenFallback, value: NSString(string: token))
+//            afterStoredToken()
+//        }
+//
+//        if keychain.storeString(key: KeychainKeys.token, value: token) {
+//            afterStoredToken()
+//        } else {
+//            logger.e("Couldn't store token. Fall back to prefs.")
+//            onKeychainFailed()
+//        }
     }
     
     public static func removeToken() {
-        
-        logger.v("Removing login token")
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
-        if let valet = valet {
-            if !valet.removeObject(forKey: KeychainKeys.token) {
-                logger.e("Remove token returned false")
-            }
-            logger.v("Removed login token")
-        } else {
-            logger.e("Valet not set")
-        }
-        
-        // In case we have stored a fallback remove it too
-        removePrefsToken()
+
+
+//        logger.v("Removing login token")
+//
+//        if !keychain.remove(KeychainKeys.token) {
+//            logger.e("Remove token returned false")
+//        }
+//        logger.v("Removed login token")
+//
+//        // In case we have stored a fallback remove it too
+//        removePrefsToken()
     }
     
     // MARK: - Prefs
     
     fileprivate static func loadPrefsToken() -> String? {
-        logger.v("Loading token from prefs")
-        return PreferencesManager.loadPreference(PreferencesManagerKey.loginTokenFallback)
+        return nil
+
+
+//        logger.v("Loading token from prefs")
+//        return PreferencesManager.loadPreference(PreferencesManagerKey.loginTokenFallback)
     }
     
     fileprivate static func removePrefsToken() {
-        PreferencesManager.clearPreference(key: PreferencesManagerKey.loginTokenFallback)
+
+
+//        PreferencesManager.clearPreference(key: PreferencesManagerKey.loginTokenFallback)
     }
 }
