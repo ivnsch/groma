@@ -4398,7 +4398,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 37QAPDY2PR;
 				ENABLE_BITCODE = NO;
@@ -4413,7 +4413,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "bc57b82e-1694-416a-94b2-b5a4fc1a7bbb";
-				PROVISIONING_PROFILE_SPECIFIER = "Groma development created 2018_07_29";
+				PROVISIONING_PROFILE_SPECIFIER = "Groma iOS development profile";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -4445,7 +4445,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "dd038fa3-1284-48ca-b72f-4c01118858e2";
-				PROVISIONING_PROFILE_SPECIFIER = "Groma AdHoc";
+				PROVISIONING_PROFILE_SPECIFIER = "Groma iOS distribution profile";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
