@@ -42,11 +42,23 @@ public enum Model : String {
     iPhone8        = "iPhone 8",
     iPhone8plus    = "iPhone 8 Plus",
     iPhoneX        = "iPhone X",
+    iPhoneXS       = "iPhone XS",
+    iPhoneXSmax    = "iPhone XS Max",
+    iPhoneXR       = "iPhone XR",
     unrecognized   = "?unrecognized?"
 }
 
 public extension UIDevice {
 
+    public static func hasNotch() -> Bool {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return UIScreen.main.nativeBounds.height == 2436 // X, XS
+                || UIScreen.main.nativeBounds.height == 2688 // XS max
+                || UIScreen.main.nativeBounds.height == 1792 // XR max
+        }
+        return false
+    }
+    
     public var modelCode: String {
         var systemInfo = utsname()
         uname(&systemInfo)
@@ -109,7 +121,11 @@ public extension UIDevice {
             "iPhone10,1" : .iPhone8,
             "iPhone10,2" : .iPhone8plus,
             "iPhone10,3" : .iPhoneX,
-            "iPhone10,6" : .iPhoneX
+            "iPhone10,6" : .iPhoneX,
+            "iPhone11,2" : .iPhoneXS,
+            "iPhone11,4" : .iPhoneXSmax,
+            "iPhone11,6" : .iPhoneXSmax,
+            "iPhone11,8" : .iPhoneXR
         ]
         
         if let key = NSString(cString: modelCode, encoding: String.Encoding.utf8.rawValue).map({$0 as String}) {

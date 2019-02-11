@@ -85,16 +85,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     // In this app we use sometimes a custom view nav bar (to be able to have expand animation with dot) so it's necessary to use a hardcoded height.
     // Maybe a solution could also be to generate a dummy navbar and measure it
     fileprivate func initNavBarHeight() {
-        func onIPhoneX() {
+        if UIDevice.hasNotch() {
             Theme.navBarHeight = Theme.notchNavBarHeight
         }
-//        if UIDevice.current.type == .iPhoneX {
-//            onIPhoneX()
-//        } else if UIDevice.current.type == .simulator {
-            if UIDevice.current.userInterfaceIdiom == .phone && UIScreen.main.nativeBounds.height == 2436 {
-                onIPhoneX()
-            }
-//        }
     }
 
     var notificationToken: NotificationToken!

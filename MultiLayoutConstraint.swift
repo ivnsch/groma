@@ -23,6 +23,7 @@ import Providers
     @IBInspectable var vSmall: Float = invalidNumber
     @IBInspectable var vMiddle: Float = invalidNumber
     @IBInspectable var vLarge: Float = invalidNumber
+    @IBInspectable var vvLarge: Float = invalidNumber
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -45,6 +46,7 @@ import Providers
                 case .small: return vSmall
                 case .middle: return vMiddle
                 case .large, .xLarge: return vLarge
+                case .xxLarge: return vvLarge == MultiLayoutConstraint.invalidNumber ? vLarge : vvLarge
                 }
             }
         }()
