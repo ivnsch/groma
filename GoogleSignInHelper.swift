@@ -17,7 +17,7 @@ struct GoogleSignInHelper {
 //        var configureError: NSError?
 
         // From GoogleService-Info.plist
-        GIDSignIn.sharedInstance().clientID = "648544826350-fjbp79b7n7f4mssd8h6d53t46arf79qg.apps.googleusercontent.com"
+        GIDSignIn.sharedInstance().clientID = "1092160392759-bcm55vcn1e11agl7s03qeo901im11sk1.apps.googleusercontent.com"
 
         GIDSignIn.sharedInstance().delegate = delegate
         

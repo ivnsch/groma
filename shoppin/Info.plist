@@ -33,7 +33,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.648544826350-fjbp79b7n7f4mssd8h6d53t46arf79qg</string>
+				<string>com.googleusercontent.apps.1092160392759-bcm55vcn1e11agl7s03qeo901im11sk1</string>
 			</array>
 		</dict>
 		<dict>
@@ -67,6 +67,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSSiriUsageDescription</key>
+	<string>Shoppings lists information will be sent to Siri</string>
 	<key>UILaunchImageFile</key>
 	<string>LaunchScreen</string>
 	<key>UILaunchStoryboardName</key>
@@ -87,7 +89,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSSiriUsageDescription</key>
-	<string>Shoppings lists information will be sent to Siri</string>
 </dict>
 </plist>
