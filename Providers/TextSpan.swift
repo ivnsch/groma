@@ -6,7 +6,6 @@
 //  Copyright © 2017 ivanschuetz. All rights reserved.
 //
 
-import Foundation
 
 public enum TextAttribute: Int, Equatable {
     case bold = 0

@@ -89,7 +89,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
 
-//        self.fillTestInput()
+        self.fillTestInput()
 
         self.initValidator()
 

@@ -10,13 +10,13 @@ import UIKit
 
 public class DefaultChartLegendCell: UICollectionViewCell, ChartLegendCell {
 
-    @IBOutlet weak public var shape: UIView!
-    @IBOutlet weak public var label: UILabel!
+    @IBOutlet public weak var shape: UIView!
+    @IBOutlet public weak var label: UILabel!
     
-    @IBOutlet weak public var leading: NSLayoutConstraint!
-    @IBOutlet weak public var shapeWidth: NSLayoutConstraint!
-    @IBOutlet weak public var shapeToLabel: NSLayoutConstraint!
-    @IBOutlet weak public var trailing: NSLayoutConstraint!
+    @IBOutlet weak var leading: NSLayoutConstraint!
+    @IBOutlet weak var shapeWidth: NSLayoutConstraint!
+    @IBOutlet weak var shapeToLabel: NSLayoutConstraint!
+    @IBOutlet weak var trailing: NSLayoutConstraint!
     
     public var defaultFont: UIFont?
     
@@ -26,7 +26,7 @@ public class DefaultChartLegendCell: UICollectionViewCell, ChartLegendCell {
         didSet {
             if let legend = legend {
                 label.text = legend.text
-
+                
                 label.font = legend.font ?? defaultFont
 
                 let shapeLayer = CAShapeLayer()

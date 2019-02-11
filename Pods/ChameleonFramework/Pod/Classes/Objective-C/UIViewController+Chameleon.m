@@ -438,12 +438,12 @@
         }
     }
     
-//    //Workaround for Swift http://stackoverflow.com/a/28765193
-//    [[UIButton appearanceWhenContainedWithin:@[[UIView class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
-//    [[UIButton appearanceWhenContainedWithin:@[[UIView class],[UIImagePickerController class]]] setTintColor:ClearColor];
-//    [[UIButton appearanceWhenContainedWithin:@[[UINavigationBar class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
-//    [[UIButton appearanceWhenContainedWithin:@[[UINavigationBar class],[UIImagePickerController class]]] setTintColor:contentColor];
-//    [[UIButton appearanceWhenContainedWithin:@[[UITableViewCell class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
+    //Workaround for Swift http://stackoverflow.com/a/28765193
+    [[UIButton appearanceWhenContainedWithin:@[[UIView class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
+    [[UIButton appearanceWhenContainedWithin:@[[UIView class],[UIImagePickerController class]]] setTintColor:ClearColor];
+    [[UIButton appearanceWhenContainedWithin:@[[UINavigationBar class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
+    [[UIButton appearanceWhenContainedWithin:@[[UINavigationBar class],[UIImagePickerController class]]] setTintColor:contentColor];
+    [[UIButton appearanceWhenContainedWithin:@[[UITableViewCell class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
     
     //[[UIButton appearanceWhenContainedInInstancesOfClasses:@[[UIView class],[UIImagePickerController class]]] setBackgroundColor:ClearColor];
     //[[UIButton appearanceWhenContainedInInstancesOfClasses:@[[UIView class],[UIImagePickerController class]]] setTintColor:contentColor];

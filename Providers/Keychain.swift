@@ -18,14 +18,14 @@ public enum KeychainKey: String {
 
 class Keychain {
 
-    fileprivate let valet = VALValet(
-        identifier: "lisa", // This seems to be a copy paste accident when this class was created. Don't change it.
-        accessibility: VALAccessibility.afterFirstUnlock
-    )
+    fileprivate let valet = Identifier(nonEmpty: "lisa").map { Valet.valet(
+        with: $0, // This seems to be a copy paste accident when this class was created. Don't change it.
+        accessibility: .afterFirstUnlock
+    )}
 
     func storeString(key: KeychainKey, value: String) -> Bool {
         guard let valet = valet else { logValetNotInitialized(); return false }
-        if valet.setString(value, forKey: key.rawValue) {
+        if valet.set(string: value, forKey: key.rawValue) {
             logger.d("Successfully set value for key: \(key)", .env)
             return true
         } else {

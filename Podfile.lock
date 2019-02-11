@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.5.1)
+  - Alamofire (4.8.1)
   - ASValueTrackingSlider (0.12.1)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
@@ -11,56 +11,49 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - ChartLegends (0.0.6)
-  - CMPopTipView (2.3.0)
-  - FBSDKCoreKit (4.31.1):
-    - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.31.1):
+  - CMPopTipView (2.3.2)
+  - FBSDKCoreKit (4.40.0):
+    - Bolts (~> 1.9)
+  - FBSDKLoginKit (4.40.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.31.1):
-    - FBSDKCoreKit (~> 4.31.1)
-  - GoogleSignIn (4.1.0):
-    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
-    - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
-    - GTMOAuth2 (~> 1.0)
+  - FBSDKShareKit (4.40.0):
+    - FBSDKCoreKit
+  - GoogleSignIn (4.4.0):
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.1.1):
-    - GoogleToolboxForMac/Defines (= 2.1.1)
-  - GoogleToolboxForMac/Defines (2.1.1)
-  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.1):
-    - GoogleToolboxForMac/DebugUtils (= 2.1.1)
-    - GoogleToolboxForMac/Defines (= 2.1.1)
-    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.1)
-  - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
-  - GTMOAuth2 (1.1.5):
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.11):
-    - GTMSessionFetcher/Full (= 1.1.11)
-  - GTMSessionFetcher/Core (1.1.11)
-  - GTMSessionFetcher/Full (1.1.11):
-    - GTMSessionFetcher/Core (= 1.1.11)
-  - HockeySDK (5.0.0):
-    - HockeySDK/DefaultLib (= 5.0.0)
-  - HockeySDK/DefaultLib (5.0.0)
+  - GoogleToolboxForMac/DebugUtils (2.2.0):
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+  - GoogleToolboxForMac/Defines (2.2.0)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
+    - GoogleToolboxForMac/Defines (= 2.2.0)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
+  - GTMSessionFetcher/Core (1.2.1)
+  - HockeySDK (5.1.4):
+    - HockeySDK/DefaultLib (= 5.1.4)
+  - HockeySDK/DefaultLib (5.1.4)
   - KLCPopup (1.0)
-  - lottie-ios (2.5.0)
+  - lottie-ios (2.5.2)
   - Reachability (3.2)
-  - Realm (3.7.5):
-    - Realm/Headers (= 3.7.5)
-  - Realm/Headers (3.7.5)
-  - RealmSwift (3.7.5):
-    - Realm (= 3.7.5)
+  - Realm (3.7.6):
+    - Realm/Headers (= 3.7.6)
+  - Realm/Headers (3.7.6)
+  - RealmSwift (3.7.6):
+    - Realm (= 3.7.6)
   - Starscream (3.0.2)
-  - SwiftCharts (0.6.1)
+  - SwiftCharts (0.6.3)
   - SwiftValidator (4.0.0)
-  - SwiftyBeaver (1.5.0)
+  - SwiftyBeaver (1.5.2)
   - SwipeView (1.3.2)
-  - Valet (2.4.2)
+  - Valet (3.2.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5)
   - ASValueTrackingSlider (~> 0.12.1)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
-  - ChartLegends (~> 0.0.6)
+  - ChartLegends (from `https://github.com/i-schuetz/ChartLegends.git`)
   - CMPopTipView (~> 2.0)
   - FBSDKCoreKit
   - FBSDKLoginKit
@@ -72,15 +65,41 @@ DEPENDENCIES:
   - Reachability (~> 3.2)
   - RealmSwift (~> 3.7.5)
   - Starscream (= 3.0.2)
-  - SwiftCharts (~> 0.6.1)
+  - SwiftCharts (~> 0.6.3)
   - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator.git`, branch `remove_delegate_callback`)
   - SwiftyBeaver (~> 1.5.0)
   - SwipeView (~> 1.3.2)
-  - Valet (~> 2.4.2)
+  - Valet (~> 3.2.3)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - ASValueTrackingSlider
+    - Bolts
+    - CMPopTipView
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
+    - GoogleSignIn
+    - GoogleToolboxForMac
+    - GTMSessionFetcher
+    - HockeySDK
+    - KLCPopup
+    - lottie-ios
+    - Reachability
+    - Realm
+    - RealmSwift
+    - Starscream
+    - SwiftCharts
+    - SwiftyBeaver
+    - SwipeView
+    - Valet
 
 EXTERNAL SOURCES:
   ChameleonFramework:
     :git: https://github.com/ViccAlexander/Chameleon.git
+  ChartLegends:
+    :git: https://github.com/i-schuetz/ChartLegends.git
   SwiftValidator:
     :branch: remove_delegate_callback
     :git: https://github.com/i-schuetz/SwiftValidator.git
@@ -89,37 +108,39 @@ CHECKOUT OPTIONS:
   ChameleonFramework:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
+  ChartLegends:
+    :commit: 61bb1efcab1624a2fa5da720ebfa4ac240a45358
+    :git: https://github.com/i-schuetz/ChartLegends.git
   SwiftValidator:
     :commit: 159ba2ede3dbf2b8772ed0fbdf0124329f296308
     :git: https://github.com/i-schuetz/SwiftValidator.git
 
 SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   ASValueTrackingSlider: 5261de3fcf00adb339efc93885e8f0bc99e703cd
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  ChartLegends: bd0b58d74772f35dc14fc6a3ff245cccf3204a59
-  CMPopTipView: 774e0230b5c73abb3c39051da6d8a383373c4f7f
-  FBSDKCoreKit: e08ccfcefa7bc1347a07c276dac9bf6c7fe57024
-  FBSDKLoginKit: 99797ac39252fef6f72600b886f6ee60b4b29cab
-  FBSDKShareKit: e640c41c9fcd61929eeb3d0c21ad335103e7cb62
-  GoogleSignIn: 8c599fc10d25b2af86a3f82fd9631e863f2b1400
-  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
-  GTMOAuth2: be83fd28d63ae3087e7d351b1f39c1a7e24ab6e7
-  GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
-  HockeySDK: 82bf8dcbe1af3c87c24dc98924fcf2e2ba5be8c4
+  ChartLegends: 93ae2a78cdf14a3ee15593f149f9015fe2810765
+  CMPopTipView: 2d56ef53e8e739c4e63ad97a5a88b97712b46c7b
+  FBSDKCoreKit: ae214474b25033399c131dc81d258e412582a2ba
+  FBSDKLoginKit: 7a1e411d46acc8834588eca437daf34de42e1d52
+  FBSDKShareKit: 0e45916f4150da485928ae2a17ca021950b194f5
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
+  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  HockeySDK: 15afe6bc0a5bfe3a531fd73dbf082095f37dac3b
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
+  lottie-ios: 3fef45d3fabe63e3c7c2eb603dd64ddfffc73062
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
-  RealmSwift: 2a9281e37d6de55f66f76254d49d28aeb1b729e4
+  Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
+  RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
   Starscream: b512c62f6706421221b5ceb2ba01a9f58aca5bea
-  SwiftCharts: 77378d6cf667e95f9c79a745b6778e66eed5339c
+  SwiftCharts: 1535b5e228702af2c9c4d60c2a408f2f0f579fa8
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
-  SwiftyBeaver: 384235c59d9c67b4a5e1810cffa713babba34efd
+  SwiftyBeaver: 85daaaa2b3ae6e31b7b55c99430e8b91dac088af
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
-  Valet: 14463ef24fab8fd5809044ecedb61484b799fdd6
+  Valet: 4af0382d4a94db5c7861504f751884f653437d24
 
-PODFILE CHECKSUM: e1bf016250c676b1da63af9159145b5bc9e1c2f9
+PODFILE CHECKSUM: 29f9ef1cd95265f3e99f8cc73aa87fa04032d0f0
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.6.0

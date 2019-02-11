@@ -32,7 +32,8 @@ public struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionS
             let paidPrice = representation.value(forKeyPath: "paidPrice") as? Float
             else {
                 print("Invalid json: \(representation)")
-                return nil}
+                return nil
+        }
         
         self.uuid = uuid
         self.inventoryUuid = inventoryUuid

@@ -13,7 +13,7 @@ def providersdeps
 
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
     pod 'Alamofire', '~> 4.5'
-    pod 'Valet', '~> 2.4.2'
+    pod 'Valet', '~> 3.2.3'
     pod 'Starscream', '3.0.2'
 end
 
@@ -28,7 +28,7 @@ def gromadeps
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'HockeySDK'
     pod 'ASValueTrackingSlider', '~> 0.12.1'
-    pod 'ChartLegends', '~> 0.0.6'
+    pod 'ChartLegends', :git => 'https://github.com/i-schuetz/ChartLegends.git'
     pod 'lottie-ios'
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'

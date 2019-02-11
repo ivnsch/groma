@@ -2826,7 +2826,6 @@
 				6AD91224210E1AA500E177EB /* Sources */,
 				6AD91225210E1AA500E177EB /* Frameworks */,
 				6AD91226210E1AA500E177EB /* Resources */,
-				031C34DC8587E5BB8262AC83 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3218,7 +3217,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-groma/Pods-groma-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS9.0/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability-iOS9.0/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework",
@@ -3234,7 +3233,6 @@
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/KLCPopup/KLCPopup.framework",
@@ -3242,13 +3240,6 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
 				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
-				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS10.0/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Reachability-iOS10.0/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm-iOS10.0/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift-iOS10.0/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream-iOS10.0/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver-iOS10.0/SwiftyBeaver.framework",
-				"${BUILT_PRODUCTS_DIR}/Valet-iOS10.0/Valet.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3267,7 +3258,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KLCPopup.framework",
@@ -3275,32 +3265,10 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		031C34DC8587E5BB8262AC83 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Siri/Pods-Siri-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-groma/Pods-groma-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2914BDFAD188B5991A65938A /* [CP] Check Pods Manifest.lock */ = {
@@ -3345,17 +3313,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/HockeySDK/HockeySDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/HockeySDKResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CB2B61D9196D84D5944AF372 /* [CP] Embed Pods Frameworks */ = {
@@ -3364,7 +3333,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS9.0/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability-iOS9.0/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm-iOS9.0/Realm.framework",
@@ -3380,7 +3349,6 @@
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/KLCPopup/KLCPopup.framework",
@@ -3406,7 +3374,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KLCPopup.framework",
@@ -3417,7 +3384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D7A0B09196426BECD3C0C00D /* [CP] Copy Pods Resources */ = {
@@ -3426,17 +3393,18 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-groma/Pods-groma-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/HockeySDK/HockeySDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/HockeySDKResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-groma/Pods-groma-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EB6E3D541C60129600D65DD5 /* ShellScript */ = {
