@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,7 +41,7 @@
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nUK-Yj-LWy" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="52.5" y="130" width="270" height="40"/>
+                                <rect key="frame" x="53" y="130" width="269.5" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Syj-Pt-nFq" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -83,7 +83,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bw0-j8-uAM" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="52.5" y="175" width="270" height="35"/>
+                                <rect key="frame" x="53" y="175" width="269.5" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="4C6-7b-sAx" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -124,7 +124,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYQ-Up-a4i" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="42.5" y="220" width="290" height="50"/>
+                                <rect key="frame" x="43" y="220" width="289.5" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Dmt-k3-Cfx" customClass="SubmitButtonHeightConstraint" customModule="groma" customModuleProvider="target"/>
@@ -182,7 +182,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in enables you to sync with the cloud and share lists with other people" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ktj-23-cyZ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="360" width="250" height="33.5"/>
+                                <rect key="frame" x="63" y="360" width="249.5" height="33.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -192,7 +192,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2w-Ea-Xfq" customClass="MyFacebookButton" customModule="groma" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2w-Ea-Xfq" customClass="MyFacebookButton" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="408.5" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="2tE-KH-WRd"/>
@@ -206,7 +206,7 @@
                                     <action selector="onFacebookLoginButtonTap" destination="4xN-Sk-YzP" eventType="touchUpInside" id="dCP-5Z-gzl"/>
                                 </connections>
                             </button>
-                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVW-c9-pTZ" customClass="MyGoogleLoginButton" customModule="groma" customModuleProvider="target">
+                            <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVW-c9-pTZ" customClass="MyGoogleLoginButton" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="468.5" width="250" height="45"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -245,14 +245,14 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="username" translatesAutoresizingMaskIntoConstraints="NO" id="tDw-9e-mZm">
-                                <rect key="frame" x="52" y="140" width="20" height="20"/>
+                                <rect key="frame" x="53" y="140" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="2Jt-sB-ecq"/>
                                     <constraint firstAttribute="height" constant="20" id="559-e4-Kyq"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="yKm-uq-lwo">
-                                <rect key="frame" x="52" y="182" width="20" height="20"/>
+                                <rect key="frame" x="53" y="182.5" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="3VU-p4-cov"/>
                                     <constraint firstAttribute="height" constant="20" id="cPz-xT-Mxk"/>
@@ -375,8 +375,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="eye_open" width="68" height="38"/>
-        <image name="group_selected" width="25" height="25"/>
+        <image name="eye_open" width="68.5" height="38"/>
+        <image name="group_selected" width="25" height="25.5"/>
         <image name="login_register" width="459" height="427"/>
         <image name="password" width="51" height="75"/>
         <image name="username" width="48" height="60"/>
