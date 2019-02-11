@@ -46,7 +46,9 @@ import Providers
                 case .small: return vSmall
                 case .middle: return vMiddle
                 case .large, .xLarge: return vLarge
-                case .xxLarge: return vvLarge == MultiLayoutConstraint.invalidNumber ? vLarge : vvLarge
+                case .xxLarge:
+                    // Need to check for 0, since apparently the non existent dimension in the xibs get initialized to 0
+                    return vvLarge == MultiLayoutConstraint.invalidNumber || vvLarge == 0 ? vLarge : vvLarge
                 }
             }
         }()
