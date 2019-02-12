@@ -79,9 +79,18 @@ end
 #end
 
 
+#post_install do |installer|
+#    puts("Update debug pod settings to speed up build time")
+#    Dir.glob(File.join("Pods", "**", "Pods*{debug,Private}.xcconfig")).each do |file|
+#        File.open(file, 'a') { |f| f.puts "\nDEBUG_INFORMATION_FORMAT = dwarf" }
+#    end
+#end
+
+# Fix "too many symbols" on app submission https://stackoverflow.com/a/48518656/930450
 post_install do |installer|
-    puts("Update debug pod settings to speed up build time")
-    Dir.glob(File.join("Pods", "**", "Pods*{debug,Private}.xcconfig")).each do |file|
-        File.open(file, 'a') { |f| f.puts "\nDEBUG_INFORMATION_FORMAT = dwarf" }
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf'
     end
+  end
 end

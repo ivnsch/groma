@@ -89,7 +89,6 @@
 		6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */; };
 		6A4DBFDF1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */; };
 		6A4DBFE21FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */; };
-		6A4F45E32115BF67000548AD /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */; };
 		6A4F45E52115CD1A000548AD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		6A501D69202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */; };
 		6A633753201E0120001E4969 /* LoginOrRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633752201E0120001E4969 /* LoginOrRegisterController.swift */; };
@@ -222,6 +221,7 @@
 		6AFDAFAD1FFCFF2500C57703 /* PriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFDAFAC1FFCFF2500C57703 /* PriceView.swift */; };
 		6AFDAFAF1FFCFFC000C57703 /* PriceView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AFDAFAE1FFCFFC000C57703 /* PriceView.xib */; };
 		6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */; };
+		84AD83492212CDE600F2119E /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84AD834B2212CDE600F2119E /* AppIntentVocabulary.plist */; };
 		ABCC0C60A2DB87DCAF62D76A /* Pods_shoppinUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
 		CD03F4926820FD40F2BA710C /* Pods_Siri.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F9087E6BD50DBA6662C495 /* Pods_Siri.framework */; };
@@ -682,7 +682,6 @@
 		6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveItemsToCartTest.swift; sourceTree = "<group>"; };
 		6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchItemsBetweenTodoCartTests.swift; sourceTree = "<group>"; };
 		6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartTodoItemsTestUtils.swift; sourceTree = "<group>"; };
-		6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		6A4F45E42115C846000548AD /* Siri.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Siri.entitlements; sourceTree = "<group>"; };
 		6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitBaseHelpCellExplanationHighlighter.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
@@ -830,6 +829,10 @@
 		6AFF383A1E89B0D6009AD368 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
 		6AFF383C1E89B0DC009AD368 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
 		6AFF383E1E89B0DF009AD368 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
+		84AD834A2212CDE600F2119E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = de; path = de.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
+		84AD834C2212CE3600F2119E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
+		84AD834D2212CE3E00F2119E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
+		84AD834E2212CE4600F2119E /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_groma.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90786A7A2BEDAE7F0308001C /* Pods-groma.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-groma.debug.xcconfig"; path = "Pods/Target Support Files/Pods-groma/Pods-groma.debug.xcconfig"; sourceTree = "<group>"; };
 		9205D4FFE19B37AD4CFEE52E /* Pods-shoppinUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppinUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1869,7 +1872,7 @@
 			isa = PBXGroup;
 			children = (
 				EB1DDEA91A3334EC00D778DE /* Info.plist */,
-				6A4F45E22115BF67000548AD /* AppIntentVocabulary.plist */,
+				84AD834B2212CDE600F2119E /* AppIntentVocabulary.plist */,
 				EB0F5F851B962D2100035175 /* GoogleService-Info.plist */,
 			);
 			name = "Supporting Files";
@@ -3070,7 +3073,7 @@
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
 				6A3A67DE1E59D50C00B5354F /* UnitEditableCell.xib in Resources */,
 				6A287E971E54792F00868244 /* ManageItemsSectionView.xib in Resources */,
-				6A4F45E32115BF67000548AD /* AppIntentVocabulary.plist in Resources */,
+				84AD83492212CDE600F2119E /* AppIntentVocabulary.plist in Resources */,
 				6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */,
@@ -3941,6 +3944,17 @@
 				6AFF383E1E89B0DF009AD368 /* es */,
 			);
 			name = ManageDatabase.storyboard;
+			sourceTree = "<group>";
+		};
+		84AD834B2212CDE600F2119E /* AppIntentVocabulary.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				84AD834A2212CDE600F2119E /* de */,
+				84AD834C2212CE3600F2119E /* Base */,
+				84AD834D2212CE3E00F2119E /* en */,
+				84AD834E2212CE4600F2119E /* es */,
+			);
+			name = AppIntentVocabulary.plist;
 			sourceTree = "<group>";
 		};
 		EB1DDEB11A3334EC00D778DE /* Main.storyboard */ = {
